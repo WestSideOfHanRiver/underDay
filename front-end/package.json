@@ -21,7 +21,11 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
+    "prettier": "2.8.7",
     "sass": "^1.62.0",
+    "stylelint": "^15.5.0",
+    "stylelint-config-clean-order": "^5.0.1",
+    "stylelint-scss": "^4.6.0",
     "typescript-plugin-css-modules": "^5.0.1"
   }
 }

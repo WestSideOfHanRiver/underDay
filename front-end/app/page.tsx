@@ -1,13 +1,17 @@
-import Image from 'next/image';
-import { Inter } from 'next/font/google';
-import styles from './page.module.css';
+import Image from 'next/image'
+import { Inter } from 'next/font/google'
+import styles from './page.module.scss'
 
-const inter = Inter({ subsets: ['latin'] });
+import { useState } from 'react'
+
+import Calendar from './components/calendar'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   return (
-    <main className={styles.main}>
-      <h1>여기는 메인 ~</h1>
+    <main>
+      <Calendar />
     </main>
-  );
+  )
 }
