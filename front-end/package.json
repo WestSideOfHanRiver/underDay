@@ -10,13 +10,22 @@
   },
   "dependencies": {
     "@types/node": "18.15.11",
-    "@types/react": "18.0.34",
+    "@types/react": "18.0.35",
     "@types/react-dom": "18.0.11",
     "eslint": "8.38.0",
     "eslint-config-next": "13.3.0",
-    "next": "13.3.0",
+    "moment": "^2.29.4",
+    "next": "^13.3.1-canary.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "prettier": "2.8.7",
+    "sass": "^1.62.0",
+    "stylelint": "^15.5.0",
+    "stylelint-config-clean-order": "^5.0.1",
+    "stylelint-scss": "^4.6.0",
+    "typescript-plugin-css-modules": "^5.0.1"
   }
 }

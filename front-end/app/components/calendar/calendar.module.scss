@@ -1,0 +1,78 @@
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css');
+
+.content {
+  font-family: 'Pretendard Variable', Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI',
+    'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
+}
+
+.content {
+  max-width: 320px;
+  margin: 0 auto;
+  padding: 0 20px;
+  border: 1px solid;
+
+  .topTit {
+    display: flex;
+    justify-content: space-between;
+
+    h2 {
+      font-size: 25px;
+      font-weight: 600;
+    }
+
+    .topBtn {
+      button {
+        width: 30px;
+        height: 30px;
+
+        border: none;
+        border-radius: 5px;
+        outline: none;
+      }
+    }
+  }
+
+  ul {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+
+    li {
+      font-weight: 500;
+      text-align: center;
+    }
+  }
+
+  .dayTit {
+    margin: 25px 0 15px;
+
+    li {
+      font-size: 12px;
+
+      &:first-child {
+        color: #fa576b;
+      }
+
+      &:last-child {
+        color: #2fa7ff;
+      }
+    }
+  }
+
+  .days {
+    margin-bottom: 15px;
+
+    li {
+      font-size: 15px;
+
+      &.before {
+        color: #ddd;
+      }
+
+      &.today {
+        color: #2fa7ff;
+      }
+    }
+  }
+}
