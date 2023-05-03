@@ -5,6 +5,8 @@ import { useState } from 'react'
 
 import styles from './calendar.module.scss'
 
+const DUMMYDATE = ['20230423', '20230426']
+
 export default function Calendar() {
   const [getMoment, setMoment] = useState(moment())
   const [getTitle, setTitle] = useState(getMoment.format('YY.MM'))
@@ -40,17 +42,26 @@ export default function Calendar() {
                 .startOf('week')
                 .add(index, 'day')
 
-              let styleClass = ''
+              let styleClass = null
 
-              if (moment().format('YYYYMMDD') === days.format('YYYYMMDD')) {
+              if (moment().isSame(days, 'day')) {
                 styleClass = 'today'
-              } else if (today.format('YYYYMM') !== days.format('YYYYMM')) {
+              } else if (!today.isSame(days, 'month')) {
                 styleClass = 'before'
               }
 
               return (
-                <li key={index} className={`${styles[styleClass]}`}>
+                <li
+                  key={index}
+                  data-day={`${days.day()}`}
+                  className={styleClass != null ? `${styles[styleClass]}` : ''}
+                >
                   {days.format('DD')}
+                  {DUMMYDATE.map((date, index) => {
+                    if (date === days.format('YYYYMMDD')) {
+                      return <small key={index} className={styles.dot}></small>
+                    }
+                  })}
                 </li>
               )
             })}
