@@ -1,11 +1,14 @@
-import { Inter } from 'next/font/google'
+'use client'
+
+import { useSession, signOut } from 'next-auth/react'
 
 import styles from './page.module.scss'
 
 import LessonCard from './components/lessonCard'
 import Calendar from './components/calendar'
+import Login from './components/login'
 
-const inter = Inter({ subsets: ['latin'] })
+import { Inter } from 'next/font/google'
 
 const DUMMY = [
   {
@@ -42,7 +45,17 @@ const DUMMY = [
 ]
 
 export default function Home() {
+  const { data: session, status } = useSession()
   const categories = ['전체', ...new Set(DUMMY.map(({ category }) => category))]
+
+  // FIXME: 수정 필요
+  if (status == 'loading') {
+    return <div>loading...</div>
+  }
+
+  if (!session) {
+    return <Login />
+  }
 
   return (
     <main className={styles.main}>
