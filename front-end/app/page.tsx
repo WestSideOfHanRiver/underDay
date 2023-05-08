@@ -1,17 +1,26 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from './page.module.scss'
+'use client'
 
-import { useState } from 'react'
+import { useSession, signOut } from 'next-auth/react'
 
 import Calendar from './components/calendar'
-
-const inter = Inter({ subsets: ['latin'] })
+import Login from './components/login'
 
 export default function Home() {
+  const { data: session, status } = useSession()
+
+  if (status == 'loading') {
+    return <div>loading...</div>
+  }
+
   return (
-    <main>
-      <Calendar />
-    </main>
+    <>
+      {session ? (
+        <div>
+          <Calendar />
+        </div>
+      ) : (
+        <Login />
+      )}
+    </>
   )
 }
