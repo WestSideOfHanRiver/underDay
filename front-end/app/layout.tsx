@@ -1,10 +1,18 @@
 'use client'
 
-import './globals.css'
 import { SessionProvider } from 'next-auth/react'
+
+import './globals.css'
+
+import Navigation from './navigation'
 
 export interface children {
   children: React.ReactNode
+}
+
+export const metadata = {
+  title: 'Under Day',
+  description: 'check your workout schedule and manage yours',
 }
 
 export default function RootLayout({ children }: children) {
@@ -12,7 +20,10 @@ export default function RootLayout({ children }: children) {
     <>
       <SessionProvider>
         <html lang="en">
-          <body>{children}</body>
+          <body>
+            {children}
+            <Navigation />
+          </body>
         </html>
       </SessionProvider>
     </>
