@@ -1,13 +1,11 @@
-'use client'
-
-import { useSession, signOut } from 'next-auth/react'
 import { Inter } from 'next/font/google'
 
 import styles from './page.module.scss'
 
 import LessonCard from './components/lessonCard'
 import Calendar from './components/calendar'
-import Login from './components/login'
+
+const inter = Inter({ subsets: ['latin'] })
 
 const DUMMY = [
   {
@@ -44,38 +42,26 @@ const DUMMY = [
 ]
 
 export default function Home() {
-  const { data: session, status } = useSession()
-
-  if (status == 'loading') {
-    return <div>loading...</div>
-  }
-
   const categories = ['전체', ...new Set(DUMMY.map(({ category }) => category))]
 
   return (
-    <>
-      {session ? (
-        <main className={styles.main}>
-          <Calendar />
-          <select name="" id="">
-            {categories.map((category) => (
-              <option key={category}>{category}</option>
-            ))}
-          </select>
-          <label htmlFor="">Day</label>
-          {DUMMY.map(({ teacher, lessonName, lessonState, category }) => (
-            <LessonCard
-              teacher={teacher}
-              lessonName={lessonName}
-              lessonState={lessonState}
-              category={category}
-              key={lessonName} // 수정 해야함
-            />
-          ))}
-        </main>
-      ) : (
-        <Login />
-      )}
-    </>
+    <main className={styles.main}>
+      <Calendar />
+      <select name="" id="">
+        {categories.map((category) => (
+          <option key={category}>{category}</option>
+        ))}
+      </select>
+      <label htmlFor="">Day</label>
+      {DUMMY.map(({ teacher, lessonName, lessonState, category }) => (
+        <LessonCard
+          teacher={teacher}
+          lessonName={lessonName}
+          lessonState={lessonState}
+          category={category}
+          key={lessonName} // 수정 해야함
+        />
+      ))}
+    </main>
   )
 }

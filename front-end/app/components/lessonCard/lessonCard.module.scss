@@ -1,0 +1,96 @@
+.lessonCard {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+  padding: 15px 25px;
+
+  background-color: #dde1e7;
+  border-radius: 6px;
+  box-shadow: -3px -3px 7px #ffffff73, 2px 2px 5px rgba(94, 104, 121, 0.288);
+
+  img {
+    border-radius: 50%;
+  }
+
+  &.confirmed {
+    border: 1px solid green;
+  }
+
+  &.denied {
+    border: 1px solid red;
+  }
+}
+
+.time {
+  font-size: 12px;
+
+  svg {
+    margin-right: 4px;
+  }
+}
+
+.lessonName {
+  overflow: hidden;
+
+  padding-right: 50px;
+
+  font-size: 20px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.extraInfo {
+  position: absolute;
+  top: 15px;
+  right: 25px;
+
+  display: flex;
+  flex-direction: column;
+  row-gap: 5px;
+
+  font-size: 12px;
+  text-align: right;
+
+  p {
+    padding: 4px;
+    border-radius: 5px;
+
+    svg {
+      margin-right: 2px;
+    }
+  }
+
+  .confirmed {
+    color: green;
+  }
+  .denied {
+    color: red;
+  }
+}
+
+.applyButton {
+  cursor: pointer;
+
+  position: absolute;
+  right: 25px;
+  bottom: 15px;
+
+  padding: 10px 15px;
+
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 12px;
+  color: #595959;
+
+  background: #dde1e7;
+  border: none;
+  border-radius: 25px;
+  outline: none;
+  box-shadow: 2px 2px 5px #babecc, -5px -5px 10px #ffffff73;
+}
