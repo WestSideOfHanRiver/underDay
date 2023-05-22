@@ -13,13 +13,13 @@ const DUMMYDATE = ['20230623', '20230626']
 
 export default function Calendar() {
   const [getMoment, setMoment] = useState(moment())
-  const [getTitle, setTitle] = useState(getMoment.format('YY.MM'))
+  const [getTitle, setTitle] = useState(getMoment.format('M'))
 
   const handleCalendar = (days: number) => {
     const date = getMoment.clone().add(days, 'month')
 
     setMoment(date)
-    setTitle(date.format('YY.MM'))
+    setTitle(date.format('M'))
   }
 
   const selectedDate = useSelector(
