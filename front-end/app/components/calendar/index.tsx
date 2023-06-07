@@ -1,11 +1,15 @@
 'use client'
 
+import { MouseEvent, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
-import { useState } from 'react'
 
 import styles from './calendar.module.scss'
 
-const DUMMYDATE = ['20230423', '20230426']
+import { RootState } from '@/store'
+import { setSelectedDate } from './selectedDateSlice'
+
+const DUMMYDATE = ['20230623', '20230626']
 
 export default function Calendar() {
   const [getMoment, setMoment] = useState(moment())
@@ -16,6 +20,15 @@ export default function Calendar() {
 
     setMoment(date)
     setTitle(date.format('YY.MM'))
+  }
+
+  const selectedDate = useSelector(
+    (state: RootState) => state.selectedDate.value,
+  )
+  const dispatch = useDispatch()
+
+  const handleClickDate = (e: MouseEvent<HTMLLIElement>) => {
+    dispatch(setSelectedDate(e.currentTarget.dataset.date!))
   }
 
   const calendarArr = () => {
@@ -34,7 +47,7 @@ export default function Calendar() {
         <ul key={week} className={styles.days}>
           {Array(7)
             .fill(0)
-            .map((data, index) => {
+            .map((_, index) => {
               let days = today
                 .clone()
                 .startOf('year')
@@ -53,10 +66,18 @@ export default function Calendar() {
               return (
                 <li
                   key={index}
+                  className={`${
+                    styleClass != null ? `${styles[styleClass]}` : ''
+                  } ${
+                    days.format('YYMMDD') === selectedDate
+                      ? styles.selectedDate
+                      : ''
+                  }`}
                   data-day={`${days.day()}`}
-                  className={styleClass != null ? `${styles[styleClass]}` : ''}
+                  data-date={`${days.format('YYMMDD')}`}
+                  onClick={handleClickDate}
                 >
-                  {days.format('DD')}
+                  {days.format('D')}
                   {DUMMYDATE.map((date, index) => {
                     if (date === days.format('YYYYMMDD')) {
                       return <small key={index} className={styles.dot}></small>
@@ -77,7 +98,6 @@ export default function Calendar() {
     <div className={styles.content}>
       <div className={styles.topTit}>
         <h2>{getTitle}</h2>
-
         <div className={styles.topBtn}>
           <button type="button" onClick={() => handleCalendar(-1)}>
             전
