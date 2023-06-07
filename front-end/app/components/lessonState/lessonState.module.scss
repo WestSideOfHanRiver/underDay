@@ -1,0 +1,40 @@
+.lessonState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 61px;
+  height: 26px;
+
+  font-family: 'Noto Sans KR';
+  font-size: 12px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 18px;
+
+  border-radius: 4px;
+}
+
+.available {
+  color: #ffffff;
+  background: #ff612f;
+  border: 1px solid #ff612f;
+}
+
+.standBy {
+  color: #ff612f;
+  background: #ffe2d9;
+  border: 1px solid #ff612f;
+}
+
+.closed {
+  color: #6f7c97;
+  background: #afb8cb;
+  border: 1px solid #afb8cb;
+}
+
+.confirmed {
+  color: #0dc2a2;
+  background: #cef3ed;
+  border: 1px solid #0dc2a2;
+}
