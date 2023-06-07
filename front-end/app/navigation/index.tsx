@@ -11,19 +11,36 @@ import communityIcon from '@svg/community.svg'
 import communityActiveIcon from '@svg/communityActive.svg'
 import myPageIcon from '@svg/myPage.svg'
 import myPageActiveIcon from '@svg/myPageActive.svg'
+import { usePathname } from 'next/navigation'
 
 export default function Navigation() {
+  const pathname = usePathname()
+
   return (
     <nav className={styles.navigation}>
       <ul>
-        {NAV_LIST.map(({ label, path, icon }) => (
-          <li key={path}>
-            <Link className={styles.link} href={path}>
-              <Image src={icon} alt={label} width={16} height={16} />
-              {label}
-            </Link>
-          </li>
-        ))}
+        {NAV_LIST.map(({ label, path, icon, activeIcon }) => {
+          const isActive =
+            (path === '/' && pathname === '/') ||
+            (pathname !== '/' && path.startsWith(pathname!))
+
+          return (
+            <li key={path}>
+              <Link
+                className={`${styles.link} ${isActive ? styles.active : ''}`}
+                href={path}
+              >
+                {!isActive && (
+                  <Image className={styles.icon} src={icon} alt={label} />
+                )}
+                {isActive && (
+                  <Image className={styles.icon} src={activeIcon} alt={label} />
+                )}
+                {label}
+              </Link>
+            </li>
+          )
+        })}
       </ul>
     </nav>
   )
@@ -34,20 +51,24 @@ const NAV_LIST = [
     label: '홈',
     path: '/',
     icon: homeIcon,
+    activeIcon: homeActiveIcon,
   },
   {
     label: '수강권',
-    path: 'classes',
+    path: '/classes',
     icon: ticketIcon,
+    activeIcon: ticketActiveIcon,
   },
   {
     label: '커뮤니티',
-    path: 'community',
+    path: '/community',
     icon: communityIcon,
+    activeIcon: communityActiveIcon,
   },
   {
     label: '마이',
-    path: 'setting',
+    path: '/setting',
     icon: myPageIcon,
+    activeIcon: myPageActiveIcon,
   },
 ]
