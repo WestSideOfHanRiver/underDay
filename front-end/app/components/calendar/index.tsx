@@ -3,8 +3,12 @@
 import { MouseEvent, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
+import Image from 'next/image'
 
 import styles from './calendar.module.scss'
+
+import PreviousIcon from '@svg/previous.svg'
+import NextIcon from '@svg/next.svg'
 
 import { RootState } from '@/store'
 import { setSelectedDate } from './selectedDateSlice'
@@ -13,13 +17,13 @@ const DUMMYDATE = ['20230623', '20230626']
 
 export default function Calendar() {
   const [getMoment, setMoment] = useState(moment())
-  const [getTitle, setTitle] = useState(getMoment.format('M'))
+  const [getTitle, setTitle] = useState(getMoment.format('YY년 M월'))
 
   const handleCalendar = (days: number) => {
     const date = getMoment.clone().add(days, 'month')
 
     setMoment(date)
-    setTitle(date.format('M'))
+    setTitle(date.format('YY년 M월'))
   }
 
   const selectedDate = useSelector(
@@ -97,15 +101,13 @@ export default function Calendar() {
   return (
     <div className={styles.content}>
       <div className={styles.topTit}>
+        <button type="button" onClick={() => handleCalendar(-1)}>
+          <Image src={PreviousIcon} alt="previous month button" />
+        </button>
         <h2>{getTitle}</h2>
-        <div className={styles.topBtn}>
-          <button type="button" onClick={() => handleCalendar(-1)}>
-            전
-          </button>
-          <button type="button" onClick={() => handleCalendar(1)}>
-            후
-          </button>
-        </div>
+        <button type="button" onClick={() => handleCalendar(1)}>
+          <Image src={NextIcon} alt="next month button" />
+        </button>
       </div>
       <ul className={styles.dayTit}>
         {'일월화수목금토'.split('').map((day) => (
