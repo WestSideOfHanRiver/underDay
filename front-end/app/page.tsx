@@ -9,7 +9,7 @@ import Calendar from './components/calendar'
 // import Login from './login'
 
 const notoSans = Noto_Sans_KR({
-  weight: '700',
+  weight: '500',
   display: 'fallback',
   subsets: ['latin'],
   style: 'normal',
