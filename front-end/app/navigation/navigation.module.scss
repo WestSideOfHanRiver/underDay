@@ -32,8 +32,13 @@
   text-decoration: none;
 }
 
-.navIcon {
-  width: 30px;
-  height: 30px;
-  fill: black;
+.icon {
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+}
+
+.active {
+  font-weight: 700;
+  color: #0f2552;
 }
