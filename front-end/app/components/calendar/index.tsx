@@ -5,17 +5,17 @@ import { useState } from 'react'
 
 import styles from './calendar.module.scss'
 
-const DUMMYDATE = ['20230423', '20230426']
+const DUMMYDATE = ['20230523', '20230526']
 
 export default function Calendar() {
   const [getMoment, setMoment] = useState(moment())
-  const [getTitle, setTitle] = useState(getMoment.format('YY.MM'))
+  const [getTitle, setTitle] = useState(getMoment.format('M'))
 
   const handleCalendar = (days: number) => {
     const date = getMoment.clone().add(days, 'month')
 
     setMoment(date)
-    setTitle(date.format('YY.MM'))
+    setTitle(date.format('M'))
   }
 
   const calendarArr = () => {
@@ -76,16 +76,9 @@ export default function Calendar() {
   return (
     <div className={styles.content}>
       <div className={styles.topTit}>
-        <h2>{getTitle}</h2>
-
-        <div className={styles.topBtn}>
-          <button type="button" onClick={() => handleCalendar(-1)}>
-            전
-          </button>
-          <button type="button" onClick={() => handleCalendar(1)}>
-            후
-          </button>
-        </div>
+        <button type="button" onClick={() => handleCalendar(-1)}></button>
+        <h2>{getTitle}월</h2>
+        <button type="button" onClick={() => handleCalendar(1)}></button>
       </div>
       <ul className={styles.dayTit}>
         {'일월화수목금토'.split('').map((day) => (
