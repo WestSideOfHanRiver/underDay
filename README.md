@@ -22,6 +22,7 @@ deactivate
 mac - python -> python3
 1. $ python manage.py makemigrations  -> app의 모델 변경 사항을 체크
 2. $ python manage.py migrate -> 변경사항을 DB에 반영
+3. $ python manage.py inspectdb > models.py  ->mariadb를 models.py 생성
 
 
 ## 서버실행
