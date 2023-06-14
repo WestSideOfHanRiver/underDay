@@ -20,9 +20,7 @@ export default function Navigation() {
     <nav className={styles.navigation}>
       <ul>
         {NAV_LIST.map(({ label, path, icon, activeIcon }) => {
-          const isActive =
-            (path === '/' && pathname === '/') ||
-            (pathname !== '/' && path.startsWith(pathname!))
+          const isActive = pathname === path
 
           return (
             <li key={path}>
