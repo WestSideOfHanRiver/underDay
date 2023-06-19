@@ -1,6 +1,5 @@
 ../myvenv/
 *.pyc
 ../.vscode/
-mysqlclient-1.4.6-cp37-cp37m-win_amd64.whl
 myvenv/
 underday/main/migrations/
