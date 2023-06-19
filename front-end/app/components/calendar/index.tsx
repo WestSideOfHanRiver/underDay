@@ -10,6 +10,8 @@ import styles from './calendar.module.scss'
 import PreviousIcon from '@svg/previous.svg'
 import NextIcon from '@svg/next.svg'
 
+import testIcon from '@'
+
 import { RootState } from '@/store'
 import { setSelectedDate } from './selectedDateSlice'
 

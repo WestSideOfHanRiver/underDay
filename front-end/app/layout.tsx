@@ -22,7 +22,7 @@ export interface children {
 export default function RootLayout({ children }: children) {
   return (
     <SessionProvider>
-      <html lang="en">
+      <html lang="ko">
         <body>
           <Provider store={store}>
             {children}

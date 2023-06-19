@@ -1,0 +1,11 @@
+.select_profile {
+  display: flex;
+  gap: 0 0.2em;
+  align-items: center;
+  font-size: 20px;
+  &::after {
+    content: '\25BE';
+    clear: both;
+    display: block;
+  }
+}
