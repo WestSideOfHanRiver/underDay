@@ -1,7 +1,9 @@
 from django.contrib import admin
-from .models import User
+from .models import UrMaster
 
-class UserItemAdmin(admin.ModelAdmin):
-    list_display = ('username', 'password')
 
-admin.site.register(User, UserItemAdmin)
+class UrMasterItemAdmin(admin.ModelAdmin):
+    list_display = ('user_numb', 'user_phon', 'user_name', 'user_nick')
+
+
+admin.site.register(UrMaster, UrMasterItemAdmin)
