@@ -6,6 +6,10 @@ import styles from './page.module.scss'
 
 import LessonCard from './components/lessonCard'
 import Calendar from './components/calendar'
+
+import Lottie from 'lottie-react'
+import Loding from './assets/svg/loding.json'
+
 // import Login from './login'
 
 const notoSans = Noto_Sans_KR({
@@ -51,7 +55,11 @@ export default function Home() {
 
   // FIXME: 수정 필요
   if (status == 'loading') {
-    return <div>loading...</div>
+    return (
+      <div>
+        <Lottie animationData={Loding} />
+      </div>
+    )
   }
 
   // if (!session) {
