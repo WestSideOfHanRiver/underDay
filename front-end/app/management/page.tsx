@@ -1,5 +1,8 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
+import dynamic from 'next/dynamic'
 
 import { MdSportsTennis } from 'react-icons/md'
 import { BsClockFill } from 'react-icons/bs'
@@ -22,6 +25,8 @@ export default function Management({
   lessonName,
   category,
 }: Props) {
+  const test_event = dynamic(import('./index'))
+
   const datas = [
     {
       id: 123,
@@ -58,7 +63,14 @@ export default function Management({
 
                 <p>{datas[i].teacher}</p>
                 <p>{datas[i].category}</p>
-                <Link href="/">정보보기</Link>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    test_event(e)
+                  }}
+                >
+                  정보보기
+                </button>
               </li>
             )
           })}
