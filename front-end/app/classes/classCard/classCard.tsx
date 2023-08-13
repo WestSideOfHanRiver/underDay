@@ -14,6 +14,9 @@ import { BsClockFill } from 'react-icons/bs'
 import { GrSwim, GrYoga } from 'react-icons/gr'
 import { TbStretching } from 'react-icons/tb'
 import { BiDumbbell } from 'react-icons/bi'
+import { useState } from 'react'
+import Modal from '@components/modal'
+import ClassDetails from '@components/classDetails'
 
 interface Props {
   teacher: string
@@ -36,7 +39,10 @@ export default function ClassCard({
     헬스: <BiDumbbell />,
   }[category]
 
+  const [toggleDetail, setToggleDetail] = useState(false)
+
   const handleClickClassCard = () => {
+    setToggleDetail(true)
     console.log(teacher, lessonName)
   }
 
@@ -70,6 +76,11 @@ export default function ClassCard({
           </p>
         </div>
       </article>
+      {toggleDetail && (
+        <Modal>
+          <ClassDetails setToggleDetail={setToggleDetail} title={lessonName} />
+        </Modal>
+      )}
     </>
   )
 }

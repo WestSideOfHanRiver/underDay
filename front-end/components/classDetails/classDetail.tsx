@@ -9,11 +9,16 @@ import styles from './classDetail.module.scss'
 
 interface Props {
   setToggleDetail: Dispatch<SetStateAction<boolean>>
+  title?: string
 }
 
-export default function ClassDetails({ setToggleDetail }: Props) {
-  const { register, handleSubmit } = useForm<ClassDetails>()
-
+export default function ClassDetails({ setToggleDetail, title }: Props) {
+  const { register, handleSubmit } = useForm<ClassDetails>({
+    defaultValues: {
+      title: title || '',
+    },
+  })
+  console.log('title:', title)
   const submitClass: SubmitHandler<ClassDetails> = (data) => {
     console.log('class registered!!')
   }
@@ -30,7 +35,7 @@ export default function ClassDetails({ setToggleDetail }: Props) {
     }
 
     document.addEventListener('click', closeModal)
-    focusedInput.current?.focus()
+    // focusedInput.current?.focus()
 
     return () => {
       document.removeEventListener('click', closeModal)
@@ -48,7 +53,7 @@ export default function ClassDetails({ setToggleDetail }: Props) {
         <input
           className={styles.input}
           {...register('title', { required: true })}
-          ref={focusedInput}
+          name="title"
         />
         <label>날짜</label>
         <input
