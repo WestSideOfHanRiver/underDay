@@ -10,9 +10,7 @@ import styles from './calendar.module.scss'
 import PreviousIcon from '@svg/previous.svg'
 import NextIcon from '@svg/next.svg'
 
-import testIcon from '@'
-
-import { RootState } from '@/store'
+import { RootState } from '@stores/selectedDate'
 import { setSelectedDate } from './selectedDateSlice'
 
 const DUMMYDATE = ['20230623', '20230626']

@@ -22,11 +22,12 @@
         "plugins": [{ "name": "typescript-plugin-css-modules" }]
       }
     ],
-    "baseUrl": "./app",
     "paths": {
-      "@/*": ["./*"],
       "@components/*": ["./components/*"],
-      "@svg/*": ["./assets/svg/*"]
+      "@stores/*": ["./stores/*"],
+      "@svg/*": ["./app/assets/svg/*"],
+      "types/*": ["./types/*"],
+      "@utils/*": ["./utils/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
