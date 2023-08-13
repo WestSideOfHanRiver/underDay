@@ -21,6 +21,7 @@
     "next-auth": "0.0.0-pr.6777.c5550344",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.45.2",
     "react-icons": "^4.8.0",
     "react-modal": "^3.16.1",
     "react-redux": "^8.0.7",
