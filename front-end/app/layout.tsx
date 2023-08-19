@@ -1,8 +1,12 @@
 'use client'
 
-import Navigation from './navigation'
-import './globals.css'
 import { SessionProvider } from 'next-auth/react'
+import { Provider } from 'react-redux'
+import './globals.css'
+
+import { store } from './store'
+
+import Navigation from './navigation'
 
 // export const metadata = {
 //   title: 'Under Day',
@@ -15,13 +19,15 @@ export interface children {
 
 export default function RootLayout({ children }: children) {
   return (
-    <SessionProvider>
-      <html lang="en">
-        <body>
-          {children}
-          <Navigation />
-        </body>
-      </html>
-    </SessionProvider>
+    <html lang="ko">
+      <body>
+        <SessionProvider>
+          <Provider store={store}>
+            {children}
+            <Navigation />
+          </Provider>
+        </SessionProvider>
+      </body>
+    </html>
   )
 }

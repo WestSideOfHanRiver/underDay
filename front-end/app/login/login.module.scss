@@ -1,0 +1,40 @@
+.loginWrap {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 12px;
+
+  > div {
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 46px;
+    height: 46px;
+
+    color: #333;
+
+    border-radius: 23px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+
+    &.kakao {
+      background-color: #fee500;
+    }
+
+    &.naver {
+      background-color: #1ec800;
+    }
+
+    &.google {
+      background-color: #fff;
+      border: 1px solid rgba(189, 189, 189);
+    }
+
+    &.apple {
+      color: #fff;
+      background-color: #000;
+    }
+  }
+}

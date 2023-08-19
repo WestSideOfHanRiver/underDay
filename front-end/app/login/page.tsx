@@ -5,6 +5,7 @@ import axios from 'axios'
 import Social from '@/components/social'
 
 import styles from './page.module.scss'
+import { signIn } from 'next-auth/react';
 
 export default function Login() {
   const [username, setUserId] = useState('');

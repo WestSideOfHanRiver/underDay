@@ -7,11 +7,11 @@
   display: flex;
   align-items: center;
 
-  height: 45px;
+  height: 64px;
 
   color: black;
 
-  background-color: #e8e8e8;
+  background-color: #ffffff;
 
   ul {
     display: flex;
@@ -20,8 +20,25 @@
   }
 }
 
-.navIcon {
-  width: 30px;
-  height: 30px;
-  fill: black;
+.link {
+  display: flex;
+  flex-direction: column;
+  row-gap: 4px;
+  align-items: center;
+
+  font-size: 12px;
+  font-weight: 400;
+  color: #afb8cb;
+  text-decoration: none;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+}
+
+.active {
+  font-weight: 700;
+  color: #0f2552;
 }

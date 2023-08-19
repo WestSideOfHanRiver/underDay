@@ -1,11 +1,11 @@
-import NextAuth from 'next-auth'
-import KakaoProvider from 'next-auth/providers/kakao'
+import NextAuth from 'next-auth/next'
+import KaKaoProvider from 'next-auth/providers/kakao'
 import NaverProvider from 'next-auth/providers/naver'
 import GoogleProvider from 'next-auth/providers/google'
 
-export const authOptions = {
+const handler = NextAuth({
   providers: [
-    KakaoProvider({
+    KaKaoProvider({
       clientId: process.env.KAKAO_ID as string,
       clientSecret: process.env.KAKAO_SECRET as string,
     }),
@@ -18,6 +18,7 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_SECRET as string,
     }),
   ],
-  secret: process.env.SECRET,
-}
-export default NextAuth(authOptions)
+  secret: process.env.NEXTAUTH_SECRET,
+})
+
+export { handler as GET, handler as POST }
