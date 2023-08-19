@@ -6,9 +6,9 @@ import styles from './page.module.scss'
 
 import LessonCard from './components/lessonCard'
 import Calendar from './components/calendar'
-import Login from './components/login'
 
 import { Inter } from 'next/font/google'
+import Login from './login/page'
 
 const DUMMY = [
   {

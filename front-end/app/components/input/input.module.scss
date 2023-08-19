@@ -1,0 +1,101 @@
+.inputArea {
+
+  display: block;
+  margin-top: 25px;
+  position: relative;
+
+  width: 100%;
+
+  font-size: 18px;
+
+  input {
+    padding-left: 0px;
+
+    border: none;
+    border-bottom: 1px solid #ddd;
+    outline: none;
+    width: 100%;
+    height: 40px;
+
+    font-size: inherit;
+
+    &:focus,
+    &.active {
+      border-bottom: 1px solid #ff612f;
+      caret-color: #ff612f;
+
+      ~ label {
+        top: -8px;
+        font-size: 12px;
+        font-weight: 300;
+        color: #ff612f;
+      }
+    }
+  }
+
+  label {
+    position: absolute;
+    top: 50%;
+    left: 0px;
+
+    font-size: inherit;
+    font-weight: 500;
+    color: #bbb;
+
+    transition: 0.3s;
+    cursor: text;
+    transform: translateY(-50%);
+
+    &.active {
+      top: -8px;
+      font-size: 12px;
+      font-weight: 300;
+      color: #ff612f;
+    }
+  }
+
+  i {
+
+    display: none;
+
+    border: 1px solid red;
+
+    position: absolute;
+    top: 50%;
+    right: 0;
+
+    width: 10px;
+    height: 10px;
+    cursor: pointer;
+    transform: translateY(-50%);
+
+    &.active {
+      display: block;
+    }
+  }
+
+  .checkInput {
+    display: flex;
+    gap: 4px;
+
+    small {
+      font-size: 10px;
+      color: #bbb;
+
+      &:before {
+        display: inline-block;
+        margin-right: 5px;
+
+        border: 1px solid red;
+
+        width: 5px;
+        height: 5px;
+        content: '';
+      }
+
+      &.active {
+        color: #ff612f;
+      }
+    }
+  }
+}
