@@ -87,8 +87,6 @@ export default function Info () {
         //   detailData: JSON.stringify(infoData)
         // });
     } else {
-      console.log(infoData)
-
       axios.post('', infoData, {withCredentials: true})
         .then(res => {
           console.log(res)
@@ -117,7 +115,6 @@ export default function Info () {
   return (
     <form className={styles.form}>
       <h1 className={styles.title}>{BASIC_LIST[count - 1].title}</h1>
-
       <div className={styles.info}>
         <div className={styles.inputWrap}>
           {BASIC_LIST.slice(1, count).map((item, index) => (
