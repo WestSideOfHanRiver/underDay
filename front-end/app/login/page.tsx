@@ -1,5 +1,7 @@
+"use client"
+
 import Link from 'next/link'
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios'
 
 import Social from '@/components/social'
@@ -23,7 +25,12 @@ export default function Login() {
       return
     }
 
-    axios.post('', {user_numb: username, password1: password}, {withCredentials: true})
+    console.log({
+      "user_numb" : username,
+      "password1" : password
+    })
+
+    axios.post('http://127.0.0.1:8000/signup', {username: username, password: password})
       .then(res => {
         console.log(res);
       })

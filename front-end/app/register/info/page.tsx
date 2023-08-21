@@ -81,7 +81,7 @@ export default function Info () {
   // 권한 타입이 기업인 경우 다음 페이지(기업 추가 질문)으로 이동
   const router = useRouter()
   const handleSubmit = () => {
-    if (infoData.auth === 'C') {
+    if (infoData.user_abcd === 'C') {
       router.push('../sub');
         // query: {
         //   detailData: JSON.stringify(infoData)
@@ -100,7 +100,7 @@ export default function Info () {
   const handleAuth = (e: { target: { id: string } }) => {
     setInfoData((prevState) => ({
       ...prevState,
-      "auth": e.target.id,
+      "user_abcd": e.target.id,
     }));
   }
 
@@ -139,7 +139,7 @@ export default function Info () {
                 data-key={index}
                 id={item.value} 
                 type="radio" 
-                name="auth"
+                name="user_abcd"
                 onChange={handleAuth}
                 />
               <label htmlFor={item.value}>{item.label}</label>
