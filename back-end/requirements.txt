@@ -1,9 +1,13 @@
 asgiref==3.6.0
 Django==3.2.18
+django-cors-headers==4.1.0
 djangorestframework==3.14.0
+drf-yasg==1.21.7
+inflection==0.5.1
 mariadb==1.1.6
-mysqlclient @ file:///C:/Users/MSI/OneDrive/%EB%B0%94%ED%83%95%20%ED%99%94%EB%A9%B4/underday/_day/back-end/mysqlclient-1.4.6-cp37-cp37m-win_amd64.whl#sha256=683269b350813b3d593e290e0d565b0de6bcd7f8b3c5cec3025260b3dfcd3b57
 packaging==23.1
 pytz==2023.3
+PyYAML==6.0.1
 sqlparse==0.4.4
 typing_extensions==4.5.0
+uritemplate==4.1.1
