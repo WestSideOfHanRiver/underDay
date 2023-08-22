@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'main',
+    'user',
+    'ticket',
     
 ]
 
@@ -79,9 +81,11 @@ WSGI_APPLICATION = 'underday.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
+        #'NAME': '_day',
         'NAME': 'underday',
         'USER': 'root',
-        'PASSWORD': 'root',
+        # 'PASSWORD': 'root',
+        'PASSWORD': 'dhksemr0319!!',
         'HOST': '127.0.0.1',
         'PORT': '3306',
     }
