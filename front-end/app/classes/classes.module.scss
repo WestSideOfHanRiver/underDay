@@ -1,0 +1,120 @@
+.main {
+    padding: 0 20px;
+
+    .content {
+        min-width: 320px;
+        margin: 70px auto 0;
+    }
+}
+
+.classCard_wrap {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    justify-content: space-between;
+  
+    margin-bottom: 20px;
+    padding: 12px 18px;
+  
+    background-color: #f7f7f7;
+    border-radius: 6px; 
+}
+
+.classCard_info {
+    display: grid;
+    grid-template:
+        "a b"
+        "c c";
+    align-items: center;
+    justify-content: space-between;
+
+    .name {    
+        position: relative;
+
+        overflow: hidden;
+    
+        padding-left: 10px;
+    
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    
+        &::before {
+            content: '';
+      
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+      
+            width: 4px;
+            height: 4px;
+            margin-right: 6px;
+      
+            background-color: #ff612f;
+            border-radius: 50%;
+          }
+    }
+
+    .state {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        width: 61px;
+        height: 26px;
+        
+        font-family: 'Noto Sans KR';
+        font-size: 12px;
+        font-weight: 400;
+        font-style: normal;
+        line-height: 18px;
+        
+        border-radius: 4px;
+
+        &.active {
+            color: #ff612f;
+            background: #ffe2d9;
+            border: 1px solid #ff612f;
+        }
+
+        &.inActive {
+            color: #6f7c97;
+            background: #afb8cb;
+            border: 1px solid #afb8cb;
+        }
+    }
+
+    .time {
+        font-size: 14px;
+        font-weight: 500;
+        color: #0f2552;
+        line-height: 17px;
+        display: flex;
+        align-items: stretch;
+        
+        svg {
+            margin-right: 4px;
+          }
+    }
+}
+
+.classCard_detail {
+    display: flex;
+
+    p {
+        overflow: hidden;
+        display: flex;
+        flex-grow: 1;
+        align-items: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        font-size: 12px;
+        font-weight: 500;
+        color: #6f7c97;
+    }
+}
+
