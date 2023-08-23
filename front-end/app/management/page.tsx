@@ -49,6 +49,27 @@ export default function Management({
       pro_img:
         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp8bmA6Wo8AgCeZqRtAbu304L7t9PoJtD0-Q&usqp=CAU',
     },
+    {
+      id: 8235,
+      teacher: '이미지',
+      category: '헬스',
+      pro_img:
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp8bmA6Wo8AgCeZqRtAbu304L7t9PoJtD0-Q&usqp=CAU',
+    },
+    {
+      id: 8235,
+      teacher: '이미지',
+      category: '헬스',
+      pro_img:
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp8bmA6Wo8AgCeZqRtAbu304L7t9PoJtD0-Q&usqp=CAU',
+    },
+    {
+      id: 8235,
+      teacher: '이미지',
+      category: '헬스',
+      pro_img:
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTp8bmA6Wo8AgCeZqRtAbu304L7t9PoJtD0-Q&usqp=CAU',
+    },
   ]
   return (
     <>
@@ -60,22 +81,52 @@ export default function Management({
                 <figure className={styles.pro_img}>
                   <img src={datas[i].pro_img} alt={datas[i].teacher}></img>
                 </figure>
-
-                <p>{datas[i].teacher}</p>
-                <p>{datas[i].category}</p>
-                <Link
-                  href={{
-                    pathname: '/management/teacher',
-                    query: {
-                      id: datas[i].id,
-                      name: datas[i].teacher,
-                    },
-                  }}
-                  //as={'/management/teacher'}
-                  passHref
-                >
-                  정보 보기
-                </Link>
+                <div className={styles.userInfo}>
+                  <strong className={styles.userName}>
+                    {datas[i].teacher}
+                  </strong>
+                  <ul className={styles.userClassCartegory}>
+                    <li>#{datas[i].category}</li>
+                  </ul>
+                  <ul className={styles.ueserStatistics}>
+                    <li>
+                      3 <p>진행중인 수업</p>
+                    </li>
+                    <li>
+                      3 <p>대기중인 수업</p>
+                    </li>
+                    <li>
+                      21 <p>수강생</p>
+                    </li>
+                  </ul>
+                  <div className={styles.authority}>
+                    <div>
+                      <input type="checkbox" id={`check_${datas[i].id}_0`} />
+                      <label htmlFor={`check_${datas[i].id}_0`}>강의관리</label>
+                    </div>
+                    <div>
+                      <input type="checkbox" id={`check_${datas[i].id}_1`} />
+                      <label htmlFor={`check_${datas[i].id}_1`}>회원관리</label>
+                    </div>
+                    <div>
+                      <input type="checkbox" id={`check_${datas[i].id}_2`} />
+                      <label htmlFor={`check_${datas[i].id}_2`}>티켓관리</label>
+                    </div>
+                  </div>
+                  <Link
+                    href={{
+                      pathname: '/management/teacher',
+                      query: {
+                        id: datas[i].id,
+                        name: datas[i].teacher,
+                      },
+                    }}
+                    //as={'/management/teacher'}
+                    passHref
+                  >
+                    상세보기 +
+                  </Link>
+                </div>
               </li>
             )
           })}

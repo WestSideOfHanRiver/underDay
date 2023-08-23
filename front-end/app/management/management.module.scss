@@ -1,30 +1,134 @@
 .main {
-  padding: 16px;
+  overflow-x: auto;
+
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 768px;
+  height: calc(100% - 64px);
+  margin: 0 auto;
 
   .ul {
     display: flex;
     flex-direction: column;
     gap: 16px 0;
 
-    .list {
-      display: flex;
+    height: 100%;
+    padding: 16px;
 
-      padding: 8px 12px;
+    //flex-direction: column;
+
+    .list {
+      position: relative;
+
+      display: flex;
+      align-items: center;
+
+      box-sizing: border-box;
 
       font-size: 14px;
 
-      background: #ccc;
-      border-radius: 3em;
+      border: solid 1px #dcdcdc;
 
       .pro_img {
-        width: 40px;
-        height: 40px;
-
+        flex: 2;
+        height: 100%;
         img {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          border-radius: 50%;
+        }
+      }
+
+      .userInfo {
+        position: relative;
+
+        display: flex;
+        flex: 6;
+        flex-direction: column;
+
+        padding: 16px;
+
+        background: #fff;
+
+        .userName {
+          display: block;
+
+          margin-bottom: 12px;
+
+          font-size: 18px;
+          font-weight: 600;
+          text-align: center;
+        }
+
+        .ueserStatistics {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 20px;
+
+          li {
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            gap: 10px 0;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 16px;
+            font-weight: bold;
+
+            p {
+              font-size: 0.7em;
+            }
+          }
+        }
+
+        .userClassCartegory {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          margin-bottom: 18px;
+        }
+
+        > a {
+          display: block;
+          margin-left: auto;
+        }
+      }
+
+      .authority {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        margin-bottom: 12px;
+
+        input[type='checkbox'] {
+          display: none;
+        }
+
+        label {
+          display: flex;
+          gap: 0 0.3em;
+          align-items: center;
+          font-size: 13px;
+
+          &::before {
+            content: '';
+
+            display: block;
+
+            box-sizing: border-box;
+            aspect-ratio: 1;
+            width: 1em;
+
+            border: 1px solid #333;
+            border-radius: 2px;
+          }
+        }
+
+        input[type='checkbox']:checked + label {
+          &::before {
+            background-color: #000;
+          }
         }
       }
     }
