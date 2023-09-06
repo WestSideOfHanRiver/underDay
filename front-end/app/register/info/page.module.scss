@@ -1,6 +1,22 @@
-.form {
+.formWrap {
   margin-top: 90px;
   padding: 0 20px;
+  
+  h2 {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 25px;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column-reverse;
+
+    > div {
+      position: relative;
+      margin-bottom: 25px;
+    }
+  }
 
   button {
     padding: 10px 0;
@@ -12,45 +28,66 @@
     z-index: 999;
     height: 64px;
     width: 100%;
-  
-    background-color: #bbb;
-  
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 22px;
     color: #fff;
-  
-    span {
-      font-size: 16px;
-      font-weight: 500;
-      line-height: 22px;
-    }
-  
-    &.active {
-      border: 1px solid red;
-      background: #ff612f;
-    }
+    border: 1px solid red;
+    background: #ff612f;
   }
-}
 
-.info {
   .inputWrap {
-    display: flex;
-    flex-direction: column-reverse;
+    input {
+      padding-left: 0px;
+  
+      border: none;
+      border-bottom: 1px solid #ddd;
+      background: transparent;
+      outline: none;
+      width: 100%;
+      height: 40px;
+  
+      font-size: inherit;
+  
+      &:focus,
+      &.active {
+        border-bottom: 1px solid #ff612f;
+        caret-color: #ff612f;
+  
+        ~ label {
+          top: -8px;
+          font-size: 12px;
+          font-weight: 300;
+          color: #ff612f;
+        }
+      }
+    }
+  
+    label {
+      position: absolute;
+      z-index: -1;
+      top: 50%;
+      left: 0px;
+  
+      font-size: inherit;
+      font-weight: 500;
+      color: #bbb;
+  
+      transition: 0.3s;
+      cursor: text;
+      transform: translateY(-50%);
+  
+      &.active {
+        top: -8px;
+        font-size: 12px;
+        font-weight: 300;
+        color: #ff612f;
+      }
+    }
   }
-}
 
-.auth {
-  display: flex;
-  margin-top: 25px;
-  flex-direction: column;
-
-  small {
-    font-size: 12px;
-    font-weight: 300;
-    color: #ff612f;
-  }
-
-  .authWrap {
+  .radioWrap {
     display: flex;
-    margin-top: 10px;
 
     label {
       width: 80px;
@@ -88,3 +125,7 @@
     }
   }
 }
+
+
+
+

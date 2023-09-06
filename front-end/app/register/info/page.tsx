@@ -1,162 +1,26 @@
-'use client'
-import React from 'react'
-import { useState } from 'react'
+"use client" 
 
-import Input from '@/components/input'
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 
 import styles from './page.module.scss'
-import {useRouter} from 'next/navigation'
-import axios from 'axios'
+import { error } from 'console';
+import axios from 'axios';
 
-export interface inputValue {
-  id: string
+interface InputInfo {
+  id: number;
+  name: string;
+  type: string;
+  title: string;
+  pattern: RegExp;
+}
+
+export interface InputAuth {
+  label: string
   value: string
 }
 
-// 비밀번호 
-// 비밀번호 확인
-// 사용자 구분
-// 휴대폰번호
-// 실명
-
-export default function Info () {
-  const maxLength = BASIC_LIST.length
-  const [count, setCount] = useState(1);
-  const [infoData, setInfoData] = useState<Record<string, string>>({});
-
-  // 클릭시 다음 항목으로 이동 
-  // 마지막 항목일 경우 제출
-  const handleClick = () => {
-    if (handleException()) {
-      if (count === maxLength) {
-        handleSubmit();
-        return
-      }
-
-      setCount(count + 1)
-    }
-  }
-
-  // 질문에 따른 정규식 테스트
-  const handleException = () => {
-    const checkValue = BASIC_LIST
-      .slice(0, count)
-      .map((item) => {
-        const id = item.id;
-        const regEx = item.regEx;
-
-        // 빈 값인지 확인
-        const isEmptyValue = infoData[id] === undefined || infoData[id] === null && infoData[id] === ''; 
-
-        // 정규식이 있고 해당 정규식에 부합하지 않는지 확인
-        let doesNotMatchRegex = !regEx.test(infoData[id]); 
-
-        //예외) 비밀번호 확인의 경우 이전 비밀번호와 동일한지 비교
-        if (id === 'password2') {
-          doesNotMatchRegex = infoData[id] != infoData["password1"];
-        }
-
-        if (isEmptyValue || doesNotMatchRegex){
-          return item.title
-        } else {
-          return ''
-        }
-      });
-
-      const hasErrors = checkValue.some(title => title !== '');
-
-      if (hasErrors) {
-        checkValue.forEach(title => {
-          if (title !== '') {
-            alert(title);
-          }
-        });
-        return false;
-      } else {
-        return true;
-      }
-  }
-
-  // 권한 타입이 회원, 강사인 경우 설문 제출 -> 저장
-  // 권한 타입이 기업인 경우 다음 페이지(기업 추가 질문)으로 이동
-  const router = useRouter()
-  const handleSubmit = () => {
-    if (infoData.user_abcd === 'C') {
-      router.push('../sub');
-        // query: {
-        //   detailData: JSON.stringify(infoData)
-        // });
-    } else {
-      axios.post('', infoData, {withCredentials: true})
-        .then(res => {
-          console.log(res)
-        })
-    }
-  }
-
-  // 권한 변동될 때마다 변경
-  const handleAuth = (e: { target: { id: string } }) => {
-    setInfoData((prevState) => ({
-      ...prevState,
-      "user_abcd": e.target.id,
-    }));
-  }
-
-  // 입력칸이 변동될 때마다 변경
-  const handleChange = (e: { target: { id: string; value: string } }) => {
-    const { id, value } = e.target;
-
-    setInfoData((prevState) => ({
-      ...prevState,
-      [id]: value,
-    }));
-  };
-
-  return (
-    <form className={styles.form}>
-      <h1 className={styles.title}>{BASIC_LIST[count - 1].title}</h1>
-      <div className={styles.info}>
-        <div className={styles.inputWrap}>
-          {BASIC_LIST.slice(1, count).map((item, index) => (
-            <Input
-              key={index}
-              data={item}
-              event={handleChange}
-            />
-          ))}
-        </div>
-      </div>
-
-      <div className={styles.auth}> 
-        <small>권한</small>
-        <div className={styles.authWrap}>
-          {AUTH_LIST.map((item, index) => (
-            <>
-              <input 
-                data-key={index}
-                id={item.value} 
-                type="radio" 
-                name="user_abcd"
-                onChange={handleAuth}
-                />
-              <label htmlFor={item.value}>{item.label}</label>
-            </>
-          ))}
-        </div>
-      </div>
-
-      <button
-          type="button"
-          className={styles.active}
-          onClick={handleClick}
-        >
-        <span>확인</span>
-      </button>
-    </form>
-  )
-}
-
-const AUTH_LIST = [
+const inputAuthList: InputAuth[] = [
   {
     label: '회원',
     value: 'A',
@@ -171,66 +35,103 @@ const AUTH_LIST = [
   }
 ];
 
-const BASIC_LIST = [
+const inputInfoList: InputInfo[] = [
   {
-    id: 'user_abcd',
+    id: 1,
+    name: 'user_abcd',
+    type: 'radio',
     title: '권한을 선택해 주세요.',
-    type: '',
-    label: '',
-    regEx: /^[a-zA-Z]+$/,
-    check: []
+    pattern: /^[a-zA-Z]+$/,
   },
   {
-    id: 'user_name',
+    id: 2,
+    name: 'user_name',
+    type: 'text',
     title: '이름을 입력해 주세요.',
-    type: 'input',
-    label: '이름',
-    regEx: /^[a-zA-Z]+$/,
-    check: []
+    pattern: /^[a-zA-Z]+$/,
   },
   {
-    id: 'user_phon',
+    id: 3,
+    name: 'user_phon',
+    type: 'text',
     title: '휴대폰번호를 입력해 주세요.',
-    type: 'input',
-    label: '휴대폰번호',
-    regEx: /^\d+$/,
-    check: []
+    pattern: /^\d+$/,
   },
   {
-    id: 'user_numb',
+    id: 4,
+    name: 'user_numb',
+    type: 'text',
     title: '아이디를 입력해 주세요.',
-    type: 'input',
-    label: '아이디',
-    regEx: /^[a-zA-Z]+$/,
-    check: []
+    pattern: /^[a-zA-Z]+$/,
   },
   {
-    id: 'password1',
+    id: 5,
+    name: 'password1',
+    type: 'text',
     title: '비밀번호를 입력해 주세요.',
-    type: 'input',
-    label: '비밀번호',
-    regEx: /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{7,10}$).*$/,
-    check: [
-      {
-        name: '특수기호 입력',
-        regex: /^(?=.*[!@#$%^&*()_+\-=[\]{};':"|,.<>/?]).+$/,
-      },
-      {
-        name: '대문자 입력',
-        regex: /^(?=.*[A-Z]).+$/,
-      },
-      {
-        name: '7~10자리 입력',
-        regex: /^.{7,10}$/,
-      },
-    ],
+    pattern: /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{7,10}$).*$/,
   },
   {
-    id: 'password2',
+    id: 6,
+    name: 'password2',
+    type: 'text',
     title: '비밀번호를 확인해 주세요.',
-    type: 'input',
-    label: '비밀번호 확인',
-    regEx: /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{7,10}$).*$/,
-    check: []
+    pattern: /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{7,10}$).*$/,
   },
 ]
+
+export default function Info() {
+  const [ count , setCount ] = useState(0);
+  const { register, handleSubmit, formState: { errors } } = useForm({mode: "onChange"});
+
+  const onSubmit = (data: any) => {
+    if (count == inputInfoList.length) {
+      axios.post('', {data}, {withCredentials: true}
+        ).then(() => {
+          console.log('');
+        }).catch((error) => {
+          console.dir(error);
+        });
+      
+      return
+    } 
+
+    setCount(count + 1);
+  } 
+
+  const onInvalid = (errors: any) => {
+    alert(inputInfoList[count].title);
+  };
+
+  return (
+    <>
+      <div className={styles.formWrap}>
+        <h2>{inputInfoList[count].title}</h2>
+        <form onSubmit={handleSubmit(onSubmit, onInvalid)}>
+
+          {inputInfoList.slice(0, count + 1).map((inputInfo, index) => (
+            <>
+              {inputInfo.type === 'text' ? 
+                <div className={styles.inputWrap}>
+                  <input type="text" placeholder={inputInfo.title} {...register(`${inputInfo.name}`, {required: true, pattern: inputInfo.pattern })}/>
+                  <label htmlFor={inputInfo.name}>{inputInfo.title}</label>
+                </div>
+                :
+                <div className={styles.radioWrap}>
+                  {inputAuthList.map((inputAuth, index) => (
+                    <>
+                      <input type="radio" id={inputAuth.value} value={inputAuth.value} {...register(`${inputInfo.name}`, {required: true})}/>
+                      <label htmlFor={inputAuth.value}>{inputAuth.label}</label>
+                    </>
+                  ))}
+                </div> 
+              }
+            </>
+          ))}
+
+          <button type="submit">다음</button>
+        </form>
+      </div>
+    </>
+  );
+}
