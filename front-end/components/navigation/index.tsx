@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 
 import styles from './navigation.module.scss'
 
@@ -11,7 +12,8 @@ import communityIcon from '@svg/community.svg'
 import communityActiveIcon from '@svg/communityActive.svg'
 import myPageIcon from '@svg/myPage.svg'
 import myPageActiveIcon from '@svg/myPageActive.svg'
-import { usePathname } from 'next/navigation'
+import classIcon from '@svg/class.svg'
+import classActiveIcon from '@svg/classActive.svg'
 
 export default function Navigation() {
   const pathname = usePathname()
@@ -46,6 +48,7 @@ export default function Navigation() {
   )
 }
 
+// FIXME: 로그인한 User type(고객, 강사, 기업)에 따라 다르게 뿌려야함
 const NAV_LIST = [
   {
     label: '홈',
@@ -54,8 +57,14 @@ const NAV_LIST = [
     activeIcon: homeActiveIcon,
   },
   {
-    label: '수강권',
+    label: '강의',
     path: '/classes',
+    icon: classIcon,
+    activeIcon: classActiveIcon,
+  },
+  {
+    label: '수강권',
+    path: '/tickets',
     icon: ticketIcon,
     activeIcon: ticketActiveIcon,
   },

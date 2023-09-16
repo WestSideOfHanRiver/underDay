@@ -1,0 +1,40 @@
+.addButton {
+  cursor: pointer;
+
+  position: fixed;
+  bottom: 70px;
+
+  width: 25px;
+  height: 25px;
+
+  background-color: white;
+  border: 2px solid orange;
+  border-radius: 50%;
+
+  transition: transform 1s ease-in-out;
+
+  &::before,
+  &::after {
+    content: '';
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+
+    width: 10px;
+    height: 2px;
+
+    background: orange;
+  }
+  &::before {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+  &::after {
+    transform: translate(-50%, -50%) rotate(0);
+  }
+}
+
+.addButton.close {
+  transform: rotate(45deg);
+  transition: transform 1s ease-in-out;
+}
