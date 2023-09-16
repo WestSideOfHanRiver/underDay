@@ -1,38 +1,42 @@
-"use client"
+'use client'
 
 import Link from 'next/link'
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import axios from 'axios'
 
-import Social from '@/components/social'
+import Social from '@components/social'
 
 import styles from './page.module.scss'
-import { signIn } from 'next-auth/react';
+import { signIn } from 'next-auth/react'
 
 export default function Login() {
-  const [username, setUserId] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUserId] = useState('')
+  const [password, setPassword] = useState('')
 
   const passwordLogin = () => {
     // 아이디, 비밀번호 빈값 체크
     if (!username) {
-      alert('아이디를 입력해 주세요.');
+      alert('아이디를 입력해 주세요.')
       return
     }
 
     if (!password) {
-      alert('비밀번호를 입력해 주세요.');
+      alert('비밀번호를 입력해 주세요.')
       return
     }
 
     console.log({
-      "user_numb" : username,
-      "password1" : password
+      user_numb: username,
+      password1: password,
     })
 
-    axios.post('http://127.0.0.1:8000/signup', {username: username, password: password})
-      .then(res => {
-        console.log(res);
+    axios
+      .post('http://127.0.0.1:8000/signup', {
+        username: username,
+        password: password,
+      })
+      .then((res) => {
+        console.log(res)
       })
   }
 
