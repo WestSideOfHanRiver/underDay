@@ -2,13 +2,12 @@
 
 import { useSession, signOut } from 'next-auth/react'
 import { Noto_Sans_KR } from 'next/font/google'
-import styles from './page.module.scss'
 
 import LessonCard from './components/lessonCard'
-import Calendar from './components/calendar'
+import Calendar from '@components/calendar'
 
 import Lottie from 'lottie-react'
-import Loding from './assets/svg/loding.json'
+import Loading from './assets/svg/loading.json'
 
 // import Login from './login'
 
@@ -57,7 +56,7 @@ export default function Home() {
   if (status == 'loading') {
     return (
       <div>
-        <Lottie animationData={Loding} />
+        <Lottie animationData={Loading} />
       </div>
     )
   }
@@ -67,7 +66,7 @@ export default function Home() {
   // }
 
   return (
-    <main className={`${styles.main} ${notoSans.className}`}>
+    <>
       <Calendar />
       <select name="" id="">
         {categories.map((category) => (
@@ -86,6 +85,6 @@ export default function Home() {
           key={lessonName} // 수정 해야함
         />
       ))}
-    </main>
+    </>
   )
 }

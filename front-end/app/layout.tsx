@@ -4,9 +4,11 @@ import { SessionProvider } from 'next-auth/react'
 import { Provider } from 'react-redux'
 import './globals.css'
 
-import { store } from './store'
+import { store } from '../stores/selectedDate'
 
-import Navigation from './navigation'
+import styles from './layout.module.scss'
+
+import Navigation from '@components/navigation'
 
 // FIXME: use client 안 쓰도록 빼내기
 // export const metadata = {
@@ -20,15 +22,16 @@ export interface children {
 
 export default function RootLayout({ children }: children) {
   return (
-    <SessionProvider>
-      <html lang="ko">
-        <body>
+    <html lang="ko">
+      <body>
+        <SessionProvider>
           <Provider store={store}>
-            {children}
+            <main className={styles.main}>{children}</main>
+            <div id="portal" />
             <Navigation />
           </Provider>
-        </body>
-      </html>
-    </SessionProvider>
+        </SessionProvider>
+      </body>
+    </html>
   )
 }

@@ -1,0 +1,12 @@
+.calendarWrap {
+    width: 100%;
+
+    .calendarToday {
+        color: #d62c2c !important;
+        border: 1px solid #d62c2c;
+
+        &::after {
+            visibility: hidden;
+        }
+    }
+}
