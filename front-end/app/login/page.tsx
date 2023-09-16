@@ -6,7 +6,7 @@ import axios from 'axios'
 
 import Social from '@components/social'
 
-import styles from './page.module.scss'
+import styles from './login.module.scss'
 import { signIn } from 'next-auth/react'
 
 export default function Login() {
@@ -77,8 +77,8 @@ export default function Login() {
       <Social />
 
       <div className={styles.joinWrap}>
-        <Link href="./register/info">비밀번호 찾기</Link>
-        <Link href="./register/info">회원가입</Link>
+        <Link href="./register">비밀번호 찾기</Link>
+        <Link href="./register">회원가입</Link>
       </div>
     </div>
   )
