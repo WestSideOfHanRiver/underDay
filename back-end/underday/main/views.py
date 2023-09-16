@@ -26,7 +26,7 @@ def user_list(request):
 # ######################    SQL을 사용한 class_list 함수   ###########################
 # @csrf_exempt
 # @api_view(['GET'])
-# def class_list(request):
+# def class_list(request): 
 #     data = request.data
 #     Nick = data['nick']
 #     date = data['date']
@@ -212,3 +212,24 @@ def class_request(request):
         return 
 
 
+# API : http://127.0.0.1:8000/peoplelist/
+# 제목 : 회원 및 강사 리스트
+# 로직 : 조회할때 회원구분을 받아서, A이면 회원, B이면 강사
+# 요청 : userid 
+# 리턴 : 회원 및 강사 리스트
+@csrf_exempt
+@api_view(['GET'])
+def people_list(request):
+    
+    return
+
+
+# API : http://127.0.0.1:8000/peoplemanage/
+# 제목 : 회원,강사관리
+# 로직 : 조회할때 회원구분을 받아서, A이면 회원, B이면 강사
+# 요청 : 
+# 리턴 : x
+@csrf_exempt
+@api_view(['POST','PUT','DELETE'])
+def people_manage(request):
+    return
