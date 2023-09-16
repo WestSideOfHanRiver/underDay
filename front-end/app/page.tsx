@@ -2,19 +2,15 @@
 
 import { useSession, signOut } from 'next-auth/react'
 import { Noto_Sans_KR } from 'next/font/google'
-
-import styles from './page.module.scss'
 import { useRouter } from 'next/navigation'
 
-import LessonCard from './components/lessonCard'
+import LessonCard from '@components/lessonCard'
 import Calendar from '@components/calendar'
 
 import { Inter } from 'next/font/google'
 import Login from './login/page'
 import Lottie from 'lottie-react'
-import Loading from './assets/svg/loading.json'
-
-// import Login from './login'
+import Loading from '@svg/loading.json'
 
 const notoSans = Noto_Sans_KR({
   weight: '500',
