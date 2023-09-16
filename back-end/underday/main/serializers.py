@@ -1,4 +1,4 @@
-# backend/post/serializers.py
+
 from rest_framework import serializers
 from .models import UrMaster,TrClass,TrMbship
 
@@ -16,3 +16,4 @@ class TrMbshipSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrMbship
         fields = '__all__'  
+
