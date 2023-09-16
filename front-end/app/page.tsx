@@ -7,7 +7,7 @@ import LessonCard from './components/lessonCard'
 import Calendar from '@components/calendar'
 
 import Lottie from 'lottie-react'
-import Loding from './assets/svg/loding.json'
+import Loading from './assets/svg/loading.json'
 
 // import Login from './login'
 
@@ -56,7 +56,7 @@ export default function Home() {
   if (status == 'loading') {
     return (
       <div>
-        <Lottie animationData={Loding} />
+        <Lottie animationData={Loading} />
       </div>
     )
   }
