@@ -10,7 +10,6 @@ import styles from './layout.module.scss'
 
 import Navigation from '@components/navigation'
 
-// FIXME: use client 안 쓰도록 빼내기
 // export const metadata = {
 //   title: 'Under Day',
 //   description: 'check your workout schedule and manage yours',

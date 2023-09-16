@@ -3,11 +3,16 @@
 import { useSession, signOut } from 'next-auth/react'
 import { Noto_Sans_KR } from 'next/font/google'
 
+import styles from './page.module.scss'
+import { useRouter } from 'next/navigation'
+
 import LessonCard from './components/lessonCard'
 import Calendar from '@components/calendar'
 
+import { Inter } from 'next/font/google'
+import Login from './login/page'
 import Lottie from 'lottie-react'
-import Loding from './assets/svg/loding.json'
+import Loading from './assets/svg/loading.json'
 
 // import Login from './login'
 
@@ -49,6 +54,7 @@ const DUMMY = [
 ]
 
 export default function Home() {
+  const router = useRouter()
   const { data: session, status } = useSession()
   const categories = ['전체', ...new Set(DUMMY.map(({ category }) => category))]
 
@@ -56,14 +62,14 @@ export default function Home() {
   if (status == 'loading') {
     return (
       <div>
-        <Lottie animationData={Loding} />
+        <Lottie animationData={Loading} />
       </div>
     )
   }
 
-  // if (!session) {
-  //   return <Login />
-  // }
+  if (!session) {
+    router.push('/login')
+  }
 
   return (
     <>
