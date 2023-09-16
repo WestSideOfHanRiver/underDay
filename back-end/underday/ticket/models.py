@@ -14,5 +14,5 @@ class UrMbship(models.Model):
     umem_updt = models.DateTimeField(db_column='UMEM_UPDT', blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'ur_mbship'

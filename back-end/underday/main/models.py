@@ -13,7 +13,7 @@ class UrMbship(models.Model):
     umem_updt = models.DateTimeField(db_column='UMEM_UPDT', blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'ur_mbship'
 
 
@@ -33,7 +33,7 @@ class TrClass(models.Model):
     clas_updt = models.DateTimeField(db_column='CLAS_UPDT', blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'tr_class'
         unique_together = (('clas_numb', 'clas_date', 'clas_time'),)
 
@@ -55,7 +55,7 @@ class TrMbship(models.Model):
     tmem_updt = models.DateTimeField(db_column='TMEM_UPDT', blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'tr_mbship'
 
 
@@ -75,7 +75,7 @@ class UrMaster(models.Model):
     user_updt = models.DateTimeField(db_column='USER_UPDT', blank=True, null=True)
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 'ur_master'
         unique_together = (('user_numb', 'user_phon'),)
 
@@ -98,5 +98,5 @@ class ReMaster(models.Model):
 
 
     class Meta:
-        managed = True
+        managed = False
         db_table = 're_master'

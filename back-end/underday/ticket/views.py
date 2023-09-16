@@ -51,7 +51,7 @@ def create(request):
         # 입력 생성 전 필수입력체크
             # TMEM_NUMB '강사수업일련번호' 
 
-        if UrMaster.objects.filter(user_idxx=request.data['user_idxx']).exists():
+        if UrMbship.objects.filter(user_idxx=request.data['user_idxx']).exists():
             return Response({'message': 'INVAILD_USERS'}, status=401)
 
         # 티켓생성
