@@ -4,9 +4,11 @@ import { SessionProvider } from 'next-auth/react'
 import { Provider } from 'react-redux'
 import './globals.css'
 
-import { store } from './store'
+import { store } from '../stores/selectedDate'
 
-import Navigation from './navigation'
+import styles from './layout.module.scss'
+
+import Navigation from '@components/navigation'
 
 // export const metadata = {
 //   title: 'Under Day',
@@ -23,7 +25,8 @@ export default function RootLayout({ children }: children) {
       <body>
         <SessionProvider>
           <Provider store={store}>
-            {children}
+            <main className={styles.main}>{children}</main>
+            <div id="portal" />
             <Navigation />
           </Provider>
         </SessionProvider>

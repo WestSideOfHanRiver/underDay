@@ -2,8 +2,11 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import dynamic from 'next/dynamic'
+import Modal from 'react-modal'
 
+//import dynamic from 'next/dynamic'
+
+import { useRouter } from 'next/router'
 import { MdSportsTennis } from 'react-icons/md'
 import { BsClockFill } from 'react-icons/bs'
 import { GrSwim, GrYoga } from 'react-icons/gr'
@@ -25,8 +28,6 @@ export default function Management({
   lessonName,
   category,
 }: Props) {
-  const test_event = dynamic(import('./index'))
-
   const datas = [
     {
       id: 123,
@@ -63,14 +64,19 @@ export default function Management({
 
                 <p>{datas[i].teacher}</p>
                 <p>{datas[i].category}</p>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    test_event(e)
+                <Link
+                  href={{
+                    pathname: '/management/teacher',
+                    query: {
+                      id: datas[i].id,
+                      name: datas[i].teacher,
+                    },
                   }}
+                  //as={'/management/teacher'}
+                  passHref
                 >
-                  정보보기
-                </button>
+                  정보 보기
+                </Link>
               </li>
             )
           })}

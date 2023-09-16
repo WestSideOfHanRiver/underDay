@@ -1,0 +1,46 @@
+.loginWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  max-width: 400px;
+  height: 100vh;
+  margin: 0 auto;
+  padding: 0 20px;
+
+  > div {
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    height: 55px;
+    margin-bottom: 15px;
+    padding: 0 8px;
+
+    color: #333;
+
+    border-radius: 5px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+
+    &.kakao {
+      background-color: #fee500;
+    }
+
+    &.naver {
+      background-color: #1ec800;
+    }
+
+    &.google {
+      background-color: #fff;
+      border: 1px solid rgba(189, 189, 189);
+    }
+
+    &.apple {
+      color: #fff;
+      background-color: #000;
+    }
+  }
+}
