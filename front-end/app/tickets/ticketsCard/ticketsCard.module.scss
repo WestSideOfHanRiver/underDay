@@ -1,13 +1,4 @@
-.main {
-    padding: 0 20px;
-
-    .content {
-        min-width: 320px;
-        margin: 70px auto 0;
-    }
-}
-
-.classCard_wrap {
+.tickets_wrap {
     display: flex;
     flex-direction: column;
     row-gap: 8px;
@@ -20,7 +11,7 @@
     border-radius: 6px; 
 }
 
-.classCard_info {
+.tickets_info {
     display: grid;
     grid-template:
         "a b"
@@ -101,7 +92,7 @@
     }
 }
 
-.classCard_detail {
+.tickets_detail {
     display: flex;
 
     p {
