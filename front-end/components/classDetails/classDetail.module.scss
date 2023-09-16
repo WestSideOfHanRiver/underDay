@@ -1,13 +1,20 @@
 .classForm {
   position: fixed;
-  right: 30px;
-  bottom: 100px;
-  left: 30px;
+  right: 0px;
+  bottom: 80px;
+  left: 0px;
+  transform: translateY(-200px);
 
   display: flex;
   flex-direction: column;
 
+  padding: 20px 20px;
+
   background-color: white;
+  border: orange 1px solid;
+  border-radius: 16px 16px 0 0;
+
+  transition: all 5s;
 }
 
 .input {
