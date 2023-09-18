@@ -1,0 +1,5 @@
+../myvenv/
+*.pyc
+../.vscode/
+myvenv/
+underday/main/migrations/
