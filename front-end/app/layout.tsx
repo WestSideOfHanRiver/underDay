@@ -26,7 +26,7 @@ export default function RootLayout({ children }: children) {
         <SessionProvider>
           <Provider store={store}>
             <main className={styles.main}>{children}</main>
-            <div id="portal" />
+            <div id="portal"/>
             <Navigation />
           </Provider>
         </SessionProvider>

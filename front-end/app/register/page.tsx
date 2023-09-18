@@ -145,7 +145,6 @@ export default function Info() {
                 inputInfo.type === 'text' &&
                   <div className={styles.inputWrap}>
                     <input type="text" placeholder={inputInfo.title} {...methods.register(`${inputInfo.name}`, {required: true, pattern: inputInfo.pattern })}/>
-                    <label htmlFor={inputInfo.name}>{inputInfo.title}</label>
                   </div>
               }
 

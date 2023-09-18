@@ -85,6 +85,12 @@
     }
   }
 
+  .comWrap {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+
   .btnWrap {
     display: grid;
     grid-template-columns: 3fr 1fr;
