@@ -82,8 +82,8 @@ DATABASES = {
         'NAME': 'underday',
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'HOST': 'svc.sel5.cloudtype.app',
+        'PORT': '30518',
     }
    
     # 'default': {
