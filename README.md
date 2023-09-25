@@ -1,8 +1,8 @@
 \_Day
 
-| <img src="https://avatars.githubusercontent.com/u/60081286?s=96&v=4" width="100" height="100" /> | <img src="https://avatars.githubusercontent.com/u/127229564?s=96&v=4" width="100" height="100" /> | <img src="https://avatars.githubusercontent.com/u/87363088?s=96&v=4" width="100" height="100" /> | <img src="https://avatars.githubusercontent.com/u/84326278?s=96&v=4" width="100" height="100" /> |
-| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
-| 조완석                                                                                           | 김도완                                                                                            | 김부건                                                                                           | 진가영                                                                                           |
+| <img src="https://avatars.githubusercontent.com/u/60081286?s=96&v=4" width="100" height="100" /> | <img src="https://avatars.githubusercontent.com/u/127229564?s=96&v=4" width="100" height="100" /> | <img src="https://avatars.githubusercontent.com/u/87363088?s=96&v=4" width="100" height="100" /> | <img src="https://avatars.githubusercontent.com/u/84326278?s=96&v=4" width="100" height="100" /> |<img src="https://avatars.githubusercontent.com/u/43087664?s=64&v=4" width="100" height="100" /> |
+|:---:|:---:|:---:|:---:|:---:|
+|조완석|김도완|김부건|진가영|최흥수|
 # 모두 화이팅!
 
 ### django 셋팅 전에 가상환경 설정 필요, 
