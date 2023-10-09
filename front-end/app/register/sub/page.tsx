@@ -3,7 +3,7 @@ import React from 'react'
 import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import Input from '@/components/input'
+import Input from '@components/input'
 
 import styles from '../info/page.module.scss'
 
