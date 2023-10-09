@@ -1,22 +1,17 @@
 'use client'
 
-import Link from 'next/link'
-import Image from 'next/image'
+import { useSearchParams } from 'next/navigation'
 
-import { useRouter } from 'next/navigation'
-import { MdSportsTennis } from 'react-icons/md'
-import { BsClockFill } from 'react-icons/bs'
-import { GrSwim, GrYoga } from 'react-icons/gr'
-import { TbStretching } from 'react-icons/tb'
-import { BiDumbbell } from 'react-icons/bi'
+export default function Teacher() {
+  const searchparams = useSearchParams()
 
-export default function Teacher({ searchParams }) {
-  //console.log(searchParams)
+  const id = searchparams.get('id')
+  const name = searchparams.get('name')
 
   return (
     <>
       <h2>
-        id: {searchParams.id} neme : {searchParams.name}
+        id: {id} name : {name}
       </h2>
     </>
   )
