@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import { useState } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import Input from '@components/input'
 
@@ -18,21 +18,20 @@ export interface inputValue {
 
 // 추가사항 -> 사업자 번호 검증 , 주소 API
 
-export default function Sub () {
-    const router = useRouter();
-    console.log(useSearchParams()?.get('detailData'))
+export default function Sub() {
+  const router = useRouter()
+  console.log(useSearchParams()?.get('detailData'))
 
-    const maxLength = SUB_LIST.length
-    const [count, setCount] = useState(1);
-    const [infoData, setInfoData] = useState<Record<string, string>>({});
+  const maxLength = SUB_LIST.length
+  const [count, setCount] = useState(1)
+  const [infoData, setInfoData] = useState<Record<string, string>>({})
 
-
-  // 클릭시 다음 항목으로 이동 
+  // 클릭시 다음 항목으로 이동
   // 마지막 항목일 경우 제출
   const handleClick = () => {
     if (handleException()) {
       if (count === maxLength) {
-        handleSubmit();
+        handleSubmit()
         return
       }
 
@@ -42,37 +41,37 @@ export default function Sub () {
 
   // 질문에 따른 정규식 테스트
   const handleException = () => {
-    const checkValue = SUB_LIST
-      .slice(0, count)
-      .map((item) => {
-        const id = item.id;
-        const regEx = item.regEx;
+    const checkValue = SUB_LIST.slice(0, count).map((item) => {
+      const id = item.id
+      const regEx = item.regEx
 
-        // 빈 값인지 확인
-        const isEmptyValue = infoData[id] === undefined || infoData[id] === null && infoData[id] === ''; 
+      // 빈 값인지 확인
+      const isEmptyValue =
+        infoData[id] === undefined ||
+        (infoData[id] === null && infoData[id] === '')
 
-        // 정규식이 있고 해당 정규식에 부합하지 않는지 확인
-        let doesNotMatchRegex = !regEx.test(infoData[id]); 
+      // 정규식이 있고 해당 정규식에 부합하지 않는지 확인
+      let doesNotMatchRegex = !regEx.test(infoData[id])
 
-        if (isEmptyValue || doesNotMatchRegex){
-          return item.title
-        } else {
-          return ''
-        }
-      });
-
-      const hasErrors = checkValue.some(title => title !== '');
-
-      if (hasErrors) {
-        checkValue.forEach(title => {
-          if (title !== '') {
-            alert(title);
-          }
-        });
-        return false;
+      if (isEmptyValue || doesNotMatchRegex) {
+        return item.title
       } else {
-        return true;
+        return ''
       }
+    })
+
+    const hasErrors = checkValue.some((title) => title !== '')
+
+    if (hasErrors) {
+      checkValue.forEach((title) => {
+        if (title !== '') {
+          alert(title)
+        }
+      })
+      return false
+    } else {
+      return true
+    }
   }
 
   // 제출
@@ -82,13 +81,13 @@ export default function Sub () {
 
   // 입력칸이 변동될 때마다 변경
   const handleChange = (e: { target: { id: string; value: string } }) => {
-    const { id, value } = e.target;
+    const { id, value } = e.target
 
     setInfoData((prevState) => ({
       ...prevState,
       [id]: value,
-    }));
-  };
+    }))
+  }
 
   return (
     <form className={styles.form}>
@@ -97,20 +96,12 @@ export default function Sub () {
       <div className={styles.info}>
         <div className={styles.inputWrap}>
           {SUB_LIST.slice(0, count).map((item, index) => (
-            <Input
-              key={index}
-              data={item}
-              event={handleChange}
-            />
+            <Input key={index} data={item} event={handleChange} />
           ))}
         </div>
       </div>
 
-      <button
-          type="button"
-          className={styles.active}
-          onClick={handleClick}
-        >
+      <button type="button" className={styles.active} onClick={handleClick}>
         <span>확인</span>
       </button>
     </form>
@@ -124,7 +115,7 @@ const SUB_LIST = [
     type: 'input',
     label: '센터명',
     regEx: /^[a-zA-Z]+$/,
-    check: []
+    check: [],
   },
   {
     id: 'address',
@@ -132,7 +123,7 @@ const SUB_LIST = [
     type: 'input',
     label: '주소',
     regEx: /^[a-zA-Z]+$/,
-    check: []
+    check: [],
   },
   {
     id: 'license',
@@ -140,6 +131,6 @@ const SUB_LIST = [
     type: 'input',
     label: '사업자 번호',
     regEx: /^[a-zA-Z]+$/,
-    check: []
+    check: [],
   },
 ]
