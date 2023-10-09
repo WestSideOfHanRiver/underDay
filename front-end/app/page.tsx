@@ -63,10 +63,6 @@ export default function Home() {
     )
   }
 
-  if (!session) {
-    router.push('/login')
-  }
-
   return (
     <>
       <Calendar />
