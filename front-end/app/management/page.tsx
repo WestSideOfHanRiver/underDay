@@ -2,9 +2,6 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import Modal from 'react-modal'
-
-//import dynamic from 'next/dynamic'
 
 import { useRouter } from 'next/router'
 import { MdSportsTennis } from 'react-icons/md'
@@ -15,19 +12,7 @@ import { BiDumbbell } from 'react-icons/bi'
 
 import styles from './management.module.scss'
 
-interface Props {
-  id: number
-  teacher: string
-  lessonName: string
-  category: string
-}
-
-export default function Management({
-  id,
-  teacher,
-  lessonName,
-  category,
-}: Props) {
+export default function Management() {
   const datas = [
     {
       id: 123,
