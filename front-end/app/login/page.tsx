@@ -3,11 +3,11 @@
 import Link from 'next/link'
 import React, { useState } from 'react'
 import axios from 'axios'
+import { setCookie } from '@utils/cookie'
 
 import Social from '@components/social'
 
 import styles from './login.module.scss'
-import { signIn } from 'next-auth/react'
 
 export default function Login() {
   const [username, setUserId] = useState('')
@@ -25,18 +25,18 @@ export default function Login() {
       return
     }
 
-    console.log({
-      user_numb: username,
-      password1: password,
-    })
-
     axios
       .post('http://127.0.0.1:8000/signup', {
-        username: username,
+        user_idxx: username,
         password: password,
       })
       .then((res) => {
         console.log(res)
+
+        //setCookie('accessToken', 'test', { path: '/', secure: true })
+      })
+      .catch((err) => {
+        console.log(err)
       })
   }
 

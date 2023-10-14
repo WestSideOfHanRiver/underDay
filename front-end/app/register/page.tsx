@@ -1,20 +1,20 @@
-"use client" 
+'use client'
 
-import React, { useState } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
-import { error } from 'console';
-import axios from 'axios';
-import CheckLicense from './checkLicense/checkLicense';
-import CheckAddress from './checkAddress/checkAddress';
+import React, { useState } from 'react'
+import { useForm, FormProvider } from 'react-hook-form'
+import axios from 'axios'
+import CheckLicense from './checkLicense/checkLicense'
+import CheckAddress from './checkAddress/checkAddress'
 
 import styles from './register.module.scss'
+import { useRouter } from 'next/navigation'
 
 interface InputInfo {
-  id: number;
-  name: string;
-  type: string;
-  title: string;
-  pattern: RegExp;
+  id: number
+  name: string
+  type: string
+  title: string
+  pattern: RegExp
 }
 
 export interface InputAuth {
@@ -34,8 +34,8 @@ const inputAuthList: InputAuth[] = [
   {
     label: '센터',
     value: 'C',
-  }
-];
+  },
+]
 
 const inputInfoList: InputInfo[] = [
   {
@@ -86,87 +86,104 @@ const inputInfoList: InputInfo[] = [
     type: 'text',
     title: '센터명을 입력해 주세요.',
     pattern: /^[a-zA-Z]+$/,
-},
-  {
-      id: 8,
-      name: 'address',
-      type: 'com',
-      title: '주소를 입력해 주세요.',
-      pattern: /^[a-zA-Z]+$/,
   },
   {
-      id: 9,
-      name: 'license',
-      type: 'com',
-      title: '사업자 번호를 입력해 주세요.',
-      pattern: /^[a-zA-Z]+$/,
-  }
+    id: 8,
+    name: 'address',
+    type: 'com',
+    title: '주소를 입력해 주세요.',
+    pattern: /^[a-zA-Z]+$/,
+  },
+  {
+    id: 9,
+    name: 'license',
+    type: 'com',
+    title: '사업자 번호를 입력해 주세요.',
+    pattern: /^[a-zA-Z]+$/,
+  },
 ]
 
 export default function Info() {
-  const [ count , setCount ] = useState(0);
-  const [ max , setMax ] = useState(5);
-  const methods = useForm({mode: "onChange"});
+  const router = useRouter()
+  const [count, setCount] = useState(0)
+  const [max, setMax] = useState(5)
+  const methods = useForm({ mode: 'onChange' })
 
   const onSubmit = (data: any) => {
-    if (methods.getValues("user_abcd") === 'C') {
-      setMax(inputInfoList.length - 1);
+    if (methods.getValues('user_abcd') === 'C') {
+      setMax(inputInfoList.length - 1)
     }
 
-    if ( count == max ) {
-      console.log(data);
+    if (count == max) {
+      console.log(data)
 
-      axios.post('', {data}, {withCredentials: true}
-        ).then(() => {
-          console.log('');
-        }).catch((error) => {
-          console.dir(error);
-        });
-      
+      axios
+        .post('', { data }, { withCredentials: true })
+        .then(() => {
+          console.log('')
+
+          //router.push('/')
+        })
+        .catch((err) => {
+          console.dir(err)
+        })
+
       return
-    } 
+    }
 
-    setCount(count + 1);
-  } 
+    setCount(count + 1)
+  }
 
   const onInvalid = (errors: any) => {
-    alert(inputInfoList[count].title);
-  };
+    alert(inputInfoList[count].title)
+  }
 
   return (
     <>
       <div className={styles.formWrap}>
         <h2>{inputInfoList[count].title}</h2>
         <form onSubmit={methods.handleSubmit(onSubmit, onInvalid)}>
-
           {inputInfoList.slice(0, count + 1).map((inputInfo, index) => (
             <>
-              {
-                inputInfo.type === 'text' &&
-                  <div className={styles.inputWrap}>
-                    <input type="text" placeholder={inputInfo.title} {...methods.register(`${inputInfo.name}`, {required: true, pattern: inputInfo.pattern })}/>
-                  </div>
-              }
+              {inputInfo.type === 'text' && (
+                <div className={styles.inputWrap}>
+                  <input
+                    type="text"
+                    placeholder={inputInfo.title}
+                    {...methods.register(`${inputInfo.name}`, {
+                      required: true,
+                      pattern: inputInfo.pattern,
+                    })}
+                  />
+                </div>
+              )}
 
-              {
-                inputInfo.type === 'radio' &&
-                  <div className={styles.radioWrap}>
-                    {inputAuthList.map((inputAuth, index) => (
-                      <>
-                        <input type="radio" id={inputAuth.value} value={inputAuth.value} {...methods.register(`${inputInfo.name}`, {required: true})}/>
-                        <label htmlFor={inputAuth.value}>{inputAuth.label}</label>
-                      </>
-                    ))}
-                  </div> 
-              }
+              {inputInfo.type === 'radio' && (
+                <div className={styles.radioWrap}>
+                  {inputAuthList.map((inputAuth, index) => (
+                    <>
+                      <input
+                        type="radio"
+                        id={inputAuth.value}
+                        value={inputAuth.value}
+                        {...methods.register(`${inputInfo.name}`, {
+                          required: true,
+                        })}
+                      />
+                      <label htmlFor={inputAuth.value}>{inputAuth.label}</label>
+                    </>
+                  ))}
+                </div>
+              )}
 
-              {
-                inputInfo.type === 'com' ? 
-                  <FormProvider {...methods}>
-                    {inputInfo.name === 'license' && <CheckLicense/>}
-                    {inputInfo.name === 'address' && <CheckAddress/>}
-                  </FormProvider> : ''
-              }
+              {inputInfo.type === 'com' ? (
+                <FormProvider {...methods}>
+                  {inputInfo.name === 'license' && <CheckLicense />}
+                  {inputInfo.name === 'address' && <CheckAddress />}
+                </FormProvider>
+              ) : (
+                ''
+              )}
             </>
           ))}
 
@@ -174,5 +191,5 @@ export default function Info() {
         </form>
       </div>
     </>
-  );
+  )
 }
