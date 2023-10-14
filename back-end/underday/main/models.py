@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import Group
 class UrMbship(models.Model):
     umem_numb = models.CharField(db_column='UMEM_NUMB', primary_key=True, max_length=10)
     user_numb = models.CharField(db_column='USER_NUMB', max_length=8, blank=True, null=True)
@@ -23,6 +23,7 @@ class TrClass(models.Model):
     clas_time = models.CharField(db_column='CLAS_TIME', max_length=4)
     clas_clos = models.CharField(db_column='CLAS_CLOS', max_length=4)
     tmem_numb = models.CharField(db_column='TMEM_NUMB', max_length=8, blank=True, null=True)
+    
     clas_nmax = models.CharField(db_column='CLAS_NMAX', max_length=2, blank=True, null=True)
     clas_wait = models.CharField(db_column='CLAS_WAIT', max_length=2, blank=True, null=True)
     resv_stat = models.CharField(db_column='RESV_STAT', max_length=8, blank=True, null=True)
@@ -52,7 +53,7 @@ class TrMbship(models.Model):
     tmem_ysno = models.CharField(db_column='TMEM_YSNO', max_length=1)
     tmem_inst = models.DateTimeField(db_column='TMEM_INST', blank=True, null=True)
     tmem_updt = models.DateTimeField(db_column='TMEM_UPDT', blank=True, null=True)
-
+    
     class Meta:
         managed = False
         db_table = 'tr_mbship'
