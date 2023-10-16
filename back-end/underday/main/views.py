@@ -115,12 +115,20 @@ def class_list(request):
 ######################    Serializer 사용한 class_request 함수   ###########################
 # API : http://127.0.0.1:8000/classrequest/
 
-# 예약일련번호 resv_numb, 수업개설일련번호 CLAS_NUMB,수업날짜 CLAS_DATE, 회원권 일련번호 UMEM_NUMB 
+# 예약일련번호 resv_numb, 수업개설일련번호 CLAS_NUMB,수업날짜 CLAS_DATE, 회원권 일련번호 UMEM_NUMB , reserve_status 현재 예약 상태
 
 @csrf_exempt
 @api_view(['POST'])
 def class_request(request):
-     
+    data = request.data
+    resvnumb = data["reserve_number"] # 예약일련번호
+    clssnumb = data['class_number'] # 수업개설넘버
+    clasdate = data['class_date'] # 수업날짜
+    usermembernumb = data['user_membership_number'] # 수업날짜
+    reserve_status = data['reserve_status'] # 예약상태()
+
+
+
     return
 
 
