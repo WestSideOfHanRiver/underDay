@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .models import UrMaster,UrMbship, TrMbship, TrClass, ReMaster
 from .serializers import UrMasterSerializer,TrClassSerializer,TrMbshipSerializer
 from django.views.decorators.csrf import csrf_exempt
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -9,12 +10,6 @@ from datetime import datetime
 from django.db import connection
 from django.http import HttpResponse
 
-# 제목 : 캘린더 메인페이지  
-# 로직 : 월/일 에 해당하는 모든 데이터, 수강가능한 일정
-# 요청 : Nickname, date, time
-# 리턴 : 수강가능 강의 리스트
-# id, date20230303, time1430
-# ur_master -> ur_mbship -> tr_class
 @csrf_exempt
 @api_view(['GET'])
 def user_list(request):
@@ -59,37 +54,84 @@ def user_list(request):
 
 
 
+# 제목 : 캘린더 메인페이지  
+# 로직 : 월/일 에 해당하는 모든 데이터, 수강가능한 일정
+# 요청 : id, date, time
+# 리턴 : 수강가능 강의 리스트
+# id, date20230303, time1430
+# ur_master -> ur_mbship -> tr_class
 ######################    Serializer 사용한 class_list 함수   ###########################
 # API : http://127.0.0.1:8000/classlist/
 @csrf_exempt
 @api_view(['GET'])
 def class_list(request):
-    data = request.data
-    usernumb = data['usernumb']
-    date = data['date']
-    time = data['time']
+    usernumb = request.GET.get('usernumb', None)
+    date = request.GET.get('date', None)
+
+    # 현재시간 이후에 보이는건 나중에 시간 데이터 추가
+
     mbsh_ob = UrMbship.objects.filter(user_numb=usernumb)# 유저 맴버쉽 가져오기
-    accumulated_queryset =TrClass.objects.none()
-    for i in mbsh_ob:
-        try:
-            trcl_ob = TrClass.objects.filter(tmem_numb=i.tmem_numb,clas_date=date) # 강의 리스트
-            accumulated_queryset |= trcl_ob
-            print(trcl_ob)
-            for j in trcl_ob:
-                clas_time = j.clas_time
-            print(date+'일의 강의 ' +clas_time[:2]+'시 ' + clas_time[2:4]+'분 ' +trmb_ob.tmem_name)
- 
-        except:
-            classlist = None
-            print('강의가 없어요')
-        trmb_ob = TrMbship.objects.get(tmem_numb=i.tmem_numb) # 강의 정보 가져오기
-        print(date+'일의 강의 ' +clas_time[:2]+'시 ' + clas_time[2:4]+'분 ' +trmb_ob.tmem_name)
-        print()
+    accumulated_queryset = [] # 쿼리셋 쌓을곳
+
+    sql_query = '''SELECT 
+    B.tmem_name,
+    A.clas_numb,
+    A.clas_date,
+    A.clas_time,
+    A.clas_clos,
+    A.clas_nmax,
+    A.clas_wait,
+    A.resv_stat,
+    A.resv_last,
+    A.resv_alr1,
+    A.clas_ysno,
+    A.clas_inst,
+    A.clas_updt,
+    A.tmem_numb
+    FROM tr_class A
+    LEFT JOIN tr_mbship B ON A.tmem_numb = B.tmem_numb
+    AND A.tmem_numb = B.tmem_numb
+    WHERE A.clas_date = %s ''' 
+    
+    params = [date]
+    
+    with connection.cursor() as cursor:
+        cursor.execute(sql_query, params)
+        queryset = cursor.fetchall()
+        accumulated_queryset += queryset
+    
     print(accumulated_queryset)
-    serializer = TrClassSerializer(accumulated_queryset,many=True)
-    return Response(serializer.data)
+
+    return Response(accumulated_queryset)
 
 ######################################################################################3
+
+# 제목 : 예약버튼 이벤트
+# 로직 : 예약하기, 예약 취소하기
+# 요청 : 수강번호, 요청자id
+# 리턴 : ok,erorr
+# id, date20230303, time1430
+# ur_master -> ur_mbship -> tr_class
+######################    Serializer 사용한 class_request 함수   ###########################
+# API : http://127.0.0.1:8000/classrequest/
+
+# 예약일련번호 resv_numb, 수업개설일련번호 CLAS_NUMB,수업날짜 CLAS_DATE, 회원권 일련번호 UMEM_NUMB , reserve_status 현재 예약 상태
+
+@csrf_exempt
+@api_view(['POST'])
+def class_request(request):
+    data = request.data
+    resvnumb = data["reserve_number"] # 예약일련번호
+    clssnumb = data['class_number'] # 수업개설넘버
+    clasdate = data['class_date'] # 수업날짜
+    usermembernumb = data['user_membership_number'] # 수업날짜
+    reserve_status = data['reserve_status'] # 예약상태()
+
+
+
+    return
+
+
 
 # API : http://127.0.0.1:8000/trmbship/
 # 제목 : 강의생성 수강 가능 리스트 리턴
@@ -109,14 +151,14 @@ def trmbship_list(request):
     serializer = TrMbshipSerializer(trmb_ob,many=True)
     return Response(serializer.data)
 
-# API : http://127.0.0.1:8000/classrequest/
+# API : http://127.0.0.1:8000/make_class/
 # 제목 : 강의생성 기본값 셋팅로직
 # 로직 : 강의 생성 버튼 눌렀을때 기본값 셋팅
 # 요청 : 강의명, 강의시작시간, 종료시간, 날짜, 예약마감, 개인단체구분, 정원, 운동구분 코드, 센터명
 # 리턴 : x
 @csrf_exempt
 @api_view(['POST','PUT','DELETE'])
-def class_request(request):
+def make_class(request):
     # 입력값 정의
     clasnumb = request.data["clasnumb"] # 삭제 수정에는 필요, 등록일땐 빈칸
     tmemnumb = request.data["tmemnumb"] # 수강권번호

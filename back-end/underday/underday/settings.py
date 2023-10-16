@@ -1,6 +1,6 @@
 
 from pathlib import Path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -9,8 +9,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-c8+a)c_rp1uk=cx*=rybzh(7ag%a2&_f54dp+xz#5vhght1ny8'
-
+# SECRET_KEY = 'django-insecure-c8+a)c_rp1uk=cx*=rybzh(7ag%a2&_f54dp+xz#5vhght1ny8'
+SECRET_KEY = os.environ["DJANGO_SECRET"],
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -26,14 +26,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
     'drf_yasg',
+    'rest_framework',
     'main',
     'corsheaders',
     'user',
     'ticket',
-    
-
 ]
 
 MIDDLEWARE = [
@@ -77,20 +75,18 @@ WSGI_APPLICATION = 'underday.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'underday',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-    }
-   
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
-}
+     'default': {
+        'ENGINE': os.environ["DB_ENGINE"],
+        'NAME': os.environ["DATABASE"],
+        'USER': os.environ["DB_USER"],
+        'PASSWORD': os.environ["DB_PASSWORD"],
+        'HOST': os.environ["DB_HOST"],
+        'PORT': os.environ["DB_PORT"],
+    }  
+
+
+ }
+
 
 
 # Password validation
