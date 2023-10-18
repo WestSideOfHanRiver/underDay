@@ -1,14 +1,3 @@
-.main {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.settingNav {
-  padding: 30px 16px;
-}
-
 .select_profile {
   display: flex;
   gap: 0 0.2em;
@@ -24,61 +13,128 @@
 .profile_info {
   display: flex;
   flex-direction: column;
-  gap: 1em;
   align-items: center;
   justify-content: center;
 
-  margin-bottom: 3em;
+  margin-bottom: 15px;
 
-  figure {
+
+  .profileImgBox{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     position: relative;
-
-    overflow: hidden;
-    display: block;
-
     width: 25%;
-    min-width: 100px;
-    height: 0;
-    min-height: 100px;
-    padding-top: calc(100% - 75%);
+    aspect-ratio: 1;
+    min-width: 152px;
 
-    border-radius: 100%;
-
-    img {
+    &:after{
+      display: flex;
+      width: 18%;
+      aspect-ratio: 1;
+      content: '';
+      border-radius:100%;
+      border:1px solid #5d5d5d;
       position: absolute;
-      top: 0;
-      left: 0;
+      top:0;
+      left:0;
+      background: #f7f7f7 url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMS4zNjgiIHZpZXdCb3g9IjAgMCAxMiAxMS4zNjgiPgogIDxwYXRoIGlkPSJzdGFyLUZpbGxlZF8xXyIgZD0iTTMxMy4xNDMsMjYzMy45NTFsLTEuOTY3LDEuODkuNDY0LDIuNjY2YTEuMTUxLDEuMTUxLDAsMCwxLS40NTksMS4xMzIsMS4xODMsMS4xODMsMCwwLDEtMS4yNDYuMWwtMi40MzUtMS4yNjEtMi40MzUsMS4yNjFhMS4xODEsMS4xODEsMCwwLDEtMS4yNDYtLjEsMS4xNTIsMS4xNTIsMCwwLDEtLjQ1OS0xLjEzMmwuNDY0LTIuNjY2LTEuOTY3LTEuODlhMS4xNDksMS4xNDksMCwwLDEtLjMtMS4xODgsMS4xNjMsMS4xNjMsMCwwLDEsLjk1Mi0uOGwyLjcyMS0uMzksMS4yMTYtMi40MjhhMS4xODIsMS4xODIsMCwwLDEsMi4xMDcsMGwxLjIxNiwyLjQyOCwyLjcyMi4zOWExLjE2MywxLjE2MywwLDAsMSwuOTUyLjhBMS4xNDgsMS4xNDgsMCwwLDEsMzEzLjE0MywyNjMzLjk1MVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0zMDEuNSAtMjYyOC41KSIgZmlsbD0iI2ZmNjEyZiIvPgo8L3N2Zz4K') no-repeat center / 50%;
+      transform: translate(25%,25%);
+    }
+
+    figure {
+      
+
+      overflow: hidden;
+      display: block;
 
       width: 100%;
       height: 100%;
+      
 
-      object-fit: cover;
+      border-radius: 100%;
+      margin-bottom: 14px;
+
+      img {
+        display: block;
+
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+      }
     }
+  }
+
+  .tel{
+      display: flex;
+      font-size:14px;
+      align-items: center;
+      gap:0 0.36em;
+
+      &:before{
+        display: block;
+        content: '';
+        width: .86em;
+        aspect-ratio: 1;
+        background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgdmlld0JveD0iMCAwIDEyIDEyIj4KICA8cGF0aCBpZD0icGhvbmUtRmlsbGVkXzFfIiBkPSJNNzQ0Ljg2MiwyODU0LjU2MWEyLjcsMi43LDAsMCwxLTIuMDQ3Ljk0aC0uMDc0YTkuNSw5LjUsMCwwLDEtOS4yNC05LjI0MSwyLjcsMi43LDAsMCwxLC45NDYtMi4xMzEsMi41NDQsMi41NDQsMCwwLDEsMi4xMTUtLjU4OCwyLjIzNSwyLjIzNSwwLDAsMSwuMy4wNzUuOTQxLjk0MSwwLDAsMSwuNjMyLjc1MWwuNDIzLDIuNjg3YS45NTkuOTU5LDAsMCwxLS4zNDIuODkyYy0uMDUzLjA0Mi0uMTA4LjA4My0uMTY2LjEyMmEuMzQuMzQsMCwwLDAtLjEzNi40Miw2LjIyNiw2LjIyNiwwLDAsMCwzLjIzOCwzLjIzOS4zNDMuMzQzLDAsMCwwLC40MjQtLjE0MWMuMDMtLjA0Mi4wNjEtLjA4NS4wOTItLjEyNWEuOTU3Ljk1NywwLDAsMSwuOS0uMzQ2bDIuNzM2LjQ1NmEuOTMuOTMsMCwwLDEsLjc0OS42NTJjLjAxNy4wNjEuMDMzLjEzMS4wNDcuMjFBMi41NzMsMi41NzMsMCwwLDEsNzQ0Ljg2MiwyODU0LjU2MVoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKC03MzMuNDk5IC0yODQzLjUpIiBmaWxsPSIjNDE0MTZlIi8+Cjwvc3ZnPgo=') no-repeat center / 95%;
+      }
+    }
+
+  .porgileImageSelect{
+    color: var(--key-color);
   }
 
   strong {
     display: block;
-    font-size: 2em;
-    font-weight: 600;
+    font-size: 24px;
+    font-weight: bold;
   }
 }
 
-.infoDeta {
+.category {
   display: flex;
-  gap: 0 3em;
+  font-size:14px;
+  gap: 0 .5em;
   justify-content: center;
+  margin-bottom: 1.71em;
 
   li {
     display: flex;
-    flex-direction: column;
-    gap: 1em 0;
     align-items: center;
+    height: 1.88em;
+    font-size:1.14em;
+    color:#fff;
+    padding:0 1em;
+    border-radius: 2em;
+    background-color: var(--key-color);
+  }
+}
 
-    strong {
-      display: block;
-      font-size: 2em;
+.menu{
+  display: flex;
+  font-size:16px;
+  gap: 0 0.63em;
+
+  li{
+    flex: 1;
+
+    a{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: inherit;
+      height: 2.63em;
+      border-radius: 0.75em;
+      background-color: #f7f7f7;
+      
+      span{
+        transform: translate3d(0,.1em,0);
+      }
     }
   }
+
 }
 
 .profileSelecterModal {

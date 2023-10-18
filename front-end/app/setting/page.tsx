@@ -36,25 +36,44 @@ const SettingHead = () => {
 const Profile = () => {
   return (
     <section>
-      <h3 className="blind">대시보드</h3>
+      <h3 className="blind">마이페이지</h3>
       <div className={styles.profile_info}>
-        <figure>
-          <Image src={PorfileImg} alt="프로필 이미지" />
-        </figure>
+        <div className={styles.profileImgBox}>
+          <figure>
+            <Image src={PorfileImg} alt="프로필 이미지" />
+          </figure>
+        </div>
         <strong>아무개</strong>
+        <a href="tel:010-4043-4240" className={styles.tel}>
+          010-4043-4240
+        </a>
       </div>
-      <ul className={styles.infoDeta}>
+      <ul className={styles.category}>
+        <li>#필라테스</li>
+        <li>#PT</li>
+      </ul>
+      <ul className={styles.menu}>
         <li>
-          <strong>3</strong>
-          <p>수강권</p>
+          <Link 
+          href="#"
+          onClick={(e) => {
+              e.preventDefault()
+              alert('프로필 편집!!')
+            }}
+          >
+            <span>프로필 편집</span>
+          </Link>
         </li>
         <li>
-          <strong>1</strong>
-          <p>진행중</p>
-        </li>
-        <li>
-          <strong>3</strong>
-          <p>기타</p>
+          <Link 
+          href="#"
+          onClick={(e) => {
+              e.preventDefault()
+              alert('프로필 공유!!')
+            }}
+          >
+            <span>프로필 공유</span>
+          </Link>
         </li>
       </ul>
     </section>

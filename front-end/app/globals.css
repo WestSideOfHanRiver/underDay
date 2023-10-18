@@ -2,7 +2,14 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-
+:root {
+  --key-color: #ff612f;
+  --font-color: #000;
+  --state-color-red: #db1f1f;
+  --state-color-blur: #2f59ff;
+  --state-color-green: #0a8d42;
+  --state-color-purple: #9f6fd5;
+}
 html,
 body,
 div,
@@ -108,8 +115,9 @@ nav,
 section {
   display: block;
 }
-body {
-  line-height: 1;
+html,body {
+  line-height: normal;
+  height: 100%;
 }
 ol,
 ul {

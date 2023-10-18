@@ -53,35 +53,36 @@ export default function Management({
   ]
   return (
     <>
-      <main className={styles.main}>
-        <ul className={styles.ul}>
-          {datas.map((a, i) => {
-            return (
-              <li className={styles.list} data-id={datas[i].id} key={i}>
-                <figure className={styles.pro_img}>
-                  <img src={datas[i].pro_img} alt={datas[i].teacher}></img>
-                </figure>
+      <div>
+        <h2 className="blind">마이페이지</h2>
+      </div>
+      <ul className={styles.ul}>
+        {datas.map((a, i) => {
+          return (
+            <li className={styles.list} data-id={datas[i].id} key={i}>
+              <figure className={styles.pro_img}>
+                <img src={datas[i].pro_img} alt={datas[i].teacher}></img>
+              </figure>
 
-                <p>{datas[i].teacher}</p>
-                <p>{datas[i].category}</p>
-                <Link
-                  href={{
-                    pathname: '/management/teacher',
-                    query: {
-                      id: datas[i].id,
-                      name: datas[i].teacher,
-                    },
-                  }}
-                  //as={'/management/teacher'}
-                  passHref
-                >
-                  정보 보기
-                </Link>
-              </li>
+              <p>{datas[i].teacher}</p>
+              <p>{datas[i].category}</p>
+              <Link
+                href={{
+                  pathname: '/management/teacher',
+                  query: {
+                    id: datas[i].id,
+                    name: datas[i].teacher,
+                  },
+                }}
+                //as={'/management/teacher'}
+                passHref
+              >
+                정보 보기
+              </Link>
+            </li>
             )
           })}
         </ul>
-      </main>
     </>
   )
 }

@@ -1,0 +1,43 @@
+.wrap {
+  max-width: 832px;
+  padding:0 16px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height:100%;
+
+  .main{
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    overflow: auto;
+
+    .pageTitle{
+
+    }
+  }
+}
+
+.pageTopNav{
+  display: flex;
+  height: 44px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  
+  .profileSelecter{
+    position:absolute;
+    top:50%;
+    left:0;
+    transform:translateY(-50%);
+    font-size:16px;
+    font-weight:bold;
+  }
+
+  .pageTile{
+    font-size:20px;
+    font-weight: bold;
+  }
+}

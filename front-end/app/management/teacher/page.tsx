@@ -10,11 +10,16 @@ import { GrSwim, GrYoga } from 'react-icons/gr'
 import { TbStretching } from 'react-icons/tb'
 import { BiDumbbell } from 'react-icons/bi'
 
+import Back_btn from '../../../public/assets/svg/back_btn.svg'
+
 export default function Teacher({ searchParams }) {
   //console.log(searchParams)
 
   return (
     <>
+      <div className='pageTopNav'>
+        <Back_btn/>
+      </div>
       <h2>
         id: {searchParams.id} neme : {searchParams.name}
       </h2>

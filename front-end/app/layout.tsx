@@ -6,7 +6,7 @@ import './globals.css'
 
 import { store } from '../stores/selectedDate'
 
-import styles from './layout.module.scss'
+import styles from '../styles/default.module.scss'
 
 import Navigation from '@components/navigation'
 
@@ -25,9 +25,11 @@ export default function RootLayout({ children }: children) {
       <body>
         <SessionProvider>
           <Provider store={store}>
-            <main className={styles.main}>{children}</main>
-            <div id="portal" />
-            <Navigation />
+            <div className={styles.wrap}>
+              <main className={styles.main}>{children}</main>
+              <div id="portal" />
+              <Navigation />
+            </div>
           </Provider>
         </SessionProvider>
       </body>
