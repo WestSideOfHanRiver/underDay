@@ -109,16 +109,14 @@ def class_list(request):
 # 제목 : 예약버튼 이벤트
 # 로직 : 예약하기, 예약 취소하기
 # 요청 : 수강번호, 요청자id
-# 리턴 : ok,erorr
-# id, date20230303, time1430
-# ur_master -> ur_mbship -> tr_class
-######################    Serializer 사용한 class_request 함수   ###########################
-# API : http://127.0.0.1:8000/classrequest/
+# 리턴 : ok,error
 
+# API : http://127.0.0.1:8000/classrequest/
+# 
 # 예약일련번호 resv_numb, 수업개설일련번호 CLAS_NUMB,수업날짜 CLAS_DATE, 회원권 일련번호 UMEM_NUMB , reserve_status 현재 예약 상태
 
 @csrf_exempt
-@api_view(['POST'])
+@api_view(['PUT'])
 def class_request(request):
     data = request.data
     resvnumb = data["reserve_number"] # 예약일련번호
@@ -160,9 +158,9 @@ def trmbship_list(request):
 @api_view(['POST','PUT','DELETE'])
 def make_class(request):
     # 입력값 정의
-    clasnumb = request.data["clasnumb"] # 삭제 수정에는 필요, 등록일땐 빈칸
-    tmemnumb = request.data["tmemnumb"] # 수강권번호
-    userid = request.data["userid"] # ID값
+    clasnumb = request.data["clas_numb"] # 삭제 수정에는 필요, 등록일땐 빈칸
+    tmemnumb = request.data["tmem_numb"] # 수강권번호
+    userid = request.data["user_id"] # ID값
 
     # INSERT
     if request.method == 'POST':
@@ -181,14 +179,14 @@ def make_class(request):
                 new_serial = str(datetime.now().strftime('%y%m%d')) + '0000'
 
         
-        clasdate_v = request.data['clasdate'] # 강의시작시간 
-        clastime_v = request.data["clastime"] # 수업시작시간 4자리 1130
-        clasclos_v = request.data["clasclos"] # 수업종료시간 4자리 1130
-        clasnmax_v = request.data["clasnmax"] # 정원 2자리
-        claswait_v = request.data["claswait"] # 대기인원 2자리
-        resvstat_v = request.data["resvstat"] # 예약시작시간 12자리 202302011130
-        resvlast_v = request.data["resvlast"] # 예약마감시간 12자리 202302211200
-        resvalr1_v = request.data["resvalr1"] # 예약마감전 알람시간 2자리 11시간
+        clasdate_v = request.data["clas_date"] # 강의시작시간 
+        clastime_v = request.data["clas_time"] # 수업시작시간 4자리 1130
+        clasclos_v = request.data["clas_clos"] # 수업종료시간 4자리 1130
+        clasnmax_v = request.data["clas_nmax"] # 정원 2자리
+        claswait_v = request.data["clas_wait"] # 대기인원 2자리
+        resvstat_v = request.data["resv_stat"] # 예약시작시간 12자리 202302011130
+        resvlast_v = request.data["resv_last"] # 예약마감시간 12자리 202302211200
+        resvalr1_v = request.data["resv_alr1"] # 예약마감전 알람시간 2자리 11시간
  
         # 모델 객체 생성 및 저장
         new_data = TrClass(clas_numb=new_serial, clas_date=clasdate_v,clas_time=clastime_v,clas_nmax=clasnmax_v,
@@ -197,6 +195,7 @@ def make_class(request):
 
         
         try:
+            print("success")
             new_data.save()  # 데이터 저장 시도
             return HttpResponse(status=200)  # 성공적으로 저장된 경우 200 OK 응답 반환
         except :
@@ -210,14 +209,14 @@ def make_class(request):
         except :
             return HttpResponse(status=404, content=f"No match data, {clasnumb}")
 
-        clasdate_v = request.data['clasdate'] # 강의시작시간 
-        clastime_v = request.data["clastime"] # 수업시작시간 4자리 1130
-        clasclos_v = request.data["clasclos"] # 수업종료시간 4자리 1130
-        clasnmax_v = request.data["clasnmax"] # 정원 2자리
-        claswait_v = request.data["claswait"] # 대기인원 2자리
-        resvstat_v = request.data["resvstat"] # 예약시작시간 12자리 202302011130
-        resvlast_v = request.data["resvlast"] # 예약마감시간 12자리 202302211200
-        resvalr1_v = request.data["resvalr1"] # 예약마감전 알람시간 2자리 11시간
+        clasdate_v = request.data['clas_date'] # 강의시작시간 
+        clastime_v = request.data["clas_time"] # 수업시작시간 4자리 1130
+        clasclos_v = request.data["clas_clos"] # 수업종료시간 4자리 1130
+        clasnmax_v = request.data["clas_nmax"] # 정원 2자리
+        claswait_v = request.data["clas_wait"] # 대기인원 2자리
+        resvstat_v = request.data["resv_stat"] # 예약시작시간 12자리 202302011130
+        resvlast_v = request.data["resv_last"] # 예약마감시간 12자리 202302211200
+        resvalr1_v = request.data["resv_alr1"] # 예약마감전 알람시간 2자리 11시간
         print(clasdate_v,clastime_v,clasclos_v)
         # 모델 객체 생성 및 저장
         obj.clas_date = clasdate_v

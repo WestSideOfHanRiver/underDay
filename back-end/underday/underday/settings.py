@@ -74,6 +74,15 @@ WSGI_APPLICATION = 'underday.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'underday',
+#         'USER': 'root',
+#         'PASSWORD': 'root',
+#         'HOST': '127.0.0.1',
+#         'PORT': '3306',
+#     }
 DATABASES = {
      'default': {
         'ENGINE': os.environ["DB_ENGINE"],
