@@ -100,7 +100,7 @@ def class_list(request):
         queryset = cursor.fetchall()
         accumulated_queryset += queryset
     
-    print(accumulated_queryset)
+    # print(accumulated_queryset)
 
     return Response(accumulated_queryset)
 
@@ -141,9 +141,9 @@ def class_request(request):
 def trmbship_list(request):
     data = request.data
     usernumb = data['usernumb']
-    print(usernumb)
+
     trmb_ob = TrMbship.objects.filter(user_numb=usernumb) # 강의 정보 가져오기
-    print(trmb_ob)
+
     # for da in trmb_ob:
     #    print(da.tmem_name)
     serializer = TrMbshipSerializer(trmb_ob,many=True)
@@ -165,11 +165,8 @@ def make_class(request):
     # INSERT
     if request.method == 'POST':
         last_serial = TrClass.objects.order_by('-clas_numb').first()
-    
-        print(last_serial)
         if last_serial:
             last_date = last_serial.clas_numb[:6]
-            print(last_date)
 
             if last_date == datetime.now().strftime('%y%m%d'):
                 sum_serial = int(last_serial.clas_numb[6:]) + 1
@@ -195,7 +192,6 @@ def make_class(request):
 
         
         try:
-            print("success")
             new_data.save()  # 데이터 저장 시도
             return HttpResponse(status=200)  # 성공적으로 저장된 경우 200 OK 응답 반환
         except :
@@ -217,7 +213,7 @@ def make_class(request):
         resvstat_v = request.data["resv_stat"] # 예약시작시간 12자리 202302011130
         resvlast_v = request.data["resv_last"] # 예약마감시간 12자리 202302211200
         resvalr1_v = request.data["resv_alr1"] # 예약마감전 알람시간 2자리 11시간
-        print(clasdate_v,clastime_v,clasclos_v)
+
         # 모델 객체 생성 및 저장
         obj.clas_date = clasdate_v
         obj.clas_time = clastime_v
