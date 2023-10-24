@@ -29,8 +29,6 @@ class UrMbship(models.Model):
     umem_tnum = models.CharField(db_column='UMEM_TNUM', max_length=3, blank=True, null=True)
     umem_unum = models.CharField(db_column='UMEM_UNUM', max_length=3, blank=True, null=True)
     umem_ysno = models.CharField(db_column='UMEM_YSNO', max_length=1, blank=True, null=True)
-    umem_inst = models.DateTimeField(db_column='UMEM_INST', blank=True, null=True)
-    umem_updt = models.DateTimeField(db_column='UMEM_UPDT', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -48,8 +46,6 @@ class TrMbship(models.Model):
     tmem_maxx = models.CharField(db_column='TMEM_MAXX', max_length=3, blank=True, null=True)
     tmem_wait = models.CharField(db_column='TMEM_WAIT', max_length=2, blank=True, null=True)
     tmem_ysno = models.CharField(db_column='TMEM_YSNO', max_length=1)
-    tmem_inst = models.DateTimeField(db_column='TMEM_INST', blank=True, null=True)
-    tmem_updt = models.DateTimeField(db_column='TMEM_UPDT', blank=True, null=True)
 
     class Meta:
         managed = False
