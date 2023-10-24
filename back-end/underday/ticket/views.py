@@ -56,7 +56,7 @@ def ticket_list(request):
                 # TODO 기업일 경우 리스트 조회 추가 예정
             else:
                 return Response({'message': 'INVAILD_USERS'}, status=401)
-        else :
+        else:
             return Response({'message': '일치하는 ID가 없습니다.'}, status=401)
     
         return Response({'message': 'SUCCESS'}, status=201)
@@ -70,7 +70,7 @@ def ticket_list(request):
 def create(request):
 
     try:
-        userNumb = "";
+        userNumb = ""
 
         # 강사수업일련번호 여부 chk, 권한 chk
         if TrMbship.objects.filter(tmem_numb=request.data['tmem_numb']).exists():
@@ -79,15 +79,14 @@ def create(request):
 
             # TODO JWT 토큰 연동시 강사수업일련번호 소유 여부 검증 로직 추가
 #             if(trMbshipInfo.user_numb != request.data["user_numb"]):
-# r               eturn Response({'message': ''}, status=401) 
+#                return Response({'message': ''}, status=401) 
 
             userInfo = UrMaster.objects.get(user_numb=trMbshipInfo.user_numb)
 
             # user_abcd 회원구분(A:회원, B:강사, C:기업)
-            if(userInfo.user_abcd != "B"){
+            if(userInfo.user_abcd != "B"):
                 return Response({'message': '티켓 생성 권한이 없습니다.'}, status=401)
-            }
-        else :
+        else:
             return Response({'message': '일치하는 강사수업일련번호가 없습니다.'}, status=401)
 
 
@@ -96,7 +95,7 @@ def create(request):
             userInfo = UrMaster.objects.get(user_idxx=trMbshipInfo.user_idxx)
 
             userNumb = userInfo.user_numb
-        else :
+        else:
             return Response({'message': 'INVAILD_USERS'}, status=401)
 
         # 티켓생성
@@ -110,7 +109,6 @@ def create(request):
             umem_unum=request.data["umem_unum"], # 회원권사용회차
             umem_ysno=request.data["umem_ysno"]  # 회원권사용가능여부
         )
-    
         return Response({'message': 'SUCCESS'}, status=201)
 
     except KeyError:
@@ -129,10 +127,9 @@ def trMbshipList(request):
             userInfo = UrMaster.objects.get(user_numb=request.data["user_numb"])
             
             # user_abcd 회원구분(A:회원, B:강사, C:기업)
-            if(userInfo.user_abcd != "B"){
+            if(userInfo.user_abcd != "B"):
                 return Response({'message': '조회권한이 없습니다.'}, status=401)
-            }
-        else :
+        else:
             return Response({'message': 'INVAILD_USERS'}, status=401)
             
         # 강사 본인이 갖고있는 강사수업 LIST 조회
@@ -144,7 +141,7 @@ def trMbshipList(request):
                             ,'tmem_name': trMbshipList.tmem_name # 강의명
                             ,'tmem_expl': trMbshipList.tmem_expl # 강의실명
                             }], status=200)
-        else : 
+        else: 
             return Response({'tmem_numb': '' # 강사수업일련번호
                             ,'tmem_name': '' # 강의명
                             ,'tmem_expl': '' # 강의실명

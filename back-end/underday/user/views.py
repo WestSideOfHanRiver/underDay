@@ -103,14 +103,14 @@ def login(request):
             # db에 저장된 암호화 PW == 입력받고 암호화된 PW 비교
             if bcrypt.checkpw(request.data['password'].encode('utf-8'), userInfo.user_pasw.encode('utf-8')) == True:
                 return Response({'message': 'SUCCESS'}, status=200)
-            else :
+            else:
                 # 비밀번호 오류 count 추가
                 userPwer = userInfo.user_pwer + 1
 
                 UrMaster.objects.filter(user_idxx=request.data["user_idxx"]).update(user_pwer=userPwer)
                 
                 return Response({'message': '비밀번호 오류!!'}, status=401)
-        else :
+        else:
             return Response({'message': '일치하는 ID가 없습니다.'}, status=401)
 
     except KeyError:
@@ -124,7 +124,7 @@ def chkUserId(request):
     try:
         if UrMaster.objects.filter(user_idxx=request.data["user_idxx"]).exists():
             return Response({'message': '중복된 ID입니다.'}, status=401)
-        else :
+        else:
             return Response({'message': 'SUCCESS'}, status=200)
 
     except KeyError:
