@@ -30,7 +30,7 @@ def signup(request):
         decoded_password = hashed_password.decode('utf-8')
         
         ## user_abcd 회원구분(A:회원, B:강사, C:기업)
-        if(request.data["user_abcd"] == "A"){
+        if(request.data["user_abcd"] == "A"):
 
             UrMaster.objects.create(
                 user_idxx=request.data["user_idxx"],
@@ -42,7 +42,7 @@ def signup(request):
                 user_rptt="Y",
                 user_sumo="SUN"
             )
-        } else if(request.data["user_abcd"] == "B"){
+        else if(request.data["user_abcd"] == "B"):
 
             UrMaster.objects.create(
                 user_idxx=request.data["user_idxx"],
@@ -55,7 +55,7 @@ def signup(request):
                 user_sumo="SUN",
                 user_orig=request.data["user_orig"], #소속명
             )
-        } else if(request.data["user_abcd"] == "C"){
+        else if(request.data["user_abcd"] == "C"):
 
             UrMaster.objects.create(
                 user_idxx=request.data["user_idxx"],
@@ -69,10 +69,9 @@ def signup(request):
                 user_orig=request.data["user_orig"], #소속명
                 user_addr=request.data["user_addr"], #도로명주소
             )
-        } else {
+        else:
             return Response({'message': 'INVAILD_USERS'}, status=401)
-        }
-    
+            
         return Response({'message': 'SUCCESS'}, status=201)
 
     except KeyError:
@@ -108,7 +107,6 @@ def login(request):
                 UrMaster.objects.filter(user_idxx=request.data["user_idxx"]).update(user_pwer=userPwer)
                 
                 return Response({'message': '비밀번호 오류!!'}, status=401)
-
         else :
             return Response({'message': '일치하는 ID가 없습니다.'}, status=401)
 

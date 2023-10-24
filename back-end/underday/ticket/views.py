@@ -20,7 +20,7 @@ def ticket_list(request):
             userInfo = UrMaster.objects.get(user_numb=request.data["user_numb"])
 
             # user_abcd 회원구분(A:회원, B:강사, C:기업)
-            if(userInfo.user_abcd == "A"){
+            if(userInfo.user_abcd == "A"):
                 
                 ticketInfo = UrMbship.objects.get(user_numb=request.data["user_numb"])
 
@@ -34,7 +34,7 @@ def ticket_list(request):
                                 ,'umem_ysno': ticketInfo.umem_ysno # 회원권사용가능여부
                                 }], status=200)
 
-            } else if(userInfo.user_abcd == "B"){
+            else if(userInfo.user_abcd == "B"):
                 
                 # 강사 본인이 갖고있는 강사수업 LIST 조회
                 trMbshipList = TrMbship.objects.get(user_numb=user_numb)
@@ -52,12 +52,10 @@ def ticket_list(request):
                                 ,'umem_ysno': ticketInfo.umem_ysno # 회원권사용가능여부
                                 }], status=200)
 
-            } else if(userInfo.user_abcd == "C"){
+            else if(userInfo.user_abcd == "C"):
                 # TODO 기업일 경우 리스트 조회 추가 예정
-            } else {
+            else:
                 return Response({'message': 'INVAILD_USERS'}, status=401)
-            }
-
         else :
             return Response({'message': '일치하는 ID가 없습니다.'}, status=401)
     
