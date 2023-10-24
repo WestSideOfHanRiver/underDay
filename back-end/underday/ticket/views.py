@@ -34,7 +34,7 @@ def ticket_list(request):
                                 ,'umem_ysno': ticketInfo.umem_ysno # 회원권사용가능여부
                                 }], status=200)
 
-            else if(userInfo.user_abcd == "B"):
+            elif(userInfo.user_abcd == "B"):
                 
                 # 강사 본인이 갖고있는 강사수업 LIST 조회
                 trMbshipList = TrMbship.objects.get(user_numb=user_numb)
@@ -52,7 +52,7 @@ def ticket_list(request):
                                 ,'umem_ysno': ticketInfo.umem_ysno # 회원권사용가능여부
                                 }], status=200)
 
-            else if(userInfo.user_abcd == "C"):
+            elif(userInfo.user_abcd == "C"):
                 # TODO 기업일 경우 리스트 조회 추가 예정
             else:
                 return Response({'message': 'INVAILD_USERS'}, status=401)

@@ -42,7 +42,8 @@ def signup(request):
                 user_rptt="Y",
                 user_sumo="SUN"
             )
-        else if(request.data["user_abcd"] == "B"):
+        
+        elif(request.data["user_abcd"] == "B"):
 
             UrMaster.objects.create(
                 user_idxx=request.data["user_idxx"],
@@ -55,7 +56,8 @@ def signup(request):
                 user_sumo="SUN",
                 user_orig=request.data["user_orig"], #소속명
             )
-        else if(request.data["user_abcd"] == "C"):
+
+        elif(request.data["user_abcd"] == "C"):
 
             UrMaster.objects.create(
                 user_idxx=request.data["user_idxx"],
@@ -69,9 +71,10 @@ def signup(request):
                 user_orig=request.data["user_orig"], #소속명
                 user_addr=request.data["user_addr"], #도로명주소
             )
+            
         else:
             return Response({'message': 'INVAILD_USERS'}, status=401)
-            
+
         return Response({'message': 'SUCCESS'}, status=201)
 
     except KeyError:
