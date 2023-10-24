@@ -52,7 +52,7 @@ def ticket_list(request):
                                 ,'umem_ysno': ticketInfo.umem_ysno # 회원권사용가능여부
                                 }], status=200)
 
-            elif(userInfo.user_abcd == "C"):
+            # elif(userInfo.user_abcd == "C"):
                 # TODO 기업일 경우 리스트 조회 추가 예정
             else:
                 return Response({'message': 'INVAILD_USERS'}, status=401)
