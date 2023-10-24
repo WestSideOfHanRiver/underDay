@@ -96,7 +96,7 @@ def login(request):
 
             # 비밀번호 오류 count 체크
             # 5회 이상이면 휴대폰 인증 추가!
-            if(user.user_pwer > 5):
+            if(userInfo.user_pwer > 5):
                 return Response({'message': '비밀번호 5회 이상 오류!!. 휴대폰번호를 인증해주세요.'}, status=401)
             
             # PW 검증
