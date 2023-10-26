@@ -76,7 +76,7 @@ def signup(request):
         else:
             return Response({'message': 'INVAILD_USERS'}, status=401)
 
-        return Response({'message': 'SUCCESS'}, status=201)
+        return Response({'message': 'OK'}, status=201)
 
     except KeyError:
         return Response({'message': 'KEY_ERROR'}, status=400)
@@ -103,7 +103,7 @@ def login(request):
             # PW 검증
             # db에 저장된 암호화 PW == 입력받고 암호화된 PW 비교
             if bcrypt.checkpw(request.data['password'].encode('utf-8'), userInfo.user_pasw.encode('utf-8')) == True:
-                return Response({'message': 'SUCCESS'}, status=200)
+                return Response({'message': 'OK'}, status=200)
             else:
                 # 비밀번호 오류 count 추가
                 userPwer = userInfo.user_pwer + 1
@@ -124,9 +124,9 @@ def login(request):
 def chkUserId(request):
     try:
         if UrMaster.objects.filter(user_idxx=request.data["user_idxx"]).exists():
-            return Response({'message': '중복된 ID입니다.'}, status=401)
+            return Response({'message': '중복된 ID입니다.'}, status=204)
         else:
-            return Response({'message': 'SUCCESS'}, status=200)
+            return Response({'message': 'OK'}, status=200)
 
     except KeyError:
         return Response({'message': 'KEY_ERROR'}, status=400)
@@ -150,15 +150,15 @@ def mypage(request):
             #     user_orig=request.data["user_orig"], #소속명
             #     user_addr=request.data["user_addr"], #도로명주소
             # )
-            return Response({'message': 'SUCCESS'}, status=200)
+            return Response({'message': 'OK'}, status=200)
 
             
         elif(request.method == 'POST'):
-            return Response({'message': 'SUCCESS'}, status=200)
+            return Response({'message': 'OK'}, status=200)
         elif(request.method == 'PATCH'):
-            return Response({'message': 'SUCCESS'}, status=200)
+            return Response({'message': 'OK'}, status=200)
         elif(request.method == 'DELETE'):
-            return Response({'message': 'SUCCESS'}, status=200)
+            return Response({'message': 'OK'}, status=200)
 
     except KeyError:
         return Response({'message': 'KEY_ERROR'}, status=400)

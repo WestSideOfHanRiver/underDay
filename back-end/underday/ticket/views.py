@@ -60,7 +60,7 @@ def ticket_list(request):
         else:
             return Response({'message': '일치하는 ID가 없습니다.'}, status=401)
     
-        return Response({'message': 'SUCCESS'}, status=201)
+        return Response({'message': 'OK'}, status=201)
 
     except KeyError:
         return Response({'message': 'KEY_ERROR'}, status=400)
@@ -110,7 +110,7 @@ def create(request):
             umem_unum=request.data["umem_unum"], # 회원권사용회차
             umem_ysno=request.data["umem_ysno"]  # 회원권사용가능여부
         )
-        return Response({'message': 'SUCCESS'}, status=201)
+        return Response({'message': 'OK'}, status=201)
 
     except KeyError:
         return Response({'message': 'KEY_ERROR'}, status=400)
@@ -146,7 +146,7 @@ def trMbshipList(request):
             return Response({'tmem_numb': '' # 강사수업일련번호
                             ,'tmem_name': '' # 강의명
                             ,'tmem_expl': '' # 강의실명
-                            }, status=201)
+                            }, status=204)
 
     except KeyError:
         return Response({'message': 'KEY_ERROR'}, status=400)
