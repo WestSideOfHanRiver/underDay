@@ -136,7 +136,7 @@ def trMbshipList(request):
         # 강사 본인이 갖고있는 강사수업 LIST 조회
         if TrMbship.objects.filter(user_numb=request.data['user_numb']).exists():
 
-            trMbshipList = TrMbship.objects.get(user_numb=user_numb)
+            trMbshipList = TrMbship.objects.get(user_numb=request.data['user_numb'])
 
             return Response([{'tmem_numb': trMbshipList.umem_numb # 강사수업일련번호
                             ,'tmem_name': trMbshipList.tmem_name # 강의명
