@@ -33,7 +33,6 @@ def signup(request):
         if(request.data["user_abcd"] == "A"):
 
             UrMaster.objects.create(
-                user_numb=null,
                 user_idxx=request.data["user_idxx"],
                 user_pasw=decoded_password,
                 user_phon=request.data["user_phon"],
@@ -47,7 +46,6 @@ def signup(request):
         elif(request.data["user_abcd"] == "B"):
 
             UrMaster.objects.create(
-                user_numb=null,
                 user_idxx=request.data["user_idxx"],
                 user_pasw=decoded_password,
                 user_phon=request.data["user_phon"],
@@ -62,7 +60,6 @@ def signup(request):
         elif(request.data["user_abcd"] == "C"):
 
             UrMaster.objects.create(
-                user_numb=null,
                 user_idxx=request.data["user_idxx"],
                 user_pasw=decoded_password,
                 user_phon=request.data["user_phon"],
