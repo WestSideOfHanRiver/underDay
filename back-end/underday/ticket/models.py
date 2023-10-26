@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 class UrMaster(models.Model):
+    user_numb = models.CharField(db_column='USER_NUMB', primary_key=True, max_length=8, null=True)  # Field name made lowercase.
     user_idxx = models.CharField(db_column='USER_IDXX', max_length=8, blank=True, null=True)  # Field name made lowercase.
     user_phon = models.CharField(db_column='USER_PHON', max_length=20, blank=True, null=True)  # Field name made lowercase.
     user_name = models.CharField(db_column='USER_NAME', max_length=20, blank=True, null=True)  # Field name made lowercase.
@@ -20,6 +21,7 @@ class UrMaster(models.Model):
         db_table = 'ur_master'
 
 class UrMbship(models.Model):
+    umem_numb = models.CharField(db_column='UMEM_NUMB', primary_key=True, max_length=10, null=True)
     umem_stat = models.CharField(db_column='UMEM_STAT', max_length=8, blank=True, null=True)
     umem_endt = models.CharField(db_column='UMEM_ENDT', max_length=8, blank=True, null=True)
     user_numb = models.CharField(db_column='USER_NUMB', max_length=8, blank=True, null=True)
@@ -33,6 +35,7 @@ class UrMbship(models.Model):
         db_table = 'ur_mbship'
 
 class TrMbship(models.Model):
+    tmem_numb = models.CharField(db_column='TMEM_NUMB', primary_key=True, max_length=8, null=True)
     user_numb = models.CharField(db_column='USER_NUMB', max_length=8, blank=True, null=True)
     tmem_name = models.CharField(db_column='TMEM_NAME', max_length=20, blank=True, null=True)
     tmem_expl= models.CharField(db_column='TMEM_EXPL', max_length=300, blank=True, null=True)
