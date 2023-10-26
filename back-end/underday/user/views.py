@@ -68,8 +68,9 @@ def signup(request):
                 user_pwer=0,
                 user_rptt="Y",
                 user_sumo="SUN",
+                user_conb=request.data["user_conb"], #사업자등록번호
                 user_orig=request.data["user_orig"], #소속명
-                user_addr=request.data["user_addr"], #도로명주소
+                user_add1=request.data["user_add1"], #도로명주소
             )
             
         else:
@@ -137,9 +138,9 @@ def mypage(request):
     try:
         if(request.method == 'GET'):
 
-            user_idxx = request.get[userId]
+            # user_idxx = request.get[userId]
             
-            userInfo = UrMaster.objects.get(user_idxx=user_idxx)
+            # userInfo = UrMaster.objects.get(user_idxx=user_idxx)
 
             # UrMaster.objects.update(
                 

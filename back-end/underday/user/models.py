@@ -12,6 +12,7 @@ class UrMaster(models.Model):
     user_rptt = models.CharField(db_column='USER_RPTT', max_length=2, blank=True, null=True)  # Field name made lowercase.
     user_sumo = models.CharField(db_column='USER_SUMO', max_length=4, blank=True, null=True)  # Field name made lowercase.
     user_orig = models.CharField(db_column='USER_ORIG', max_length=100, blank=True, null=True)  # Field name made lowercase.
+    user_conb = models.CharField(db_column='USER_CONB', max_length=20, blank=True, null=True)  # Field name made lowercase.
     user_add1 = models.CharField(db_column='USER_ADD1', max_length=200, blank=True, null=True)  # Field name made lowercase.
     user_add2 = models.CharField(db_column='USER_ADD2', max_length=200, blank=True, null=True)  # Field name made lowercase.
     user_add3 = models.CharField(db_column='USER_ADD3', max_length=200, blank=True, null=True)  # Field name made lowercase.
