@@ -26,6 +26,7 @@ const SettingHead = () => {
           e.preventDefault()
           alert('프로필 선택!!')
         }}
+        className={styles.profileSelect}
       >
         heungsoo89
       </Link>
