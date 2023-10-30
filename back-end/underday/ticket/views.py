@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from . import views
+from .serializers import TrMbshipListSerializer
 
 
 
@@ -122,6 +123,8 @@ def create(request):
 def trMbshipList(request):
 
     try:
+        data = []
+
         # 강사토큰의 사용자일련번호 체크, 권한 chk
         if UrMaster.objects.filter(user_numb=request.data['user_numb']).exists():
             
@@ -135,18 +138,28 @@ def trMbshipList(request):
             
         # 강사 본인이 갖고있는 강사수업 LIST 조회
         if TrMbship.objects.filter(user_numb=request.data['user_numb']).exists():
+            
+            TrMbshipList = TrMbship.objects.filter(user_numb=request.data['user_numb'])
+    
+            serializer = TrMbshipListSerializer(TrMbshipList,many=True)
 
-            trMbshipList = TrMbship.objects.filter(user_numb=request.data['user_numb'])
+            return Response(serializer.data, status=200)
 
-            return Response([{'tmem_numb': trMbshipList.umem_numb # 강사수업일련번호
-                            ,'tmem_name': trMbshipList.tmem_name # 강의명
-                            ,'tmem_expl': trMbshipList.tmem_expl # 강의실명
-                            }], status=200)
         else: 
             return Response({'tmem_numb': '' # 강사수업일련번호
                             ,'tmem_name': '' # 강의명
                             ,'tmem_expl': '' # 강의실명
                             }, status=204)
+
+        #     return Response([{'tmem_numb': trMbshipList.umem_numb # 강사수업일련번호
+        #                     ,'tmem_name': trMbshipList.tmem_name # 강의명
+        #                     ,'tmem_expl': trMbshipList.tmem_expl # 강의실명
+        #                     }], status=200)
+        # else: 
+        #     return Response({'tmem_numb': '' # 강사수업일련번호
+        #                     ,'tmem_name': '' # 강의명
+        #                     ,'tmem_expl': '' # 강의실명
+        #                     }, status=204)
 
     except KeyError:
         return Response({'message': 'KEY_ERROR'}, status=400)
