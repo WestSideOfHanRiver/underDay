@@ -74,7 +74,7 @@ def class_list(request):
     accumulated_queryset = [] # 쿼리셋 쌓을곳
 
     sql_query = '''SELECT 
-    A.clas_list,
+    A.clas_name,
     A.clas_numb,
     A.clas_date,
     A.clas_time,
