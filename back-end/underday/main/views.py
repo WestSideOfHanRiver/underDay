@@ -74,7 +74,7 @@ def class_list(request):
     accumulated_queryset = [] # 쿼리셋 쌓을곳
 
     sql_query = '''SELECT 
-    B.tmem_name,
+    A.clas_list,
     A.clas_numb,
     A.clas_date,
     A.clas_time,
@@ -119,15 +119,22 @@ def class_list(request):
 @api_view(['PUT'])
 def class_request(request):
     data = request.data
-    resvnumb = data["reserve_number"] # 예약일련번호
-    clssnumb = data['class_number'] # 수업개설넘버
-    clasdate = data['class_date'] # 수업날짜
-    usermembernumb = data['user_membership_number'] # 수업날짜
-    reserve_status = data['reserve_status'] # 예약상태()
+    resvnumb = data["resv_numb"] # 예약일련번호
+    # clssnumb = data['clss_numb'] # 수업개설넘버
+    # clasdate = data['clas_date'] # 수업날짜
+    # umemnumb = data['umem_numb'] # 사용자 멤버쉽코드
+    resvstat = data['resv_stat'] # 예약상태
 
+    queryset = ReMaster.objects.get(resv_numb = resvnumb)
+    if queryset:
+        queryset.resv_stat = resvstat
 
+    try:
+        queryset.save()
+        return HttpResponse(status=200) 
+    except:
+        return HttpResponse(status=400, content=f"Fail update")
 
-    return
 
 
 
@@ -178,6 +185,7 @@ def make_class(request):
         
         clasdate_v = request.data["clas_date"] # 강의시작시간 
         clastime_v = request.data["clas_time"] # 수업시작시간 4자리 1130
+        clasname_v = request.data["clas_name"] # 강의이름
         clasclos_v = request.data["clas_clos"] # 수업종료시간 4자리 1130
         clasnmax_v = request.data["clas_nmax"] # 정원 2자리
         claswait_v = request.data["clas_wait"] # 대기인원 2자리
@@ -186,7 +194,7 @@ def make_class(request):
         resvalr1_v = request.data["resv_alr1"] # 예약마감전 알람시간 2자리 11시간
  
         # 모델 객체 생성 및 저장
-        new_data = TrClass(clas_numb=new_serial, clas_date=clasdate_v,clas_time=clastime_v,clas_nmax=clasnmax_v,
+        new_data = TrClass(clas_numb=new_serial, clas_date=clasdate_v,clas_time=clastime_v,clas_nmax=clasnmax_v,clas_name=clasname_v,
                             clas_wait=claswait_v,resv_stat=resvstat_v,resv_last=resvlast_v,resv_alr1=resvalr1_v,
                             clas_clos=clasclos_v, tmem_numb=tmemnumb,clas_ysno='Y',clas_inst=datetime.now())
 
@@ -205,6 +213,7 @@ def make_class(request):
         except :
             return HttpResponse(status=404, content=f"No match data, {clasnumb}")
 
+        clasname_v = request.data["clas_name"] # 강의이름
         clasdate_v = request.data['clas_date'] # 강의시작시간 
         clastime_v = request.data["clas_time"] # 수업시작시간 4자리 1130
         clasclos_v = request.data["clas_clos"] # 수업종료시간 4자리 1130
@@ -215,6 +224,7 @@ def make_class(request):
         resvalr1_v = request.data["resv_alr1"] # 예약마감전 알람시간 2자리 11시간
 
         # 모델 객체 생성 및 저장
+        obj.clas_name = clasname_v
         obj.clas_date = clasdate_v
         obj.clas_time = clastime_v
         obj.clas_clos = clasclos_v
@@ -247,5 +257,4 @@ def make_class(request):
             return HttpResponse(status=400, content=f"Fail delete")
     else:
         return 
-
 
