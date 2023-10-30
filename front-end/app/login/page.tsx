@@ -13,7 +13,7 @@ export default function Login() {
   const [username, setUserId] = useState('')
   const [password, setPassword] = useState('')
 
-  const passwordLogin = () => {
+  const passwordLogin = async () => {
     // 아이디, 비밀번호 빈값 체크
     if (!username) {
       alert('아이디를 입력해 주세요.')
@@ -25,18 +25,24 @@ export default function Login() {
       return
     }
 
-    axios
-      .post('http://127.0.0.1:8000/signup', {
-        user_idxx: username,
-        password: password,
-      })
-      .then((res) => {
-        console.log(res)
-
-        //setCookie('accessToken', 'test', { path: '/', secure: true })
+    await axios
+      .post(
+        'https://port-0-underday-local-2rrqq2blmlt9v8u.sel5.cloudtype.app/user/login/',
+        {
+          user_idxx: username,
+          password: password,
+        },
+      )
+      .then((res) => res.data)
+      .then((data) => {
+        if (data.message == 'OK') {
+          console.log('성공')
+        } else {
+          console.log('아이디, 비밀번호를 다시 확인해 주세요.')
+        }
       })
       .catch((err) => {
-        console.log(err)
+        console.log('통신 실패', err)
       })
   }
 

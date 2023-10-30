@@ -3,18 +3,25 @@
 import React, { useState } from 'react'
 import { useForm, FormProvider } from 'react-hook-form'
 import axios from 'axios'
+import { useRouter } from 'next/navigation'
+import { ToastContainer, toast } from 'react-toastify'
+
 import CheckLicense from './checkLicense/checkLicense'
 import CheckAddress from './checkAddress/checkAddress'
+import CheckPassword from './checkPassword/chechPassword'
 
+import 'react-toastify/dist/ReactToastify.css'
 import styles from './register.module.scss'
-import { useRouter } from 'next/navigation'
 
 interface InputInfo {
   id: number
   name: string
   type: string
   title: string
-  pattern: RegExp
+  pattern?: {
+    value: RegExp
+    message?: string
+  }
 }
 
 export interface InputAuth {
@@ -43,63 +50,61 @@ const inputInfoList: InputInfo[] = [
     name: 'user_abcd',
     type: 'radio',
     title: '권한을 선택해 주세요.',
-    pattern: /^[a-zA-Z]+$/,
+    pattern: {
+      value: /^[a-zA-Z]+$/,
+    },
   },
   {
     id: 2,
     name: 'user_name',
     type: 'text',
     title: '이름을 입력해 주세요.',
-    pattern: /^[a-zA-Z]+$/,
+    pattern: {
+      value: /^[a-zA-Z가-힣]+$/,
+    },
   },
   {
     id: 3,
     name: 'user_phon',
     type: 'text',
     title: '휴대폰번호를 입력해 주세요.',
-    pattern: /^\d+$/,
+    pattern: {
+      value: /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/,
+      message: '-를 포함한 휴대폰 번호를 입력해 주세요.',
+    },
   },
   {
     id: 4,
-    name: 'user_numb',
+    name: 'user_idxx',
     type: 'text',
     title: '아이디를 입력해 주세요.',
-    pattern: /^[a-zA-Z]+$/,
   },
   {
     id: 5,
     name: 'password1',
-    type: 'text',
+    type: 'com',
     title: '비밀번호를 입력해 주세요.',
-    pattern: /^[a-zA-Z]+$/,
   },
   {
     id: 6,
-    name: 'password2',
-    type: 'text',
-    title: '비밀번호를 확인해 주세요.',
-    pattern: /^[a-zA-Z]+$/,
-  },
-  {
-    id: 7,
     name: 'company',
     type: 'text',
     title: '센터명을 입력해 주세요.',
-    pattern: /^[a-zA-Z]+$/,
+    pattern: {
+      value: /^[a-zA-Z]+$/,
+    },
+  },
+  {
+    id: 7,
+    name: 'license',
+    type: 'com',
+    title: '사업자 번호를 입력해 주세요.',
   },
   {
     id: 8,
     name: 'address',
     type: 'com',
     title: '주소를 입력해 주세요.',
-    pattern: /^[a-zA-Z]+$/,
-  },
-  {
-    id: 9,
-    name: 'license',
-    type: 'com',
-    title: '사업자 번호를 입력해 주세요.',
-    pattern: /^[a-zA-Z]+$/,
   },
 ]
 
@@ -109,33 +114,37 @@ export default function Info() {
   const [max, setMax] = useState(5)
   const methods = useForm({ mode: 'onChange' })
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
     if (methods.getValues('user_abcd') === 'C') {
       setMax(inputInfoList.length - 1)
     }
 
     if (count == max) {
-      console.log(data)
-
-      axios
-        .post('', { data }, { withCredentials: true })
-        .then(() => {
-          console.log('')
-
-          //router.push('/')
+      await axios
+        .post(
+          'https://port-0-underday-local-2rrqq2blmlt9v8u.sel5.cloudtype.app/user/signup/',
+          data,
+        )
+        .then((res) => res.data)
+        .then((data) => {
+          if (data.message == 'OK') {
+            router.push('/')
+          }
         })
         .catch((err) => {
-          console.dir(err)
+          console.log('통신 실패', err)
         })
 
       return
     }
 
-    setCount(count + 1)
+    setCount((prev) => prev + 1)
   }
 
-  const onInvalid = (errors: any) => {
-    alert(inputInfoList[count].title)
+  const onInvalid = (errors: Object) => {
+    Object.entries(errors).map(([type, data]) => {
+      toast(data.message)
+    })
   }
 
   return (
@@ -151,13 +160,18 @@ export default function Info() {
                     type="text"
                     placeholder={inputInfo.title}
                     {...methods.register(`${inputInfo.name}`, {
-                      required: true,
-                      pattern: inputInfo.pattern,
+                      required: {
+                        value: true,
+                        message: inputInfo.title,
+                      },
+                      pattern: {
+                        value: inputInfo.pattern?.value ?? RegExp(''),
+                        message: inputInfo.pattern?.message ?? '',
+                      },
                     })}
                   />
                 </div>
               )}
-
               {inputInfo.type === 'radio' && (
                 <div className={styles.radioWrap}>
                   {inputAuthList.map((inputAuth, index) => (
@@ -167,7 +181,10 @@ export default function Info() {
                         id={inputAuth.value}
                         value={inputAuth.value}
                         {...methods.register(`${inputInfo.name}`, {
-                          required: true,
+                          required: {
+                            value: true,
+                            message: inputInfo.title,
+                          },
                         })}
                       />
                       <label htmlFor={inputAuth.value}>{inputAuth.label}</label>
@@ -178,6 +195,7 @@ export default function Info() {
 
               {inputInfo.type === 'com' ? (
                 <FormProvider {...methods}>
+                  {inputInfo.name === 'password1' && <CheckPassword />}
                   {inputInfo.name === 'license' && <CheckLicense />}
                   {inputInfo.name === 'address' && <CheckAddress />}
                 </FormProvider>
@@ -189,6 +207,8 @@ export default function Info() {
 
           <button type="submit">다음</button>
         </form>
+
+        <ToastContainer position="top-center" />
       </div>
     </>
   )
