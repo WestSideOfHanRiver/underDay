@@ -68,9 +68,10 @@ def signup(request):
                 user_pwer=0,
                 user_rptt="Y",
                 user_sumo="SUN",
-                user_conb=request.data["user_conb"], #사업자등록번호
                 user_orig=request.data["user_orig"], #소속명
-                user_add1=request.data["user_add1"], #도로명주소
+                user_conb=request.data["user_conb"], #사업자등록번호
+                user_add1=request.data["user_add1"], #우편번호
+                user_add2=request.data["user_add2"], #주소
             )
             
         else:
@@ -98,7 +99,7 @@ def login(request):
             # 비밀번호 오류 count 체크
             # 5회 이상이면 휴대폰 인증 추가!
             if(userInfo.user_pwer > 5):
-                return Response({'message': '비밀번호 5회 이상 오류!!. 휴대폰번호를 인증해주세요.'}, status=401)
+                return Response({'message': '비밀번호 5회 이상 오류!!. 휴대폰번호를 인증해주세요.'}, status=204)
             
             # PW 검증
             # db에 저장된 암호화 PW == 입력받고 암호화된 PW 비교
@@ -110,9 +111,9 @@ def login(request):
 
                 UrMaster.objects.filter(user_idxx=request.data["user_idxx"]).update(user_pwer=userPwer)
                 
-                return Response({'message': '비밀번호 오류!!'}, status=401)
+                return Response({'message': '비밀번호 오류!!'}, status=204)
         else:
-            return Response({'message': '일치하는 ID가 없습니다.'}, status=401)
+            return Response({'message': '일치하는 ID가 없습니다.'}, status=204)
 
     except KeyError:
         return Response({'message': 'KEY_ERROR'}, status=400)
@@ -133,33 +134,129 @@ def chkUserId(request):
 
 
 # 마이페이지 조회, 추가, 수정, 삭제
-@api_view(['GET','POST','PATCH','DELETE'])
+@api_view(['GET','POST','DELETE'])
 def mypage(request):
     try:
         if(request.method == 'GET'):
-
-            # user_idxx = request.get[userId]
-            
-            # userInfo = UrMaster.objects.get(user_idxx=user_idxx)
-
-            # UrMaster.objects.update(
-                
-            #     # user_abcd=request.data["user_abcd"] #사용자구분 (회원,강사, 기업(A,B,C 알파벳 한자리)
-
-            #     user_numb=request.data["user_numb"],
-            #     user_orig=request.data["user_orig"], #소속명
-            #     user_addr=request.data["user_addr"], #도로명주소
-            # )
             return Response({'message': 'OK'}, status=200)
 
-            
         elif(request.method == 'POST'):
             return Response({'message': 'OK'}, status=200)
-        elif(request.method == 'PATCH'):
-            return Response({'message': 'OK'}, status=200)
+
         elif(request.method == 'DELETE'):
             return Response({'message': 'OK'}, status=200)
 
     except KeyError:
         return Response({'message': 'KEY_ERROR'}, status=400)
 
+## 임시 API - 로직만 구현. JWT 구현 후 수정 예정
+
+# 마이페이지 조회
+@api_view(['POST'])
+def mypageSel(request):
+    try:
+        # 사용자일련번호 CHK
+        if UrMaster.objects.filter(user_numb=request.data['user_numb']).exists():
+            
+            userInfo = UrMaster.objects.get(user_numb=request.data["user_numb"])
+        
+            ## user_abcd 회원구분(A:회원, B:강사, C:기업)
+            if(userInfo.user_abcd == "A"):
+
+                return Response({'user_idxx': userInfo.user_idxx # 사용자ID
+                                ,'user_name': userInfo.user_name # 사용자명
+                                ,'user_phon': userInfo.user_phon # 사용자휴대폰번호
+                                ,'user_abcd': userInfo.user_abcd # 사용자구분
+                                ,'user_tknm': userInfo.user_tknm # 사용자토큰키명
+                                ,'user_nick': userInfo.user_nick # 사용자닉네임
+                                ,'user_sumo': userInfo.user_sumo # 달력시작요일
+                                ,'user_pref': userInfo.user_pref # 선호운동
+                                ,'user_memo': userInfo.user_memo # 메모
+                                }, status=200)
+            
+            elif(userInfo.user_abcd == "B"):
+                
+                return Response({'user_idxx': userInfo.user_idxx # 사용자ID
+                                ,'user_name': userInfo.user_name # 사용자명
+                                ,'user_phon': userInfo.user_phon # 사용자휴대폰번호
+                                ,'user_abcd': userInfo.user_abcd # 사용자구분
+                                ,'user_tknm': userInfo.user_tknm # 사용자토큰키명
+                                ,'user_nick': userInfo.user_nick # 사용자닉네임
+                                ,'user_sumo': userInfo.user_sumo # 달력시작요일
+                                ,'user_pref': userInfo.user_pref # 선호운동
+                                ,'user_memo': userInfo.user_memo # 메모
+                                ,'user_orig': userInfo.user_orig # 소속명
+                                }, status=200)
+
+            elif(userInfo.user_abcd == "C"):
+                
+                return Response({'user_idxx': userInfo.user_idxx # 사용자ID
+                                ,'user_name': userInfo.user_name # 사용자명
+                                ,'user_phon': userInfo.user_phon # 사용자휴대폰번호
+                                ,'user_abcd': userInfo.user_abcd # 사용자구분
+                                ,'user_tknm': userInfo.user_tknm # 사용자토큰키명
+                                ,'user_nick': userInfo.user_nick # 사용자닉네임
+                                ,'user_sumo': userInfo.user_sumo # 달력시작요일
+                                ,'user_pref': userInfo.user_pref # 선호운동
+                                ,'user_memo': userInfo.user_memo # 메모
+                                ,'user_orig': userInfo.user_orig # 소속명
+                                ,'user_conb': userInfo.user_conb # 사업자등록번호
+                                ,'user_add1': userInfo.user_add1 # 우편번호
+                                ,'user_add2': userInfo.user_add2 # 주소
+                                }, status=200)
+                
+            return Response({'message': 'OK'}, status=200)  
+
+        else:
+            return Response({'message': '일치하는 ID가 없습니다.'}, status=204)
+
+    except KeyError:
+        return Response({'message': 'KEY_ERROR'}, status=400)
+
+
+# 마이페이지 수정
+@api_view(['POST'])
+def mypageUpdate(request):
+    try:
+        # 사용자일련번호 CHK
+        if UrMaster.objects.filter(user_numb=request.data['user_numb']).exists():
+            
+            userInfo = UrMaster.objects.get(user_numb=request.data["user_numb"])
+        
+            ## user_abcd 회원구분(A:회원, B:강사, C:기업)
+            if(userInfo.user_abcd == "A"):
+                UrMaster.objects.save(
+                    user_nick=request.data["user_nick"], #닉네임
+                    user_sumo=request.data["user_sumo"], #달력시작요일
+                    user_pref=request.data["user_pref"], #선호운동
+                    user_memo=request.data["user_memo"], #메모
+                )
+            
+            elif(userInfo.user_abcd == "B"):
+                UrMaster.objects.save(
+                    user_nick=request.data["user_nick"], #닉네임
+                    user_sumo=request.data["user_sumo"], #달력시작요일
+                    user_pref=request.data["user_pref"], #선호운동
+                    user_memo=request.data["user_memo"], #메모
+                    user_orig=request.data["user_orig"], #소속명
+                )
+
+            elif(userInfo.user_abcd == "C"):
+                UrMaster.objects.save(
+                    user_nick=request.data["user_nick"], #닉네임
+                    user_sumo=request.data["user_sumo"], #달력시작요일
+                    user_pref=request.data["user_pref"], #선호운동
+                    user_memo=request.data["user_memo"], #메모
+                    user_orig=request.data["user_orig"], #소속명
+                    user_conb=request.data["user_conb"], #사업자등록번호
+                    user_add1=request.data["user_add1"], #우편번호
+                    user_add2=request.data["user_add2"], #주소
+                )
+            
+            return Response({'message': 'OK'}, status=201) 
+
+        else:
+            return Response({'message': '일치하는 ID가 없습니다.'}, status=204)
+
+    except KeyError:
+        return Response({'message': 'KEY_ERROR'}, status=400)
