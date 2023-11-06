@@ -2,13 +2,15 @@ import json
 import bcrypt
 
 from django.shortcuts import render, redirect
-from .models import UrMaster
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view
+from django.core import serializers
+from django.http import HttpResponse
+from .models import UrMaster
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.response import Response
+# from rest_framework.permissions import IsAuthenticated
+# from rest_framework_jwt.authentication import JSONWebTokenAuthentication
 from . import views
-
-
 
 # 회원가입
 @csrf_exempt
@@ -18,10 +20,10 @@ def signup(request):
         # 필수 입력값 회원구분(회원, 강사, 기업)에 따라 입력
         # exists() 중복 record 찾는 함수
         if UrMaster.objects.filter(user_idxx=request.data['user_idxx']).exists():
-            return Response({'message': 'INVAILD_USERS'}, status=401)
+            return Response({'message': 'INVAILD_USERS'}, status=200)
 
         if request.data["password1"] != request.data["password2"]:
-            return Response({'message': 'INVAILD_USERS'}, status=401)
+            return Response({'message': 'INVAILD_USERS'}, status=200)
 
 
         # 비밀번호 암호화
@@ -88,6 +90,8 @@ def signup(request):
 # 로그인
 @csrf_exempt
 @api_view(['POST'])
+# @permission_classes((IsAuthenticated, ))
+# @authentication_classes((JSONWebTokenAuthentication,))
 def login(request):
     try:
 
@@ -99,7 +103,7 @@ def login(request):
             # 비밀번호 오류 count 체크
             # 5회 이상이면 휴대폰 인증 추가!
             if(userInfo.user_pwer > 5):
-                return Response({'message': '비밀번호 5회 이상 오류!!. 휴대폰번호를 인증해주세요.'}, status=204)
+                return Response({'message': '비밀번호 5회 이상 오류!!. 휴대폰번호를 인증해주세요.'}, status=200)
             
             # PW 검증
             # db에 저장된 암호화 PW == 입력받고 암호화된 PW 비교
@@ -111,9 +115,9 @@ def login(request):
 
                 UrMaster.objects.filter(user_idxx=request.data["user_idxx"]).update(user_pwer=userPwer)
                 
-                return Response({'message': '비밀번호 오류!!'}, status=204)
+                return Response({'message': '비밀번호 오류!!'}, status=200)
         else:
-            return Response({'message': '일치하는 ID가 없습니다.'}, status=204)
+            return Response({'message': '일치하는 ID가 없습니다.'}, status=200)
 
     except KeyError:
         return Response({'message': 'KEY_ERROR'}, status=400)
@@ -125,7 +129,7 @@ def login(request):
 def chkUserId(request):
     try:
         if UrMaster.objects.filter(user_idxx=request.data["user_idxx"]).exists():
-            return Response({'message': '중복된 ID입니다.'}, status=204)
+            return Response({'message': '중복된 ID입니다.'}, status=200)
         else:
             return Response({'message': 'OK'}, status=200)
 
@@ -208,7 +212,7 @@ def mypageSel(request):
             return Response({'message': 'OK'}, status=200)  
 
         else:
-            return Response({'message': '일치하는 ID가 없습니다.'}, status=204)
+            return Response({'message': '일치하는 ID가 없습니다.'}, status=200)
 
     except KeyError:
         return Response({'message': 'KEY_ERROR'}, status=400)
@@ -256,7 +260,7 @@ def mypageUpdate(request):
             return Response({'message': 'OK'}, status=201) 
 
         else:
-            return Response({'message': '일치하는 ID가 없습니다.'}, status=204)
+            return Response({'message': '일치하는 ID가 없습니다.'}, status=200)
 
     except KeyError:
         return Response({'message': 'KEY_ERROR'}, status=400)
