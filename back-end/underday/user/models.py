@@ -5,6 +5,7 @@ class UrMaster(models.Model):
     user_numb = models.IntegerField(primary_key=True)  # Field name made lowercase.
     user_idxx = models.CharField(db_column='USER_IDXX', max_length=8, blank=True, null=True)  # Field name made lowercase.
     user_phon = models.CharField(db_column='USER_PHON', max_length=20, blank=True, null=True)  # Field name made lowercase.
+    user_nick = models.CharField(db_column='USER_NICK', max_length=20, blank=True, null=True)  # Field name made lowercase.
     user_name = models.CharField(db_column='USER_NAME', max_length=20, blank=True, null=True)  # Field name made lowercase.
     user_tknm = models.CharField(db_column='USER_TKNM', max_length=20, blank=True, null=True)  # Field name made lowercase.
     user_abcd = models.CharField(db_column='USER_ABCD', max_length=4, blank=True, null=True)  # Field name made lowercase.
