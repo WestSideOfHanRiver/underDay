@@ -65,8 +65,6 @@ def ticket_list(request):
                 return Response({'message': '기업의 티켓 리스트 조회 API는 추가 예정입니다.'}, status=200)
         else:
             return Response({'message': '일치하는 ID가 없습니다.'}, status=200)
-    
-        return Response({'message': 'OK'}, status=201)
 
     except KeyError:
         return Response({'message': 'KEY_ERROR'}, status=400)
