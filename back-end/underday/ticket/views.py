@@ -18,7 +18,7 @@ def ticket_list(request):
         # 사용자ID, 권한(회원) chk - JWT 적용 후 삭제될 IF 처리.
         if UrMaster.objects.filter(user_numb=request.data["user_numb"]).exists():
 
-            userInfo = UrMaster.objects.filter(user_numb=request.data["user_numb"])
+            userInfo = UrMaster.objects.get(user_numb=request.data["user_numb"])
             
             # user_abcd 회원구분(A:회원, B:강사, C:기업)
             if(userInfo.user_abcd == "A"):
