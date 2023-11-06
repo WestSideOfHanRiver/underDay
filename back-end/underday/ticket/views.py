@@ -59,10 +59,12 @@ def ticket_list(request):
                 #                 ,'umem_ysno': ticketInfo.umem_ysno # 회원권사용가능여부
                 #                 }], status=200)
 
-            # elif(userInfo.user_abcd == "C"):
+            elif(userInfo.user_abcd == "C"):
                 # TODO 기업일 경우 리스트 조회 추가 예정
+                # return Response(serializer.data, status=200)
+                return Response({'message': '기업의 티켓 리스트 조회 API는 추가 예정입니다.'}, status=200)
         else:
-            return Response({'message': '일치하는 ID가 없습니다.'}, status=400)
+            return Response({'message': '일치하는 ID가 없습니다.'}, status=200)
     
         return Response({'message': 'OK'}, status=201)
 
@@ -90,9 +92,9 @@ def create(request):
 
             # user_abcd 회원구분(A:회원, B:강사, C:기업)
             if(userInfo.user_abcd != "B"):
-                return Response({'message': '티켓 생성 권한이 없습니다.'}, status=400)
+                return Response({'message': '티켓 생성 권한이 없습니다.'}, status=200)
         else:
-            return Response({'message': '일치하는 강사수업일련번호가 없습니다.'}, status=400)
+            return Response({'message': '일치하는 강사수업일련번호가 없습니다.'}, status=200)
 
         # 회원ID 유효여부 체크
         if UrMaster.objects.filter(user_idxx=request.data['user_idxx']).exists():
@@ -101,7 +103,7 @@ def create(request):
             # 수강하려는 회원ID의 일련번호 조회
             userNumb = userInfo.user_numb
         else:
-            return Response({'message': '일치하는 ID가 없습니다.'}, status=400)
+            return Response({'message': '일치하는 ID가 없습니다.'}, status=200)
 
         # 티켓생성
         UrMbship.objects.create(
@@ -132,9 +134,9 @@ def trMbshipList(request):
             
             # user_abcd 회원구분(A:회원, B:강사, C:기업)
             if(userInfo.user_abcd != "B"):
-                return Response({'message': '조회권한이 없습니다.'}, status=400)
+                return Response({'message': '조회권한이 없습니다.'}, status=200)
         else:
-            return Response({'message': '일치하는 ID가 없습니다.'}, status=400)
+            return Response({'message': '일치하는 ID가 없습니다.'}, status=200)
             
             
         # 강사 본인이 갖고있는 강사수업 LIST 조회
