@@ -62,7 +62,7 @@ def ticket_list(request):
             # elif(userInfo.user_abcd == "C"):
                 # TODO 기업일 경우 리스트 조회 추가 예정
         else:
-            return Response({'message': '일치하는 ID가 없습니다.'}, status=204)
+            return Response({'message': '일치하는 ID가 없습니다.'}, status=400)
     
         return Response({'message': 'OK'}, status=201)
 
@@ -84,15 +84,15 @@ def create(request):
 
             # TODO JWT 토큰 연동시 강사수업일련번호 소유 여부 검증 로직 추가
 #             if(trMbshipInfo.user_numb != request.data["user_numb"]):
-#                return Response({'message': ''}, status=204) 
+#                return Response({'message': ''}, status=400) 
 
             userInfo = UrMaster.objects.get(user_numb=trMbshipInfo.user_numb)
 
             # user_abcd 회원구분(A:회원, B:강사, C:기업)
             if(userInfo.user_abcd != "B"):
-                return Response({'message': '티켓 생성 권한이 없습니다.'}, status=204)
+                return Response({'message': '티켓 생성 권한이 없습니다.'}, status=400)
         else:
-            return Response({'message': '일치하는 강사수업일련번호가 없습니다.'}, status=204)
+            return Response({'message': '일치하는 강사수업일련번호가 없습니다.'}, status=400)
 
         # 회원ID 유효여부 체크
         if UrMaster.objects.filter(user_idxx=request.data['user_idxx']).exists():
@@ -101,7 +101,7 @@ def create(request):
             # 수강하려는 회원ID의 일련번호 조회
             userNumb = userInfo.user_numb
         else:
-            return Response({'message': '일치하는 ID가 없습니다.'}, status=204)
+            return Response({'message': '일치하는 ID가 없습니다.'}, status=400)
 
         # 티켓생성
         UrMbship.objects.create(
@@ -132,9 +132,9 @@ def trMbshipList(request):
             
             # user_abcd 회원구분(A:회원, B:강사, C:기업)
             if(userInfo.user_abcd != "B"):
-                return Response({'message': '조회권한이 없습니다.'}, status=204)
+                return Response({'message': '조회권한이 없습니다.'}, status=400)
         else:
-            return Response({'message': '일치하는 ID가 없습니다.'}, status=204)
+            return Response({'message': '일치하는 ID가 없습니다.'}, status=400)
             
             
         # 강사 본인이 갖고있는 강사수업 LIST 조회
@@ -150,7 +150,7 @@ def trMbshipList(request):
             return Response({'tmem_numb': '' # 강사수업일련번호
                             ,'tmem_name': '' # 강의명
                             ,'tmem_expl': '' # 강의실명
-                            }, status=204)
+                            }, status=400)
 
     except KeyError:
         return Response({'message': 'KEY_ERROR'}, status=400)
