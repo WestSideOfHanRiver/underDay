@@ -23,7 +23,7 @@ def ticket_list(request):
             # user_abcd 회원구분(A:회원, B:강사, C:기업)
             if(userInfo.user_abcd == "A"):
                 
-                ticketInfo = UrMbship.objects.get(user_numb=request.data["user_numb"])
+                ticketInfo = UrMbship.objects.get(user_numb=userInfo.user_numb)
 
                 serializer = UrMbshipSerializer(ticketInfo,many=True)
 
@@ -41,7 +41,7 @@ def ticket_list(request):
             elif(userInfo.user_abcd == "B"):
                 
                 # 강사 본인이 갖고있는 강사수업 LIST 조회
-                trMbshipList = TrMbship.objects.get(user_numb=request.data["user_numb"])
+                trMbshipList = TrMbship.objects.get(user_numb=userInfo.user_numb)
 
                 # TODO 강사가 소유하고 있는 강사수업일련번호 다건일 경우 오류 날듯 개선 필요
                 ticketInfo = UrMbship.objects.get(tmem_numb=trMbshipList.tmem_numb)

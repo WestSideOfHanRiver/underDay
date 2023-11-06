@@ -25,7 +25,7 @@ class UrMbship(models.Model):
     umem_numb = models.IntegerField(primary_key=True)
     umem_stat = models.CharField(db_column='UMEM_STAT', max_length=8, blank=True, null=True)
     umem_endt = models.CharField(db_column='UMEM_ENDT', max_length=8, blank=True, null=True)
-    user_numb = models.CharField(db_column='USER_NUMB', max_length=8, blank=True, null=True)
+    user_numb = models.IntegerField(db_column='USER_NUMB', blank=True, null=True)
     tmem_numb = models.IntegerField(db_column='TMEM_NUMB', blank=True, null=True)
     umem_tnum = models.CharField(db_column='UMEM_TNUM', max_length=3, blank=True, null=True)
     umem_unum = models.CharField(db_column='UMEM_UNUM', max_length=3, blank=True, null=True)
