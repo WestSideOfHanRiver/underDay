@@ -128,10 +128,7 @@ def trMbshipList(request):
             return Response(serializer.data, status=200)
 
         else: 
-            return Response({'tmem_numb': '' # 강사수업일련번호
-                            ,'tmem_name': '' # 강의명
-                            ,'tmem_expl': '' # 강의실명
-                            }, status=200)
+            return Response({}, status=200)
 
     except KeyError:
         return Response({'message': 'KEY_ERROR'}, status=400)
