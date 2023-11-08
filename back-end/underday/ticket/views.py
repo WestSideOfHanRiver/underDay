@@ -32,37 +32,18 @@ def ticket_list(request):
                 serializer = UrMbshipSerializer(ticketInfo,many=True)
 
                 return Response(serializer.data, status=200)
-                # return Response([{'umem_numb': ticketInfo.umem_numb # 회원권일련번호
-                #                 ,'user_numb': ticketInfo.user_numb # 사용자일련번호
-                #                 ,'tmem_numb': ticketInfo.tmem_numb # 강사수업일련번호
-                #                 ,'umem_stat': ticketInfo.umem_stat # 회원권이용시작일자
-                #                 ,'umem_endt': ticketInfo.umem_endt # 회원권이용종료일자
-                #                 ,'umem_tnum': ticketInfo.umem_tnum # 회원권등록회차
-                #                 ,'umem_unum': ticketInfo.umem_unum # 회원권사용회차
-                #                 ,'umem_ysno': ticketInfo.umem_ysno # 회원권사용가능여부
-                #                 }], status=200)
-
-                # 사용자명
-                # 사용자IDXX
-                # 강사수업명
 
             elif(userInfo.user_abcd == "B"):
-                # # 강사 본인이 갖고있는 강사수업 LIST 조회
-                # trMbshipList = TrMbship.objects.filter(user_numb=userInfo.user_numb)
-
-                # # TODO 강사가 소유하고 있는 강사수업일련번호 다건일 경우 오류 날듯 개선 필요
-                # ticketInfo = UrMbship.objects.filter(tmem_numb=trMbshipList[i].tmem_numb)
-
+                # 강사 본인이 갖고있는 강사수업 LIST 조회
                 ticketInfo = ticketListDetailView(userInfo.user_numb)
 
-                serializer = UrMbshipSerializer(ticketInfo,many=True)
-
-                return Response(serializer.data, status=200)
+                return Response(ticketInfo, status=200)
 
             elif(userInfo.user_abcd == "C"):
-                # TODO 기업일 경우 리스트 조회 추가 예정
-                # return Response(serializer.data, status=200)
-                return Response({'message': '기업의 티켓 리스트 조회 API는 추가 예정입니다.'}, status=200)
+                # 강사 본인이 갖고있는 강사수업 LIST 조회
+                ticketInfo = ticketListDetailView()
+
+                return Response(ticketInfo, status=200)
         else:
             return Response({'message': '일치하는 ID가 없습니다.'}, status=200)
 
@@ -156,52 +137,20 @@ def trMbshipList(request):
         return Response({'message': 'KEY_ERROR'}, status=400)
 
 
-
-
-
-
-
-
-
-
+# 강사수업 LIST 조회
 def ticketListDetailView(user_numb):
     cursor = connection.cursor()
     
     accumulated_queryset = [] # 쿼리셋 쌓을곳
 
-    ## 강사기준 조회.
     # 회원권일련번호, 사용자일련번호(회원), 사용자ID(회원), 사용자명(회원), 강사수업일련번호, 강의명, 사용자일련번호(강사), 사용자ID(강사), 사용자명(강사)
     strSql = "SELECT Z.umem_numb, Z.user_numb, Z.user_idxx, Z.user_name, Z.tmem_numb, X.tmem_name, X.user_numb, X.user_name FROM (SELECT A.umem_numb, A.user_numb, B.user_idxx, B.user_name, A.tmem_numb FROM ur_mbship A, ur_master B WHERE A.user_numb = B.user_numb) Z, (SELECT C.tmem_numb, C.tmem_name, C.user_numb, D.user_idxx, D.user_name FROM tr_mbship C, ur_master D WHERE C.user_numb = D.user_numb AND D.user_numb = NVL((%s),D.USER_NUMB)) X WHERE Z.tmem_numb = X.tmem_numb"
 
-    # result = cursor.execute(strSql, (user_numb,))
-    # datas = cursor.fetchall()
-
-    # connection.commit()
-    # connection.close()
-
-    # tickt_list = {'umem_numb': datas[0][0],
-    #         'user_numb': datas[0][1],
-    #         'user_idxx': datas[0][2],
-    #         'user_name': datas[0][3],
-    #         'tmem_numb': datas[0][4],
-    #         'tmem_name': datas[0][5],
-    #         'user_numb': datas[0][6],
-    #         'user_name': datas[0][7]}
-    
     params = [user_numb]
     
     with connection.cursor() as cursor:
         cursor.execute(strSql, params)
         queryset = cursor.fetchall()
         accumulated_queryset += queryset
-    
-    
-    print(accumulated_queryset)
 
     return accumulated_queryset
-
-    # except:
-    #     connection.rollback()
-    #     print("Failed selecting in BookListView")
-
-    # return render({'tickt_list': tickt_list})
