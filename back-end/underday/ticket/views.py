@@ -128,7 +128,7 @@ def trMbshipList(request):
             return Response(serializer.data, status=200)
 
         else: 
-            return Response({}, status=200)
+            return Response([], status=200)
 
     except KeyError:
         return Response({'message': 'KEY_ERROR'}, status=400)
