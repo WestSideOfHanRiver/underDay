@@ -22,26 +22,18 @@ def ticket_list(request):
             
             # user_abcd 회원구분(A:회원, B:강사, C:기업)
             if(userInfo.user_abcd == "A"):
-                
-                ticketInfo = UrMbship.objects.filter(user_numb=userInfo.user_numb)
-# (Model.objects
-#   .filter(조건절)
-#   .select_related('정방향_참조_필드')   # 해당 필드를 join해서 가져온다.
-#   .prefetch_related('역방향_참조_필드') # 해당 필드는 추가쿼리로 가져온다.
-# )
-                serializer = UrMbshipSerializer(ticketInfo,many=True)
+                ticketInfo = ticketListDetailView("A", userInfo.user_numb)
 
-                return Response(serializer.data, status=200)
+                return Response(ticketInfo, status=200)
 
             elif(userInfo.user_abcd == "B"):
                 # 강사 본인이 갖고있는 강사수업 LIST 조회
-                ticketInfo = ticketListDetailView(userInfo.user_numb)
+                ticketInfo = ticketListDetailView("B", userInfo.user_numb)
 
                 return Response(ticketInfo, status=200)
 
             elif(userInfo.user_abcd == "C"):
-                # 강사 본인이 갖고있는 강사수업 LIST 조회
-                ticketInfo = ticketListDetailView()
+                ticketInfo = ticketListDetailView("C", userInfo.user_numb)
 
                 return Response(ticketInfo, status=200)
         else:
@@ -135,19 +127,46 @@ def trMbshipList(request):
 
 
 # 강사수업 LIST 조회
-def ticketListDetailView(user_numb):
+def ticketListDetailView(user_gb, user_numb):
+
     cursor = connection.cursor()
     
     accumulated_queryset = [] # 쿼리셋 쌓을곳
 
-    # 회원권일련번호, 사용자일련번호(회원), 사용자ID(회원), 사용자명(회원), 강사수업일련번호, 강의명, 사용자일련번호(강사), 사용자ID(강사), 사용자명(강사)
-    strSql = "SELECT Z.umem_numb, Z.user_numb, Z.user_idxx, Z.user_name, Z.tmem_numb, X.tmem_name, X.user_numb, X.user_name FROM (SELECT A.umem_numb, A.user_numb, B.user_idxx, B.user_name, A.tmem_numb FROM ur_mbship A, ur_master B WHERE A.user_numb = B.user_numb) Z, (SELECT C.tmem_numb, C.tmem_name, C.user_numb, D.user_idxx, D.user_name FROM tr_mbship C, ur_master D WHERE C.user_numb = D.user_numb AND D.user_numb = NVL((%s),D.USER_NUMB)) X WHERE Z.tmem_numb = X.tmem_numb"
-
+    if (user_gb == "A"):
+        # 회원권일련번호, 사용자일련번호(회원), 사용자ID(회원), 사용자명(회원), 강사수업일련번호, 강의명, 회원권이용시작일자, 회원권이용종료일자, 회원권등록회차, 회원권사용회차, 회원권사용가능여부
+        strSql = '''SELECT Z.umem_numb, Z.user_numb, Z.user_idxx, Z.user_name, Z.tmem_numb, Z.umem_stat, Z.umem_endt, Z.umem_tnum, Z.umem_unum, Z.umem_ysno, X.tmem_name, X.user_numb, X.user_name 
+                      FROM (SELECT A.umem_numb, A.user_numb, B.user_idxx, B.user_name, A.tmem_numb, A.umem_stat, A.umem_endt, A.umem_tnum, A.umem_unum, A.umem_ysno
+                              FROM ur_mbship A, ur_master B 
+                             WHERE A.user_numb = B.user_numb
+                               AND A.user_numb = NVL((%s),A.user_numb)
+                        ) Z
+                        , (SELECT C.tmem_numb, C.tmem_name, C.user_numb, D.user_idxx, D.user_name 
+                             FROM tr_mbship C, ur_master D 
+                            WHERE C.user_numb = D.user_numb 
+                        ) X 
+                      WHERE Z.tmem_numb = X.tmem_numb'''
+    elif (user_gb == "B"):
+        strSql = '''SELECT Z.umem_numb, Z.user_numb, Z.user_idxx, Z.user_name, Z.tmem_numb, Z.umem_stat, Z.umem_endt, Z.umem_tnum, Z.umem_unum, Z.umem_ysno, X.tmem_name, X.user_numb, X.user_name 
+                      FROM (SELECT A.umem_numb, A.user_numb, B.user_idxx, B.user_name, A.tmem_numb, A.umem_stat, A.umem_endt, A.umem_tnum, A.umem_unum, A.umem_ysno
+                              FROM ur_mbship A, ur_master B 
+                             WHERE A.user_numb = B.user_numb
+                        ) Z
+                        , (SELECT C.tmem_numb, C.tmem_name, C.user_numb, D.user_idxx, D.user_name 
+                             FROM tr_mbship C, ur_master D 
+                            WHERE C.user_numb = D.user_numb 
+                              AND D.user_numb = NVL((%s),D.user_numb)
+                        ) X 
+                      WHERE Z.tmem_numb = X.tmem_numb'''
+    elif (user_gb == "C"):
+        strSql = ''''''
+    
     params = [user_numb]
     
     with connection.cursor() as cursor:
         cursor.execute(strSql, params)
         queryset = cursor.fetchall()
         accumulated_queryset += queryset
+        print(queryset)
 
     return accumulated_queryset
