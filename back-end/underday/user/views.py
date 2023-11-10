@@ -225,11 +225,11 @@ def mypageUpdate(request):
         # 사용자일련번호 CHK
         if UrMaster.objects.filter(user_numb=request.data['user_numb']).exists():
             
-            userInfo = UrMaster.objects.get(user_numb=request.data["user_numb"])
+            userInfo = UrMaster.objects.filter(user_numb=request.data["user_numb"])
         
             ## user_abcd 회원구분(A:회원, B:강사, C:기업)
             if(userInfo.user_abcd == "A"):
-                UrMaster.objects.update(
+                UrMaster.objects.filter(user_numb=request.data["user_numb"]).update(
                     user_nick=request.data["user_nick"], #닉네임
                     user_sumo=request.data["user_sumo"], #달력시작요일
                     user_pref=request.data["user_pref"], #선호운동
@@ -237,7 +237,7 @@ def mypageUpdate(request):
                 )
             
             elif(userInfo.user_abcd == "B"):
-                UrMaster.objects.update(
+                UrMaster.objects.filter(user_numb=request.data["user_numb"]).update(
                     user_nick=request.data["user_nick"], #닉네임
                     user_sumo=request.data["user_sumo"], #달력시작요일
                     user_pref=request.data["user_pref"], #선호운동
@@ -246,7 +246,7 @@ def mypageUpdate(request):
                 )
 
             elif(userInfo.user_abcd == "C"):
-                UrMaster.objects.update(
+                UrMaster.objects.filter(user_numb=request.data["user_numb"]).update(
                     user_nick=request.data["user_nick"], #닉네임
                     user_sumo=request.data["user_sumo"], #달력시작요일
                     user_pref=request.data["user_pref"], #선호운동
