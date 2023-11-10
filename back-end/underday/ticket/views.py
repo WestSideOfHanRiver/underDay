@@ -92,6 +92,44 @@ def create(request):
         return Response({'message': 'KEY_ERROR'}, status=400)
 
 
+# 티켓 수정
+@api_view(['POST'])
+def update(request):
+
+    try:
+        # 회원권일련번호 여부 chk, 권한 chk
+        if UrMbship.objects.filter(umem_numb=request.data["umem_numb"]).exists():
+            
+            urMbship = UrMbship.objects.get(umem_numb=request.data["umem_numb"])
+
+            userInfo = UrMaster.objects.get(user_numb=urMbship.user_numb)
+# 티켓 수정을 할 수 있는 권한 정해야할듯.
+
+            # TODO JWT 토큰 연동시 강사수업일련번호 소유 여부 검증 로직 추가
+#             if(trMbshipInfo.user_numb != request.data["user_numb"]):
+#                return Response({'message': ''}, status=400) 
+
+            # user_abcd 회원구분(A:회원, B:강사, C:기업)
+            # if(userInfo.user_abcd != "B"):
+            #     return Response({'message': '티켓 생성 권한이 없습니다.'}, status=200)
+        else:
+            return Response({'message': '일치하는 강사수업일련번호가 없습니다.'}, status=200)
+
+        # 회원권일련번호로 티켓 수정
+        UrMbship.objects.filter(umem_numb=request.data["umem_numb"]).update(
+            umem_stat=request.data["umem_stat"], # 회원권이용시작일자
+            umem_endt=request.data["umem_endt"], # 회원권이용종료일자
+            umem_tnum=request.data["umem_tnum"], # 회원권등록회차
+            umem_unum=request.data["umem_unum"], # 회원권사용회차
+            umem_ysno=request.data["umem_ysno"]  # 회원권사용가능여부
+        )
+
+        return Response({'message': 'OK'}, status=201)
+
+    except KeyError:
+        return Response({'message': 'KEY_ERROR'}, status=400)
+
+
 #  강사수업리스트 조회 API
 @csrf_exempt
 @api_view(['POST'])
