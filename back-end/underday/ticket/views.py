@@ -203,8 +203,7 @@ def ticketListDetailView(user_gb, user_numb):
     
     with connection.cursor() as cursor:
         cursor.execute(strSql, params)
-        queryset = cursor.fetchall()
+        queryset = list(cursor.fetchall())
         accumulated_queryset += queryset
-        print(queryset)
 
     return accumulated_queryset
