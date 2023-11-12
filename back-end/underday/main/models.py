@@ -21,7 +21,7 @@ class TrClass(models.Model):
     clas_numb = models.CharField(db_column='CLAS_NUMB', primary_key=True, max_length=10)
     clas_date = models.CharField(db_column='CLAS_DATE', max_length=8)
     clas_time = models.CharField(db_column='CLAS_TIME', max_length=4)
-    clas_name = models.CharField(db_column='CLAS_ NAME', max_length=30)
+    clas_name = models.CharField(db_column='CLAS_NAME', max_length=30)
     clas_clos = models.CharField(db_column='CLAS_CLOS', max_length=4)
     tmem_numb = models.CharField(db_column='TMEM_NUMB', max_length=8, blank=True, null=True)
     clas_nmax = models.IntegerField(db_column='CLAS_NMAX', blank=True, null=True)
