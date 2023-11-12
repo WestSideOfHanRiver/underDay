@@ -197,7 +197,17 @@ def ticketListDetailView(user_gb, user_numb):
                         ) X 
                       WHERE Z.tmem_numb = X.tmem_numb'''
     elif (user_gb == "C"):
-        strSql = ''''''
+        strSql = '''SELECT Z.umem_numb, Z.user_numb, Z.user_idxx, Z.user_name, Z.tmem_numb, Z.umem_stat, Z.umem_endt, Z.umem_tnum, Z.umem_unum, Z.umem_ysno, X.tmem_name, X.user_numb, X.user_name 
+                      FROM (SELECT A.umem_numb, A.user_numb, B.user_idxx, B.user_name, A.tmem_numb, A.umem_stat, A.umem_endt, A.umem_tnum, A.umem_unum, A.umem_ysno
+                              FROM ur_mbship A, ur_master B 
+                             WHERE A.user_numb = B.user_numb
+                        ) Z
+                        , (SELECT C.tmem_numb, C.tmem_name, C.user_numb, D.user_idxx, D.user_name 
+                             FROM tr_mbship C, ur_master D 
+                            WHERE C.user_numb = D.user_numb 
+                              AND D.user_numb = NVL((%s),D.user_numb)
+                        ) X 
+                      WHERE Z.tmem_numb = X.tmem_numb'''
     
     params = [user_numb]
     
