@@ -204,7 +204,7 @@ def ticketListDetailView(user_gb, user_numb):
                         ) Z
                         , (SELECT C.tmem_numb, C.tmem_name, C.user_numb, D.user_idxx, D.user_name 
                              FROM tr_mbship C, ur_master D 
-                            WHERE C.user_numb = D.user_numb 
+                            WHERE C.user_orig = D.user_orig 
                               AND D.user_numb = NVL((%s),D.user_numb)
                         ) X 
                       WHERE Z.tmem_numb = X.tmem_numb'''
