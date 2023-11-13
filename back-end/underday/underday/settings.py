@@ -9,13 +9,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#로컬
-# SECRET_KEY = 'django-insecure-c8+a)c_rp1uk=cx*=rybzh(7ag%a2&_f54dp+xz#5vhght1ny8'
-# 개발
-SECRET_KEY = '5xeuu%71e@wu=#f@^xs6fp0d$adc@c7dvk@8-gfb%0r@ynpe*-'
-# 운영
-# SECRET_KEY = os.environ["DJANGO_SECRET"],
-
+SECRET_KEY = os.environ["DJANGO_SECRET"],
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -77,35 +72,16 @@ WSGI_APPLICATION = 'underday.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-#로컬DB
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'underday',
-#         'USER': 'root',
-#         'PASSWORD': 'root',
-#         'HOST': '127.0.0.1',
-#         'PORT': '3306',
-#     }
-#개발DB
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'underday',
-        'USER': 'root',
-        'PASSWORD': 'root',
-        'HOST': 'svc.sel5.cloudtype.app',
-        'PORT': '30518',
-    }
-# DATABASES = {
-#      'default': {
-#         'ENGINE': os.environ["DB_ENGINE"],
-#         'NAME': os.environ["DATABASE"],
-#         'USER': os.environ["DB_USER"],
-#         'PASSWORD': os.environ["DB_PASSWORD"],
-#         'HOST': os.environ["DB_HOST"],
-#         'PORT': os.environ["DB_PORT"],
-#     }  
+     'default': {
+        'ENGINE': os.environ["DB_ENGINE"],
+        'NAME': os.environ["DATABASE"],
+        'USER': os.environ["DB_USER"],
+        'PASSWORD': os.environ["DB_PASSWORD"],
+        'HOST': os.environ["DB_HOST"],
+        'PORT': os.environ["DB_PORT"],
+    }  
 
 
  }
@@ -154,4 +130,3 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
