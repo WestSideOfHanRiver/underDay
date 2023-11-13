@@ -162,7 +162,7 @@ def make_class(request):
     # 입력값 정의
     clasnumb = request.data["clas_numb"] # 삭제 수정에는 필요, 등록일땐 빈칸
     tmemnumb = request.data["tmem_numb"] # 수강권번호
-    userid = request.data["user_id"] # ID값
+    user_numb = request.data["user_numb"] # ID값
 
     # INSERT
     if request.method == 'POST':
