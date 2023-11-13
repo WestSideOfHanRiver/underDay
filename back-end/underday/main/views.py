@@ -37,57 +37,47 @@ def class_list(request):
     # 현재시간 이후에 보이는건 나중에 시간 데이터 추가
     if userabcd == 'A': # 회원일때 
         mbsh_ob = UrMbship.objects.filter(user_numb=usernumb, umem_ysno = 'Y')# 유저 맴버쉽 가져오기
-        
-        accumulated_queryset = [] # 쿼리셋 쌓을곳
-        for mbsh in mbsh_ob:
-            print(mbsh.tmem_numb)
+        queryset = TrClass.objects.filter(clas_date=date,tmem_numb__in=[mbsh.tmem_numb for mbsh in mbsh_ob])
 
-            sql_query = '''SELECT 
-            A.clas_name,
-            A.clas_numb,
-            A.clas_date,
-            A.clas_time,
-            A.clas_clos,
-            A.clas_nmax,
-            A.clas_wait,
-            A.resv_stat,
-            A.resv_last,
-            A.resv_alr1,
-            A.clas_ysno,
-            A.clas_inst,
-            A.clas_updt,
-            A.tmem_numb
-            FROM tr_class A
-            LEFT JOIN tr_mbship B ON A.tmem_numb = B.tmem_numb
-            WHERE A.clas_date = %s  and A.tmem_numb = %s  ''' 
-            
-            params = [date,mbsh.tmem_numb]
-            
-            with connection.cursor() as cursor:
-                cursor.execute(sql_query, params)
-                queryset = cursor.fetchall()
-                accumulated_queryset += queryset
-
-        return Response(accumulated_queryset)
+        print(queryset)
+        serializer = TrClassSerializer(queryset,many=True)
+        return Response(serializer.data)
     
     if userabcd == 'B': # 강사일때
         trmb_queryset = TrMbship.objects.filter(user_numb = usernumb)
-        accumulated_queryset = []
-        for trbm in trmb_queryset:
-            trbm.tmem_numb
-            accumulated_queryset  += TrClass.objects.filter(clas_date= date, tmem_numb = trbm.tmem_numb)
-            serializer = TrClassSerializer(accumulated_queryset,many=True)
+        queryset = TrClass.objects.filter(clas_date= date, tmem_numb__in = [trbm.tmem_numb for trbm in trmb_queryset])
+        serializer = TrClassSerializer(queryset,many=True)
         return Response(serializer.data)
 
     return HttpResponse(status=200) 
 
-######################################################################################3
+
+######################################################################################
+
+# 제목 : 당월 예약 가능 일자 표시
+# 요청 : 날짜, 요청자id
+# 리턴 : ok,error
+# API : http://127.0.0.1:8000/getclassdate/
+# user_numb, date
+
+@csrf_exempt
+@api_view(['GET'])
+def get_classdate(request):
+    data = request.data
+    resvnumb = data["user_numb"] # (선택)예약일련번호 예약 취소 할경우!
+    date = data["date"] # 사용자 정보
+    user_abcd = data["user_abcd"]
+    if user_abcd == 'A': # 회원일때
+
+        clas_queryset = TrClass.objects.filter(clas_date__startswith=date[:4])
+        print(clas_queryset)
+        return HttpResponse(status=200) 
+######################################################################################
 
 # 제목 : 예약버튼 이벤트
 # 로직 : 예약하기, 예약 취소하기
 # 요청 : 수강번호, 요청자id
 # 리턴 : ok,error
-
 # API : http://127.0.0.1:8000/classrequest/
 # 
 # 예약일련번호 resv_numb, 수업개설일련번호 CLAS_NUMB,수업날짜 CLAS_DATE, 회원권 일련번호 UMEM_NUMB , reserve_status 현재 예약 상태
@@ -103,7 +93,6 @@ def class_request(request):
     resvstat = data['resv_stat'] # 예약상태
 
     mbsh_ob = UrMbship.objects.filter(user_numb=usernumb, tmem_numb=tmemnumb, umem_ysno= 'Y').order_by('umem_numb')# 유저 맴버쉽 가져오기
-    print(mbsh_ob)
     if mbsh_ob.exists():  # 결과가 존재하는지 확인
         mbsh_instance = mbsh_ob[0]  # 첫 번째 객체를 얻음
     else:
@@ -114,7 +103,6 @@ def class_request(request):
     if use_numb < total_numb:
         use_numb += 1
         mbsh_instance.umem_unum = str(use_numb)
-        print(mbsh_instance.umem_unum)
         # 만약 카운트가 다 찼다면 멤버쉽 비활성화
         if use_numb == total_numb:
             mbsh_instance.umem_ysno = 'N'
@@ -130,7 +118,7 @@ def class_request(request):
 
         if queryset:
             urob =  UrMbship.objects.filter(umem_numb=queryset.umem_numb)
-            print(urob)
+
             # urob.umem_unum
             queryset.resv_stat = resvstat
 
