@@ -39,7 +39,6 @@ def class_list(request):
         mbsh_ob = UrMbship.objects.filter(user_numb=usernumb, umem_ysno = 'Y')# 유저 맴버쉽 가져오기
         queryset = TrClass.objects.filter(clas_date=date,tmem_numb__in=[mbsh.tmem_numb for mbsh in mbsh_ob])
 
-        print(queryset)
         serializer = TrClassSerializer(queryset,many=True)
         return Response(serializer.data)
     
