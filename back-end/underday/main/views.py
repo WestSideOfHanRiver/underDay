@@ -67,7 +67,7 @@ def class_list(request):
                 cursor.execute(sql_query, params)
                 queryset = cursor.fetchall()
                 accumulated_queryset += queryset
-
+                
         return Response(accumulated_queryset)
     
     if userabcd == 'B': # 강사일때
