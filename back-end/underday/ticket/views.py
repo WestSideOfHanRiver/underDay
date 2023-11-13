@@ -168,8 +168,6 @@ def trMbshipList(request):
 def ticketListDetailView(user_gb, user_numb):
 
     cursor = connection.cursor()
-    
-    accumulated_queryset = [] # 쿼리셋 쌓을곳
 
     if (user_gb == "A"):
         # 회원권일련번호, 사용자일련번호(회원), 사용자ID(회원), 사용자명(회원), 강사수업일련번호, 강의명, 회원권이용시작일자, 회원권이용종료일자, 회원권등록회차, 회원권사용회차, 회원권사용가능여부
@@ -213,7 +211,11 @@ def ticketListDetailView(user_gb, user_numb):
     
     with connection.cursor() as cursor:
         cursor.execute(strSql, params)
-        queryset = list(cursor.fetchall())
-        accumulated_queryset += queryset
+        queryset = dictfetchall(cursor)
 
-    return accumulated_queryset
+    return queryset
+
+
+def dictfetchall(cursor):
+    columns = [col[0] for col in cursor.description]
+    return [dict(zip(columns, row)) for row in cursor.fetchall()]
