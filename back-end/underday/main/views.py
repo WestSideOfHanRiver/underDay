@@ -9,6 +9,8 @@ from rest_framework import status
 from datetime import datetime
 from django.db import connection
 from django.http import HttpResponse
+from django.core import serializers
+from django.http import JsonResponse
 
 @csrf_exempt
 @api_view(['GET'])
@@ -16,42 +18,6 @@ def user_list(request):
     users = UrMaster.objects.all()
     serializer = UrMasterSerializer(users,many=True)
     return Response(serializer.data)
-
-
-# ######################    SQL을 사용한 class_list 함수   ###########################
-# @csrf_exempt
-# @api_view(['GET'])
-# def class_list(request):
-#     data = request.data
-#     Nick = data['nick']
-#     date = data['date']
-#     time = data['time']
-#     sql_query = '''SELECT 
-#     A.USER_NUMB, 
-#     A.USER_NAME,
-#     A.USER_NICK,
-#     B.UMEM_NUMB,
-#     B.TMEM_NUMB,
-#     C.CLAS_NUMB,
-#     C.CLAS_DATE,
-#     C.CLAS_TIME
-#     FROM ur_master A
-#     LEFT JOIN ur_mbship B ON A.USER_NUMB = B.USER_NUMB
-#     LEFT JOIN tr_class C ON B.TMEM_NUMB = C.TMEM_NUMB
-#     WHERE A.USER_NICK = %s AND C.CLAS_DATE = %s AND C.CLAS_TIME >= %s ''' 
-
-#     params = [Nick,date,time]
-
-
-#     # 원시 SQL 쿼리를 실행합니다.
-#     with connection.cursor() as cursor:
-#         cursor.execute(sql_query)
-
-#         # 쿼리 결과를 가져옵니다.
-#         queryset = cursor.fetchall()   
-
-#     return Response(queryset)
-
 
 
 # 제목 : 캘린더 메인페이지  
@@ -65,44 +31,55 @@ def user_list(request):
 @csrf_exempt
 @api_view(['GET'])
 def class_list(request):
-    usernumb = request.GET.get('usernumb', None)
+    usernumb = request.GET.get('user_numb', None)
     date = request.GET.get('date', None)
-
+    userabcd = request.GET.get('user_abcd', None)
     # 현재시간 이후에 보이는건 나중에 시간 데이터 추가
+    if userabcd == 'A': # 회원일때 
+        mbsh_ob = UrMbship.objects.filter(user_numb=usernumb, umem_ysno = 'Y')# 유저 맴버쉽 가져오기
+        
+        accumulated_queryset = [] # 쿼리셋 쌓을곳
+        for mbsh in mbsh_ob:
+            print(mbsh.tmem_numb)
 
-    mbsh_ob = UrMbship.objects.filter(user_numb=usernumb)# 유저 맴버쉽 가져오기
-    accumulated_queryset = [] # 쿼리셋 쌓을곳
+            sql_query = '''SELECT 
+            A.clas_name,
+            A.clas_numb,
+            A.clas_date,
+            A.clas_time,
+            A.clas_clos,
+            A.clas_nmax,
+            A.clas_wait,
+            A.resv_stat,
+            A.resv_last,
+            A.resv_alr1,
+            A.clas_ysno,
+            A.clas_inst,
+            A.clas_updt,
+            A.tmem_numb
+            FROM tr_class A
+            LEFT JOIN tr_mbship B ON A.tmem_numb = B.tmem_numb
+            WHERE A.clas_date = %s  and A.tmem_numb = %s  ''' 
+            
+            params = [date,mbsh.tmem_numb]
+            
+            with connection.cursor() as cursor:
+                cursor.execute(sql_query, params)
+                queryset = cursor.fetchall()
+                accumulated_queryset += queryset
+                
+        return Response(accumulated_queryset)
+    
+    if userabcd == 'B': # 강사일때
+        trmb_queryset = TrMbship.objects.filter(user_numb = usernumb)
+        accumulated_queryset = []
+        for trbm in trmb_queryset:
+            trbm.tmem_numb
+            accumulated_queryset  += TrClass.objects.filter(clas_date= date, tmem_numb = trbm.tmem_numb)
+            serializer = TrClassSerializer(accumulated_queryset,many=True)
+        return Response(serializer.data)
 
-    sql_query = '''SELECT 
-    A.clas_name,
-    A.clas_numb,
-    A.clas_date,
-    A.clas_time,
-    A.clas_clos,
-    A.clas_nmax,
-    A.clas_wait,
-    A.resv_stat,
-    A.resv_last,
-    A.resv_alr1,
-    A.clas_ysno,
-    A.clas_inst,
-    A.clas_updt,
-    A.tmem_numb
-    FROM tr_class A
-    LEFT JOIN tr_mbship B ON A.tmem_numb = B.tmem_numb
-    AND A.tmem_numb = B.tmem_numb
-    WHERE A.clas_date = %s ''' 
-    
-    params = [date]
-    
-    with connection.cursor() as cursor:
-        cursor.execute(sql_query, params)
-        queryset = cursor.fetchall()
-        accumulated_queryset += queryset
-    
-    # print(accumulated_queryset)
-
-    return Response(accumulated_queryset)
+    return HttpResponse(status=200) 
 
 ######################################################################################3
 
@@ -119,22 +96,56 @@ def class_list(request):
 @api_view(['PUT'])
 def class_request(request):
     data = request.data
-    resvnumb = data["resv_numb"] # 예약일련번호
-    # clssnumb = data['clss_numb'] # 수업개설넘버
-    # clasdate = data['clas_date'] # 수업날짜
-    # umemnumb = data['umem_numb'] # 사용자 멤버쉽코드
+    resvnumb = data["resv_numb"] # (선택)예약일련번호 예약 취소 할경우!
+
+    usernumb = data['user_numb'] # 사용자 정보
+    tmemnumb = data['tmem_numb'] # 강사수강일련번호
     resvstat = data['resv_stat'] # 예약상태
 
-    queryset = ReMaster.objects.get(resv_numb = resvnumb)
-    if queryset:
-        queryset.resv_stat = resvstat
+    mbsh_ob = UrMbship.objects.filter(user_numb=usernumb, tmem_numb=tmemnumb, umem_ysno= 'Y').order_by('umem_numb')# 유저 맴버쉽 가져오기
+    print(mbsh_ob)
+    if mbsh_ob.exists():  # 결과가 존재하는지 확인
+        mbsh_instance = mbsh_ob[0]  # 첫 번째 객체를 얻음
+    else:
+        return HttpResponse(status=400, content=f"User membership is empty")
+    # 내 수강권 가장 오래된 내역 불러와서 카운트 확인
+    total_numb = int(mbsh_instance.umem_tnum)
+    use_numb = int(mbsh_instance.umem_unum)
+    if use_numb < total_numb:
+        use_numb += 1
+        mbsh_instance.umem_unum = str(use_numb)
+        print(mbsh_instance.umem_unum)
+        # 만약 카운트가 다 찼다면 멤버쉽 비활성화
+        if use_numb == total_numb:
+            mbsh_instance.umem_ysno = 'N'
+        try:
+            mbsh_instance.save()
+            return HttpResponse(status=200) 
+        except:
+            return HttpResponse(status=400, content=f"Fail update, error code : 1")
 
-    try:
-        queryset.save()
+    # 예약 번호가 있으면, 예약 취소
+    if resvnumb:
+        queryset = ReMaster.objects.get(resv_numb = resvnumb)
+
+        if queryset:
+            urob =  UrMbship.objects.filter(umem_numb=queryset.umem_numb)
+            print(urob)
+            # urob.umem_unum
+            queryset.resv_stat = resvstat
+
+        try:
+            queryset.save()
+            return HttpResponse(status=200) 
+        except:
+            return HttpResponse(status=400, content=f"Fail update")
+    
+    # 예약 번호가 없으면 예약 신청
+    else:
+        # 수강권 카운트 확인
+        
+
         return HttpResponse(status=200) 
-    except:
-        return HttpResponse(status=400, content=f"Fail update")
-
 
 
 
@@ -147,12 +158,9 @@ def class_request(request):
 @api_view(['GET'])
 def trmbship_list(request):
     data = request.data
-    usernumb = data['usernumb']
+    usernumb = data['user_numb']
 
     trmb_ob = TrMbship.objects.filter(user_numb=usernumb) # 강의 정보 가져오기
-
-    # for da in trmb_ob:
-    #    print(da.tmem_name)
     serializer = TrMbshipSerializer(trmb_ob,many=True)
     return Response(serializer.data)
 
@@ -258,3 +266,73 @@ def make_class(request):
     else:
         return 
 
+
+
+
+
+
+# API : http://127.0.0.1:8000/callmembers/
+# 통신방식 : GET
+# 제목 : 강사회원 리스트
+# 로직 : 강사의 회원권을 가져와서 모든 회원권의 회원 리스트를 보여준다
+# 요청 : user_numb : 00000010, user_abcd = 'B'
+# 리턴 : 강사의 회원 리스트
+@csrf_exempt
+@api_view(['GET'])
+def call_members(request):
+    if request.data["user_abcd"] == 'B': # 요청한사람이 강사인경우만
+        # 강사의 회원 리스트
+        usernumb = request.data["user_numb"] # ID값
+        trmbsh_ob = TrMbship.objects.filter(user_numb=usernumb)# 강사 맴버쉽 가져오기
+        # print(trmbsh_ob)
+        user_dict = {} # 회원 중복 방지 -> 추후 강사-회원 테이블 만들어서 구조 변경
+        for trmbsh in trmbsh_ob:
+            tmemnumb = trmbsh.tmem_numb
+            urmbsh_ob = UrMbship.objects.filter(tmem_numb = tmemnumb)
+            for urmbsh in urmbsh_ob:
+                if urmbsh.user_numb not in user_dict:
+                    user_dict[urmbsh.user_numb] = 1
+
+        accumulated_queryset = UrMaster.objects.none()
+        for key,values in user_dict.items():
+            userdata_ob = UrMaster.objects.filter(user_numb = key)
+            accumulated_queryset = accumulated_queryset | userdata_ob
+        print(accumulated_queryset)
+        
+        # 누적된 쿼리셋을 직렬화합니다.
+        serializer = UrMasterSerializer(accumulated_queryset,many=True)
+        return Response(serializer.data)
+    else:
+        return HttpResponse(400)
+    
+
+# API : http://127.0.0.1:8000/memberdetail/
+# 통신방식 : GET
+# 제목 : 회원관리의 회원 상세
+# 로직 : 강사가 회원권에 등록한 회원리스트의 회원 디테일, 회원의 이전기록도 존재(정지이력)
+# 요청 : user_numb : 00000010
+# 리턴 : 강사의 회원정보 디테일
+@csrf_exempt
+@api_view(['GET'])
+def member_detail(request):
+    data = request.data
+    usernumb = data["user_numb"]
+    accumulated_queryset = [] # 쿼리셋 쌓을곳
+
+    sql_query = '''
+    SELECT 
+    B.user_numb,B.user_name, B.user_phon, A.UMEM_UNUM,A.UMEM_YSNO
+    FROM ur_mbship A
+    LEFT JOIN ur_master B ON A.user_numb = B.user_numb 
+	WHERE A.user_numb =%s 
+    ''' 
+    
+    params = [usernumb]
+    
+    with connection.cursor() as cursor:
+        cursor.execute(sql_query, params)
+        queryset = cursor.fetchall()
+        accumulated_queryset += queryset
+
+
+    return Response(accumulated_queryset)
