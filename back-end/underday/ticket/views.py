@@ -169,9 +169,12 @@ def ticketListDetailView(user_gb, user_numb):
 
     cursor = connection.cursor()
 
+# 회원권일련번호, 사용자일련번호(회원), 사용자ID(회원), 사용자명(회원), 강사수업일련번호, 강의명, 회원권이용시작일자, 회원권이용종료일자, 회원권등록회차, 회원권사용회차, 회원권사용가능여부, 사용자일련번호(강사), 사용자ID(강사), 사용자명(강사)
+# membership_seq, user_member_seq, user_member_id, user_member_nm, class_seq, class_nm, membership_stat_date, membership_end_date, membership_join_number, membership_use_number, membership_use_yn, user_teach_seq, user_teach_id, user_teach_nm
     if (user_gb == "A"):
-        # 회원권일련번호, 사용자일련번호(회원), 사용자ID(회원), 사용자명(회원), 강사수업일련번호, 강의명, 회원권이용시작일자, 회원권이용종료일자, 회원권등록회차, 회원권사용회차, 회원권사용가능여부
-        strSql = '''SELECT Z.umem_numb, Z.user_numb, Z.user_idxx, Z.user_name, Z.tmem_numb, Z.umem_stat, Z.umem_endt, Z.umem_tnum, Z.umem_unum, Z.umem_ysno, X.tmem_name, X.user_numb, X.user_name 
+        strSql = '''SELECT Z.umem_numb as membership_seq, Z.user_numb as user_member_seq, Z.user_idxx as user_member_id, Z.user_name as user_member_nm, Z.tmem_numb as class_seq
+                         , X.tmem_name as class_nm, Z.umem_stat as membership_stat_date, Z.umem_endt as membership_end_date, Z.umem_tnum as membership_join_number
+                         , Z.umem_unum as membership_use_number, Z.umem_ysno as membership_use_yn, X.user_numb as user_teach_seq, X.user_numb as user_teach_id, X.user_name as user_teach_nm
                       FROM (SELECT A.umem_numb, A.user_numb, B.user_idxx, B.user_name, A.tmem_numb, A.umem_stat, A.umem_endt, A.umem_tnum, A.umem_unum, A.umem_ysno
                               FROM ur_mbship A, ur_master B 
                              WHERE A.user_numb = B.user_numb
@@ -181,9 +184,11 @@ def ticketListDetailView(user_gb, user_numb):
                              FROM tr_mbship C, ur_master D 
                             WHERE C.user_numb = D.user_numb 
                         ) X 
-                      WHERE Z.tmem_numb = X.tmem_numb'''
+                    WHERE Z.tmem_numb = X.tmem_numb'''
     elif (user_gb == "B"):
-        strSql = '''SELECT Z.umem_numb, Z.user_numb, Z.user_idxx, Z.user_name, Z.tmem_numb, Z.umem_stat, Z.umem_endt, Z.umem_tnum, Z.umem_unum, Z.umem_ysno, X.tmem_name, X.user_numb, X.user_name 
+        strSql = '''SELECT Z.umem_numb as membership_seq, Z.user_numb as user_member_seq, Z.user_idxx as user_member_id, Z.user_name as user_member_nm, Z.tmem_numb as class_seq
+                         , X.tmem_name as class_nm, Z.umem_stat as membership_stat_date, Z.umem_endt as membership_end_date, Z.umem_tnum as membership_join_number
+                         , Z.umem_unum as membership_use_number, Z.umem_ysno as membership_use_yn, X.user_numb as user_teach_seq, X.user_numb as user_teach_id, X.user_name as user_teach_nm
                       FROM (SELECT A.umem_numb, A.user_numb, B.user_idxx, B.user_name, A.tmem_numb, A.umem_stat, A.umem_endt, A.umem_tnum, A.umem_unum, A.umem_ysno
                               FROM ur_mbship A, ur_master B 
                              WHERE A.user_numb = B.user_numb
@@ -193,9 +198,11 @@ def ticketListDetailView(user_gb, user_numb):
                             WHERE C.user_numb = D.user_numb 
                               AND D.user_numb = NVL((%s),D.user_numb)
                         ) X 
-                      WHERE Z.tmem_numb = X.tmem_numb'''
+                    WHERE Z.tmem_numb = X.tmem_numb'''
     elif (user_gb == "C"):
-        strSql = '''SELECT Z.umem_numb, Z.user_numb, Z.user_idxx, Z.user_name, Z.tmem_numb, Z.umem_stat, Z.umem_endt, Z.umem_tnum, Z.umem_unum, Z.umem_ysno, X.tmem_name, X.user_numb, X.user_name 
+        strSql = '''Z.umem_numb as membership_seq, Z.user_numb as user_member_seq, Z.user_idxx as user_member_id, Z.user_name as user_member_nm, Z.tmem_numb as class_seq
+                         , X.tmem_name as class_nm, Z.umem_stat as membership_stat_date, Z.umem_endt as membership_end_date, Z.umem_tnum as membership_join_number
+                         , Z.umem_unum as membership_use_number, Z.umem_ysno as membership_use_yn, X.user_numb as user_teach_seq, X.user_numb as user_teach_id, X.user_name as user_teach_nm
                       FROM (SELECT A.umem_numb, A.user_numb, B.user_idxx, B.user_name, A.tmem_numb, A.umem_stat, A.umem_endt, A.umem_tnum, A.umem_unum, A.umem_ysno
                               FROM ur_mbship A, ur_master B 
                              WHERE A.user_numb = B.user_numb
@@ -205,7 +212,7 @@ def ticketListDetailView(user_gb, user_numb):
                             WHERE C.user_orig = D.user_orig 
                               AND D.user_numb = NVL((%s),D.user_numb)
                         ) X 
-                      WHERE Z.tmem_numb = X.tmem_numb'''
+                    WHERE Z.tmem_numb = X.tmem_numb'''
     
     params = [user_numb]
     
