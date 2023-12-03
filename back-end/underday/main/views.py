@@ -44,7 +44,9 @@ def class_list(request):
     
     if userabcd == 'B': # 강사일때
         trmb_queryset = TrMbship.objects.filter(user_numb = usernumb)
+        print(trmb_queryset)
         queryset = TrClass.objects.filter(clas_date= date, tmem_numb__in = [trbm.tmem_numb for trbm in trmb_queryset])
+        print(queryset)
         serializer = TrClassSerializer(queryset,many=True)
         return Response(serializer.data)
 
@@ -263,11 +265,11 @@ def make_class(request):
 # 제목 : 강사회원 리스트
 # 로직 : 강사의 회원권을 가져와서 모든 회원권의 회원 리스트를 보여준다
 # 요청 : user_numb : 00000010, user_abcd = 'B'
-# 리턴 : 강사의 회원 리스트
+# 리턴 : 강사의 회원 리스트, 기업의 강사 리스트
 @csrf_exempt
 @api_view(['GET'])
 def call_members(request):
-    if request.data["user_abcd"] == 'B': # 요청한사람이 강사인경우만
+    if request.data["user_abcd"] == 'B': # 요청한사람이 강사인 경우
         # 강사의 회원 리스트
         usernumb = request.data["user_numb"] # ID값
         trmbsh_ob = TrMbship.objects.filter(user_numb=usernumb)# 강사 맴버쉽 가져오기
@@ -284,11 +286,17 @@ def call_members(request):
         for key,values in user_dict.items():
             userdata_ob = UrMaster.objects.filter(user_numb = key)
             accumulated_queryset = accumulated_queryset | userdata_ob
-        print(accumulated_queryset)
+
         
         # 누적된 쿼리셋을 직렬화합니다.
         serializer = UrMasterSerializer(accumulated_queryset,many=True)
         return Response(serializer.data)
+    
+    elif request.data["user_abcd"] == 'C': # 요청한사람이 기업인 경우
+        usernumb = request.data["user_numb"] # 회사 ID값
+        urmbsh_ob = UrMaster.objects.filter(user_numb = usernumb)
+        print(urmbsh_ob)
+
     else:
         return HttpResponse(400)
     
