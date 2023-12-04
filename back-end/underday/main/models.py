@@ -94,6 +94,7 @@ class ReMaster(models.Model):
     clas_numb = models.CharField(db_column='CLAS_NUMB', max_length=10, blank=True, null=True)
     clas_date = models.CharField(db_column='CLAS_DATE', max_length=8, blank=True, null=True)
     clas_time = models.CharField(db_column='CLAS_TIME', max_length=4, blank=True, null=True)
+    resv_idxx = models.CharField(db_column='RESV_IDXX', max_length=8, blank=True, null=True)
     umem_numb = models.CharField(db_column='UMEM_NUMB', max_length=10, blank=True, null=True)
     resv_stat = models.CharField(db_column='RESV_STAT', max_length=2, blank=True, null=True)
     resv_memo = models.CharField(db_column='RESV_MEMO', max_length=200, blank=True, null=True)
