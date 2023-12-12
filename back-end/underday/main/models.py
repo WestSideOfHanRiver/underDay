@@ -25,7 +25,9 @@ class TrClass(models.Model):
     clas_clos = models.CharField(db_column='CLAS_CLOS', max_length=4)
     tmem_numb = models.CharField(db_column='TMEM_NUMB', max_length=8, blank=True, null=True)
     clas_nmax = models.IntegerField(db_column='CLAS_NMAX', blank=True, null=True)
+    clas_cmax = models.IntegerField(db_column='CLAS_CMAX', blank=True, null=True)
     clas_wait = models.IntegerField(db_column='CLAS_WAIT',  blank=True, null=True)
+    clas_cwai = models.IntegerField(db_column='CLAS_CWAI',  blank=True, null=True)
     resv_stat = models.CharField(db_column='RESV_STAT', max_length=12, blank=True, null=True)
     resv_last = models.CharField(db_column='RESV_LAST', max_length=12, blank=True, null=True)
     resv_alr1 = models.IntegerField(db_column='RESV_ALR1', blank=True, null=True)
@@ -88,10 +90,11 @@ class UrMaster(models.Model):
 
 
 class ReMaster(models.Model):
-    resv_numb = models.CharField(db_column='RESV_NUMB', primary_key=True, max_length=7)
-    clas_numb = models.CharField(db_column='CLAS_NUMB', max_length=7, blank=True, null=True)
+    resv_numb = models.AutoField(primary_key=True)
+    clas_numb = models.CharField(db_column='CLAS_NUMB', max_length=10, blank=True, null=True)
     clas_date = models.CharField(db_column='CLAS_DATE', max_length=8, blank=True, null=True)
     clas_time = models.CharField(db_column='CLAS_TIME', max_length=4, blank=True, null=True)
+    resv_idxx = models.CharField(db_column='RESV_IDXX', max_length=8, blank=True, null=True)
     umem_numb = models.CharField(db_column='UMEM_NUMB', max_length=10, blank=True, null=True)
     resv_stat = models.CharField(db_column='RESV_STAT', max_length=2, blank=True, null=True)
     resv_memo = models.CharField(db_column='RESV_MEMO', max_length=200, blank=True, null=True)
