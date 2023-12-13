@@ -12,6 +12,11 @@ from django.http import HttpResponse
 from django.core import serializers
 from django.http import JsonResponse
 
+def dictfetchall(cursor):
+    columns = [col[0] for col in cursor.description]
+    return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+
 @csrf_exempt
 @api_view(['GET'])
 def user_list(request):
@@ -31,28 +36,40 @@ def user_list(request):
 @csrf_exempt
 @api_view(['GET'])
 def class_list(request):
-    # data = request.data
-    # usernumb = data["user_numb"] # (선택)예약일련번호 예약 취소 할경우!
-    # date = data["date"] # 사용자 정보
-    # userabcd = data["user_abcd"]
+
     usernumb = request.GET.get('user_numb', None)
     date = request.GET.get('date', None)
     userabcd = request.GET.get('user_abcd', None)
     # 현재시간 이후에 보이는건 나중에 시간 데이터 추가
-    print(usernumb,date,userabcd)
-    if userabcd == 'A': # 회원일때 
-        mbsh_ob = UrMbship.objects.filter(user_numb=usernumb, umem_ysno = 'Y')# 유저 맴버쉽 가져오기
-        queryset = TrClass.objects.filter(clas_date=date,tmem_numb__in=[mbsh.tmem_numb for mbsh in mbsh_ob])
-        serializer = TrClassSerializer(queryset,many=True)
-        return Response(serializer.data)
+    if userabcd == 'A':
+        cursor = connection.cursor()
+        strSql = '''SELECT B.CLAS_NUMB, B.TMEM_NUMB, B.clas_date, B.CLAS_TIME, B.CLAS_CLOS,A.TMEM_NUMB,D.USER_NAME AS TECH_NAME,
+                B.CLAS_NMAX,B.CLAS_CMAX,B.CLAS_WAIT,B.CLAS_CWAI,C.tmem_cate,B.RESV_STAT,B.RESV_LAST,B.RESV_ALR1,B.CLAS_YSNO,B.CLAS_INST, B.CLAS_UPDT
+                FROM ur_mbship AS A LEFT JOIN tr_class AS B ON A.TMEM_NUMB = B.TMEM_NUMB LEFT JOIN tr_mbship AS C ON A.TMEM_NUMB = C.TMEM_NUMB 
+                LEFT JOIN ur_master AS D ON C.USER_NUMB = D.USER_NUMB 
+                WHERE A.USER_NUMB = (%s) AND A.UMEM_YSNO = 'Y' AND B.clas_date = (%s) ORDER BY CLAS_TIME '''
+        params = [usernumb,date]
+        with connection.cursor() as cursor:
+            cursor.execute(strSql, params)
+            queryset = dictfetchall(cursor)
+        return Response(queryset)
     
     if userabcd == 'B': # 강사일때
-        trmb_queryset = TrMbship.objects.filter(user_numb = usernumb)
-        queryset = TrClass.objects.filter(clas_date= date, tmem_numb__in = [trbm.tmem_numb for trbm in trmb_queryset])
-        serializer = TrClassSerializer(queryset,many=True)
-        return Response(serializer.data)
+        cursor = connection.cursor()
+        strSql = '''SELECT B.CLAS_NUMB, B.TMEM_NUMB, B.clas_date, B.CLAS_TIME, B.CLAS_CLOS,A.TMEM_NUMB,C.USER_NAME AS TECH_NAME,
+            B.CLAS_NMAX,B.CLAS_CMAX,B.CLAS_WAIT,B.CLAS_CWAI,A.TMEM_CATE,B.RESV_STAT,B.RESV_LAST,B.RESV_ALR1,B.CLAS_YSNO,B.CLAS_INST, B.CLAS_UPDT
+            FROM tr_mbship AS A LEFT JOIN tr_class AS B ON A.TMEM_NUMB = B.TMEM_NUMB 
+            LEFT JOIN ur_master AS C ON A.USER_NUMB = C.USER_NUMB 
+            WHERE A.USER_NUMB = (%s) AND B.clas_date = (%s) ORDER BY CLAS_TIME'''
+        params = [usernumb,date]
+        with connection.cursor() as cursor:
+            cursor.execute(strSql, params)
+            queryset = dictfetchall(cursor)
+        return Response(queryset)
 
-    return HttpResponse(status=200) 
+
+    
+
 
 
 ######################################################################################
@@ -152,35 +169,44 @@ def class_request(request):
                     except:
                         return HttpResponse(status=400, content=f"멤버쉽 횟수 증가 혹은 멤버쉽 상태 변경 저장 실패")
 
-                    
-                    
-                    # 대기신청(상태값없음 프론트에서 처리) - 대기자 정원 여유 있음
-                    # resv_numb_v 자동생성
-                    print(mbsh_ob)
-                    relast = ReMaster.objects.order_by('-resv_numb').first()
-                    re_lastnumb = int(relast.resv_numb) + 1
-                    print(re_lastnumb)
+                    resved_ob = ReMaster.objects.filter(clas_numb = clasnumb, resv_idxx=usernumb,resv_stat='00').order_by('resv_numb').first()
+                    if resved_ob :
+                        resved_ob.resv_stat = resvstat
+                        try:
+                            resved_ob.save()
+                            return HttpResponse(status=200)
+                        except Exception as e:
+                            # 저장에 실패한 경우 
+                            print(f"Error during save: {e}")
+                            # 저장에 실패한 경우 
+                            return HttpResponse(status=400, content=f"기존 예약데이터 저장 실패")
+                    else:
+                        # 대기신청(상태값없음 프론트에서 처리) - 대기자 정원 여유 있음
+                        # resv_numb_v 자동생성
+                        relast = ReMaster.objects.order_by('-resv_numb').first()
+                        re_lastnumb = int(relast.resv_numb) + 1
+                  
+                        clasnumb_v = trcl_instance.clas_numb  # 수업일련번호
+                        resvidxx_v = usernumb # 신청자
+                        clasdate_v = trcl_instance.clas_date # 수업일자
+                        clastime_v = trcl_instance.clas_time # 수업상세시간
+                        umemnumb_v = mbsh_ob[0].umem_numb # 정원 2자리
+                        resvstat_v = resvstat # 예약상태 신청가능(00), 예약완료(01), 예약대기(02), 예약확정(03), 예약반려(04), 예약마감(05)
+                        cancysno_v = 'N'
 
-                    clasnumb_v = trcl_instance.clas_numb  # 수업일련번호
-                    resvidxx_v = usernumb # 신청자
-                    clasdate_v = trcl_instance.clas_date # 수업일자
-                    clastime_v = trcl_instance.clas_time # 수업상세시간
-                    umemnumb_v = mbsh_ob[0].umem_numb # 정원 2자리
-                    resvstat_v = resvstat # 예약상태 신청가능(00), 예약완료(01), 예약대기(02), 예약확정(03), 예약반려(04), 예약마감(05)
-                    cancysno_v = 'N'
-
-                    # 모델 객체 생성 및 저장
-                    new_data = ReMaster(resv_numb = re_lastnumb, resv_idxx = resvidxx_v, clas_numb=clasnumb_v, clas_date=clasdate_v,clas_time=clastime_v,umem_numb=umemnumb_v,
-                                        resv_stat=resvstat_v,canc_ysno=cancysno_v)
-                    try:
-                        new_data.save()  # 데이터 저장 시도
-                        return HttpResponse(status=200)  # 성공적으로 저장된 경우 200 OK 응답 반환
-                    except Exception as e:
-                        # 저장에 실패한 경우 
-                        print(f"Error during save: {e}")
-                        # 저장에 실패한 경우 
-                        return HttpResponse(status=400, content=f"예약데이터 저장 실패1")
-
+                        # 모델 객체 생성 및 저장
+                        new_data = ReMaster(resv_numb = re_lastnumb, resv_idxx = resvidxx_v, clas_numb=clasnumb_v, clas_date=clasdate_v,clas_time=clastime_v,umem_numb=umemnumb_v,
+                                            resv_stat=resvstat_v,canc_ysno=cancysno_v)
+                        try:
+                            new_data.save()  # 데이터 저장 시도
+                            return HttpResponse(status=200)  # 성공적으로 저장된 경우 200 OK 응답 반환
+                        except Exception as e:
+                            # 저장에 실패한 경우 
+                            print(f"Error during save: {e}")
+                            # 저장에 실패한 경우 
+                            return HttpResponse(status=400, content=f"예약데이터 저장 실패1")
+                else:
+                    return HttpResponse(status=400, content=f"예약데이터 저장 실패1")
 ############################ 예약 취소 ##################################
     # 예약 번호가 있거나 예약 완료 혹은 예약 대기인 경우, 예약 취소 가능
     if resvnumb and  (resvstat =='01' or resvstat =='02' ):
@@ -194,23 +220,49 @@ def class_request(request):
             cmax = int(trcl_instance.clas_cmax)
             wait = int(trcl_instance.clas_wait)
             if resvstat =='01': # 내가 예약완료였던 경우
-                 # 대기자 선출선납, 예약대기가 있으면
-                wait_ob =  ReMaster.objects.filter(clas_numb=clasnumb,resv_stat='02').order_by('resv_numb').first()    
-                resv_ob =  ReMaster.objects.filter(clas_numb=clasnumb,resv_idxx=usernumb,resv_stat='01').order_by('resv_numb').first()  
+                # 대기자 선출선납, 예약대기가 있으면
+                wait_ob =  ReMaster.objects.filter(clas_numb=clasnumb,resv_stat='02').order_by('resv_numb').first()  # 대기자  
+                resv_ob =  ReMaster.objects.filter(clas_numb=clasnumb,resv_idxx=usernumb,resv_stat='01').order_by('resv_numb').first()  # 예약자
                 clas_ob =  TrClass.objects.filter(clas_numb=clasnumb).first() 
-                if wait_ob and resv_ob and clas_ob:
-                    wait_ob.resv_stat= '01'
+                if resv_ob and clas_ob:
+                    # 대기자 있으면 대기인원CWAI 줄고, CMAX 그대로
+                    if wait_ob:
+                        print(wait_ob)
+                        wait_ob.resv_stat= '01'
+                        cwai_waitnumb = int(clas_ob.clas_cwai) - 1
+                        clas_ob.clas_cwai = cwai_waitnumb
+                    # 대기자 없으면 CMAX 감소
+                    else:
+                        cmax_waitnumb = int(clas_ob.clas_cmax) - 1
+                        clas_ob.clas_cmax = cmax_waitnumb
                     resv_ob.resv_stat= '00'
-                    waitnumb = int(clas_ob.clas_cwai) - 1
 
-                    clas_ob.clas_cwai = waitnumb
                     try:
-                        wait_ob.save() 
-                        resv_ob.save()
-                        clas_ob.save()
-                    except:
-                        return HttpResponse(status=400, content=f"대기자 상태 변경 실패")
+                        if resv_ob:
+                            resv_ob.save()
+                        if wait_ob:
+                            wait_ob.save() 
+                        if clas_ob:
+                            clas_ob.save()
+                    except Exception as e:
+                        print(f"Error during save: {e}")
+                        return HttpResponse(status=400, content=f"대기자 상태 변경 실패1")
+                else:
+                    return HttpResponse(status=400, content=f"예약내역이나, 강의정보를 불러올 수 없습니다")
+
             # 내가 예약 대기자였던 경우의 취소프로세스
+            elif resvstat =='02': # 내가 예약대기였던 경우
+                resv_ob =  ReMaster.objects.filter(clas_numb=clasnumb,resv_idxx=usernumb,resv_stat='02').order_by('resv_numb').first()  
+                clas_ob =  TrClass.objects.filter(clas_numb=clasnumb).first() 
+                resv_ob.resv_stat= '00'
+                waitnumb = int(clas_ob.clas_cwai) - 1
+                clas_ob.clas_cwai = waitnumb
+                try:
+                    resv_ob.save()
+                    clas_ob.save()
+                except Exception as e:
+                    print(f"Error during save: {e}")
+                    return HttpResponse(status=400, content=f"대기자 상태 변경 실패2")
 
         queryset = ReMaster.objects.get(resv_numb = resvnumb)   
         if queryset:
@@ -218,7 +270,7 @@ def class_request(request):
 
 
             unum = int(urmb_ob.umem_unum)
-            # 회원권 횟수 차감
+            # 회원권 사용횟수 증가
             urmb_ob.umem_unum = unum - 1
 
             try:
