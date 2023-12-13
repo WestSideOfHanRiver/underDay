@@ -1,33 +1,44 @@
-'use client'
-import TICKETS from './mockupData'
-import { useState } from 'react'
-import Modal from '@components/modal'
-import TicketDetails from './ticketDetails/ticketDetails'
+import { fetchData } from './api'
+import { use } from 'react'
+import { TicketDetails } from 'types/ticket'
+
 import AddTicketsButton from './addTicketButton/index'
 import TicketCard from './ticketsCard/ticketsCard'
+import Empty from '@components/empty'
 
-const data = {
-  category: '요가',
-  teacher: '조완석',
-  lessonName: '다리 찢어보자 요가킹',
-  lessonState: '예약대기',
+import styles from './tickets.module.scss'
+
+export async function getTickets() {
+  const url =
+    'https://port-0-underday-local-2rrqq2blmlt9v8u.sel5.cloudtype.app/ticket/ticket_list/'
+  const tickets = await fetchData(url, {
+    user_numb: '1',
+  })
+
+  return tickets
 }
 
 export default function TicketsPage() {
-  const [toggleDetail, setToggleDetail] = useState(false)
+  const tickets = use(getTickets())
 
   return (
     <>
-      <AddTicketsButton setToggleDetail={setToggleDetail} />
+      {tickets.length > 0 ? (
+        <article className={styles.ticketsWrap}>
+          <div className={styles.ticketsTitle}>
+            <span>이용권 {tickets.length}개</span>
+            <p>갖고 계시네요</p>
+          </div>
 
-      {/* 반복문 돌거임 */}
-      <TicketCard setToggleDetail={setToggleDetail} />
-
-      {toggleDetail && (
-        <Modal>
-          <TicketDetails setToggleDetail={setToggleDetail} data={data} />
-        </Modal>
+          {tickets.map((el: TicketDetails) => (
+            <TicketCard key={el.membership_seq} {...el} />
+          ))}
+        </article>
+      ) : (
+        <Empty message={'등록된 수강권이 없습니다:('} />
       )}
+
+      <AddTicketsButton />
     </>
   )
 }
