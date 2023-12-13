@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from user.jwt_claim_serializer import MyTokenObtainPairView
+# from user.jwt_claim_serializer import MyTokenObtainPairView
 
 # from rest_framework_simplejwt.views import (
 #     TokenObtainPairView,
