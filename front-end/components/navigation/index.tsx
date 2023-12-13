@@ -18,6 +18,8 @@ import classActiveIcon from '@svg/classActive.svg'
 export default function Navigation() {
   const pathname = usePathname()
 
+  if (pathname === '/login') return
+
   return (
     <nav className={styles.navigation}>
       <ul>
