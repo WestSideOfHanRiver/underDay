@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from user.jwt_claim_serializer import MyTokenObtainPairSerializer
+# from user.jwt_claim_serializer import MyTokenObtainPairSerializer
 
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated
@@ -93,8 +93,8 @@ class UserSignupAPI(APIView):
     
 # 로그인 ID, PW 로 로그인시.
 class UserLoginAPI(APIView):
-    @permission_classes((IsAuthenticated, ))
-    @authentication_classes((JSONWebTokenAuthentication,))
+    # @permission_classes((IsAuthenticated, ))
+    # @authentication_classes((JSONWebTokenAuthentication,))
     @swagger_auto_schema(tags=['로그인 API'], query_serializer=UserLoginSerializer, responses={201: 'OK'})
     def post(self, request):
         # 아이디 검증 - PYTHON에서 선처리하는 공간 or JWT 검증하는 공간에서 아이디 검증하므로 제외될 예정.
@@ -110,27 +110,29 @@ class UserLoginAPI(APIView):
             # PW 검증
             # db에 저장된 암호화 PW == 입력받고 암호화된 PW 비교
             if bcrypt.checkpw(request.data['password'].encode('utf-8'), userInfo.user_pasw.encode('utf-8')) == True:
-                token = MyTokenObtainPairSerializer.get_token(userInfo) # refresh 토큰 생성
-                refresh_token = str(token) # refresh 토큰 문자열화
-                access_token = str(token.access_token) # access 토큰 문자열화
-                response = Response(
-                    {
-                        "message": "OK",
-                        "userInfo": {
-                            "user_numb": userInfo.user_numb,
-                            "user_id": userInfo.user_idxx,
-                            "user_nm": userInfo.user_name,
-                            "user_gb": userInfo.user_abcd
-                        },
-                        "jwt_token": {
-                            "access_token": access_token,
-                            "refresh_token": refresh_token
-                        },
-                    },
-                    status=200
-                )
+                # token = MyTokenObtainPairSerializer.get_token(userInfo) # refresh 토큰 생성
+                # refresh_token = str(token) # refresh 토큰 문자열화
+                # access_token = str(token.access_token) # access 토큰 문자열화
+                # response = Response(
+                #     {
+                #         "message": "OK",
+                #         "userInfo": {
+                #             "user_numb": userInfo.user_numb,
+                #             "user_id": userInfo.user_idxx,
+                #             "user_nm": userInfo.user_name,
+                #             "user_gb": userInfo.user_abcd
+                #         },
+                #         "jwt_token": {
+                #             "access_token": access_token,
+                #             "refresh_token": refresh_token
+                #         },
+                #     },
+                #     status=200
+                # )
 
-                return response
+                # return response
+                
+                return Response({'message': 'OK'}, status=200)
             else:
                 # 비밀번호 오류 count 추가
                 userPwer = userInfo.user_pwer + 1
@@ -144,8 +146,8 @@ class UserLoginAPI(APIView):
 
 # 아이디 중복 체크 API
 class ChkUserAPI(APIView):
-    @permission_classes((IsAuthenticated, ))
-    @authentication_classes((JSONWebTokenAuthentication,))
+    # @permission_classes((IsAuthenticated, ))
+    # @authentication_classes((JSONWebTokenAuthentication,))
     @swagger_auto_schema(tags=['아이디 중복 체크 API'], query_serializer=UserChkSerializer, responses={201: 'OK'})
     def post(self, request):
         if UrMaster.objects.filter(user_idxx=request.data["user_idxx"]).exists():
