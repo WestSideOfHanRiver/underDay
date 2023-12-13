@@ -12,6 +12,11 @@ from django.http import HttpResponse
 from django.core import serializers
 from django.http import JsonResponse
 
+def dictfetchall(cursor):
+    columns = [col[0] for col in cursor.description]
+    return [dict(zip(columns, row)) for row in cursor.fetchall()]
+
+
 @csrf_exempt
 @api_view(['GET'])
 def user_list(request):
@@ -31,28 +36,40 @@ def user_list(request):
 @csrf_exempt
 @api_view(['GET'])
 def class_list(request):
-    # data = request.data
-    # usernumb = data["user_numb"] # (선택)예약일련번호 예약 취소 할경우!
-    # date = data["date"] # 사용자 정보
-    # userabcd = data["user_abcd"]
+
     usernumb = request.GET.get('user_numb', None)
     date = request.GET.get('date', None)
     userabcd = request.GET.get('user_abcd', None)
     # 현재시간 이후에 보이는건 나중에 시간 데이터 추가
-    print(usernumb,date,userabcd)
-    if userabcd == 'A': # 회원일때 
-        mbsh_ob = UrMbship.objects.filter(user_numb=usernumb, umem_ysno = 'Y')# 유저 맴버쉽 가져오기
-        queryset = TrClass.objects.filter(clas_date=date,tmem_numb__in=[mbsh.tmem_numb for mbsh in mbsh_ob])
-        serializer = TrClassSerializer(queryset,many=True)
-        return Response(serializer.data)
+    if userabcd == 'A':
+        cursor = connection.cursor()
+        strSql = '''SELECT B.CLAS_NUMB, B.TMEM_NUMB, B.clas_date, B.CLAS_TIME, B.CLAS_CLOS,A.TMEM_NUMB,D.USER_NAME AS TECH_NAME,
+                B.CLAS_NMAX,B.CLAS_CMAX,B.CLAS_WAIT,B.CLAS_CWAI,C.tmem_cate,B.RESV_STAT,B.RESV_LAST,B.RESV_ALR1,B.CLAS_YSNO,B.CLAS_INST, B.CLAS_UPDT
+                FROM ur_mbship AS A LEFT JOIN tr_class AS B ON A.TMEM_NUMB = B.TMEM_NUMB LEFT JOIN tr_mbship AS C ON A.TMEM_NUMB = C.TMEM_NUMB 
+                LEFT JOIN ur_master AS D ON C.USER_NUMB = D.USER_NUMB 
+                WHERE A.USER_NUMB = (%s) AND A.UMEM_YSNO = 'Y' AND B.clas_date = (%s) ORDER BY CLAS_TIME '''
+        params = [usernumb,date]
+        with connection.cursor() as cursor:
+            cursor.execute(strSql, params)
+            queryset = dictfetchall(cursor)
+        return Response(queryset)
     
     if userabcd == 'B': # 강사일때
-        trmb_queryset = TrMbship.objects.filter(user_numb = usernumb)
-        queryset = TrClass.objects.filter(clas_date= date, tmem_numb__in = [trbm.tmem_numb for trbm in trmb_queryset])
-        serializer = TrClassSerializer(queryset,many=True)
-        return Response(serializer.data)
+        cursor = connection.cursor()
+        strSql = '''SELECT B.CLAS_NUMB, B.TMEM_NUMB, B.clas_date, B.CLAS_TIME, B.CLAS_CLOS,A.TMEM_NUMB,C.USER_NAME AS TECH_NAME,
+            B.CLAS_NMAX,B.CLAS_CMAX,B.CLAS_WAIT,B.CLAS_CWAI,A.TMEM_CATE,B.RESV_STAT,B.RESV_LAST,B.RESV_ALR1,B.CLAS_YSNO,B.CLAS_INST, B.CLAS_UPDT
+            FROM tr_mbship AS A LEFT JOIN tr_class AS B ON A.TMEM_NUMB = B.TMEM_NUMB 
+            LEFT JOIN ur_master AS C ON A.USER_NUMB = C.USER_NUMB 
+            WHERE A.USER_NUMB = (%s) AND B.clas_date = (%s) ORDER BY CLAS_TIME'''
+        params = [usernumb,date]
+        with connection.cursor() as cursor:
+            cursor.execute(strSql, params)
+            queryset = dictfetchall(cursor)
+        return Response(queryset)
 
-    return HttpResponse(status=200) 
+
+    
+
 
 
 ######################################################################################
