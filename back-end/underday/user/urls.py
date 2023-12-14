@@ -13,14 +13,10 @@ urlpatterns = [
     path("signup/", views.UserSignupAPI.as_view(), name="signup"),
     path("login/", views.UserLoginAPI.as_view(), name="login"),
     path("chkUserId/", views.ChkUserAPI.as_view(), name="chkUserId"),
-    # path('signup/', views.signup, name='signup'),
-    # path('login/', views.login, name='login'),
-    # path('chkUserId/', views.chkUserId, name='chkUserId'),
 
     # 마이페이지
-    path('mypage/', views.mypage, name='mypage'),
-    path('mypageSel/', views.mypageSel, name='mypageSel'),
-    path('mypageUpdate/', views.mypageUpdate, name='mypageUpdate'),
+    path("mypageSel/", views.MypageSelAPI.as_view(), name="mypageSel"),
+    path("mypageUpdate/", views.MypageUpdateAPI.as_view(), name="mypageUpdate"),
     
     # 토큰
     # TokenObtainPairView : 토큰을 생성해주는 뷰

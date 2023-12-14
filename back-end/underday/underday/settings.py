@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-SECRET_KEY = os.environ["DJANGO_SECRET"]
+SECRET_KEY = 'django-insecure-c8+a)c_rp1uk=cx*=rybzh(7ag%a2&_f54dp+xz#5vhght1ny8'
 
 DEBUG = True
 
@@ -70,15 +70,15 @@ WSGI_APPLICATION = 'underday.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-     'default': {
-        'ENGINE': os.environ["DB_ENGINE"],
-        'NAME': os.environ["DATABASE"],
-        'USER': os.environ["DB_USER"],
-        'PASSWORD': os.environ["DB_PASSWORD"],
-        'HOST': os.environ["DB_HOST"],
-        'PORT': os.environ["DB_PORT"],
-    }  
- }
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'underday_dev',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'svc.sel5.cloudtype.app',
+        'PORT': '31749',
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
