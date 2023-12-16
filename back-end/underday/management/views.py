@@ -88,7 +88,7 @@ class ClassManagementAPI(APIView):
             trMbshipInfo = TrMbship.objects.get(tmem_numb=tmemNumb)
 
             # 해당 수업권한권의 강사와 수정 처리한 사용자 일련번호 CHK
-            if(trMbshipInfo.user_numb != userNumb)
+            if(trMbshipInfo.user_numb != userNumb):
                 return Response({'message': '수업권한권 수정 권한이 없습니다.'}, status=200)
             
             # 수업권한권 수정.
@@ -129,7 +129,7 @@ class ClassManagementAPI(APIView):
             trMbshipInfo = TrMbship.objects.get(tmem_numb=tmemNumb)
 
             # 해당 수업권한권의 강사와 삭제 처리한 사용자 일련번호 CHK
-            if(trMbshipInfo.user_numb != userNumb)
+            if(trMbshipInfo.user_numb != userNumb):
                 return Response({'message': '수업권한권 삭제 권한이 없습니다.'}, status=200)
             
             # 수업권한권 삭제.
