@@ -37,7 +37,6 @@ class MypageSelSerializer(serializers.Serializer):
     user_add2 = serializers.CharField(help_text='주소', required=False)
 
 class MypageUpdateSerializer(serializers.Serializer):
-    user_numb = serializers.CharField(help_text='사용자 일련번호', required=True)
     user_nick = serializers.CharField(help_text='닉네임', required=True)
     user_sumo = serializers.CharField(help_text='달력시작요일', required=False)
     user_pref = serializers.CharField(help_text='선호운동', required=False)
