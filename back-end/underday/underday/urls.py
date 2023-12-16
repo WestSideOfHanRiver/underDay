@@ -28,4 +28,5 @@ urlpatterns = [
     path('', include('main.urls')),
     path('user/', include('user.urls')),
     path('ticket/', include('ticket.urls')),
+    path('management/', include('management.urls')),
 ]
