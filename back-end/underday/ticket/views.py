@@ -3,7 +3,6 @@ import jwt
 
 from django.shortcuts import render
 from .models import UrMaster, UrMbship, TrMbship
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
@@ -24,7 +23,7 @@ class TicketListAPI(APIView):
         userNumb = payload.get('user_numb') # 사용자 일련번호
         userAbcd = payload.get('user_abcd') # 사용자 회원구분(A:회원, B:강사, C:기업)
 
-        # 사용자ID, 권한(회원) chk - JWT 적용 후 삭제될 IF 처리.
+        # 사용자ID, 권한(회원) chk
         if UrMaster.objects.filter(user_numb=userNumb).exists():
             # user_abcd 회원구분(A:회원, B:강사, C:기업)
             if(userAbcd == "A"):
@@ -96,7 +95,7 @@ class TicketCreateAPI(APIView):
 # 티켓수정
 class TicketUpdateAPI(APIView):
     @swagger_auto_schema(tags=['Ticket'], operation_id='티켓수정 API', operation_description='티켓수정', request_body=TicketUpdateSerializer, responses={201: 'OK'})
-    def post(self, request):
+    def put(self, request):
         
         # access token을 decode 해서 유저 id 추출 => 유저 식별
         access = request.COOKIES['access']
@@ -131,7 +130,7 @@ class TicketUpdateAPI(APIView):
 
 #  강사수업리스트 조회 API
 class trMbshipListAPI(APIView):
-    @swagger_auto_schema(tags=['Ticket'], operation_id='강사수업리스트 조회 API', operation_description='강사수업리스트 조회', responses={201: TrMbshipListSerializer})
+    @swagger_auto_schema(tags=['Ticket'], operation_id='강사수업리스트 조회 API', operation_description='강사수업리스트 조회(회원구분 강사만 조회가능 - 티켓을 강사만 생성 가능하기 때문.)', responses={201: TrMbshipListSerializer})
     def get(self, request):
         
         # access token을 decode 해서 유저 id 추출 => 유저 식별

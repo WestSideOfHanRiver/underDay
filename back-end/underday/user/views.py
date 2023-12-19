@@ -14,8 +14,8 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from user.jwt_claim_serializer import MyTokenObtainPairSerializer
@@ -29,6 +29,9 @@ class UserSignupAPI(APIView):
         # exists() 중복 record 찾는 함수
         if UrMaster.objects.filter(user_idxx=request.data['user_idxx']).exists():
             return Response({'message': 'INVAILD_USERS'}, status=200)
+
+        # 휴대폰번호 PK로 중복 체크
+        # 하나의 번호로 여러개 프로필 생성 가능(아이디 별도 입력)
 
         if request.data["password1"] != request.data["password2"]:
             return Response({'message': 'INVAILD_USERS'}, status=200)
@@ -92,9 +95,9 @@ class UserSignupAPI(APIView):
 # 로그인 ID, PW 로 로그인시.
 @permission_classes([AllowAny]) #모든 사용자 접근가능
 class UserLoginAPI(APIView):
-    @swagger_auto_schema(tags=['User'], operation_id='로그인 API', operation_description='로그인', request_body=UserLoginSerializer, responses={201: 'OK'})
+    @swagger_auto_schema(tags=['User'], operation_id='로그인 API', operation_description='JWT 토큰 없이 모든 사용자 접근 가능', request_body=UserLoginSerializer, responses={201: 'OK'})
     def post(self, request):
-        # 아이디 검증 - PYTHON에서 선처리하는 공간 or JWT 검증하는 공간에서 아이디 검증하므로 제외될 예정.
+        # 아이디 검증
         if UrMaster.objects.filter(user_idxx=request.data["user_idxx"]).exists():
             
             userInfo = UrMaster.objects.filter(user_idxx=request.data["user_idxx"]).first()
@@ -110,30 +113,13 @@ class UserLoginAPI(APIView):
                 token = MyTokenObtainPairSerializer.get_token(userInfo) # refresh 토큰 생성
                 refresh_token = str(token) # refresh 토큰 문자열화
                 access_token = str(token.access_token) # access 토큰 문자열화
-                response = Response(
-                    {
-                        "message": "OK",
-                        # "userInfo": {
-                        #     "user_numb": userInfo.user_numb,
-                        #     "user_id": userInfo.user_idxx,
-                        #     "user_nm": userInfo.user_name,
-                        #     "user_gb": userInfo.user_abcd
-                        # },
-                        # "jwt_token": {
-                        #     "access_token": access_token,
-                        #     "refresh_token": refresh_token
-                        # },
-                    },
-                    status=200
-                )
+                response = Response({"message": "OK"}, status=200)
 
                 # JWT 토큰 => 쿠키에 저장
                 response.set_cookie("access", access_token, httponly=True)
                 response.set_cookie("refresh", refresh_token, httponly=True)
 
                 return response
-                
-                # return Response({'message': 'OK'}, status=200)
             else:
                 # 비밀번호 오류 count 추가
                 userPwer = userInfo.user_pwer + 1
@@ -148,7 +134,7 @@ class UserLoginAPI(APIView):
 # 아이디 중복 체크 API
 @permission_classes([AllowAny]) #모든 사용자 접근가능
 class ChkUserAPI(APIView):
-    @swagger_auto_schema(tags=['User'], operation_id='아이디 중복 체크 API', operation_description='아이디 중복 체크', request_body=UserChkSerializer, responses={201: 'OK'})
+    @swagger_auto_schema(tags=['User'], operation_id='아이디 중복 체크 API', operation_description='JWT 토큰 없이 모든 사용자 접근 가능', request_body=UserChkSerializer, responses={201: 'OK'})
     def post(self, request):
         if UrMaster.objects.filter(user_idxx=request.data["user_idxx"]).exists():
             return Response({'message': '중복된 ID입니다.'}, status=200)
