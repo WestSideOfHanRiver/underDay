@@ -39,3 +39,7 @@ class UpdateClassSerializer(serializers.Serializer):
 
 class DeleteClassSerializer(serializers.Serializer):
     tmem_numb = serializers.CharField(help_text='수업권한권일련번호', required=True)
+
+class SportsListSerializer(serializers.Serializer):
+    sports_list = serializers.CharField(help_text='운동리스트', required=True)
+    

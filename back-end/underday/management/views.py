@@ -1,8 +1,10 @@
 import json
+import jwt
 
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from django.db import connection
 from .models import TrMbship
 from . import views
 
@@ -11,6 +13,8 @@ from drf_yasg.utils import swagger_auto_schema
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.decorators import 
+from rest_framework.permissions import AllowAny
 
 
 # 수업권한권 조회
@@ -138,3 +142,11 @@ class ClassManagementAPI(APIView):
 
         else:
             return Response({'message': '일치하는 수업권한권이 없습니다.'}, status=200)
+
+
+# 운동 목록 조회
+@permission_classes([AllowAny]) #모든 사용자 접근가능
+class SportsListAPI(APIView):
+    @swagger_auto_schema(tags=['Sports_List'], operation_id='운동 목록 조회 API', operation_description='수업권한권 생성시 운동목록 LIST 하드코딩', responses={201: SportsListSerializer})
+    def get(self, request):
+        return Response({"sports_list": ['헬스PT','필라테스','테니스','스피닝','요가','수영','골프','클라이밍','크로스핏']}, status=200)
