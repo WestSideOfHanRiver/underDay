@@ -16,7 +16,7 @@ import { BiDumbbell } from 'react-icons/bi'
 interface Props {
   teacher: string
   lessonName: string
-  lessonState: '예약확정' | '예약대기' | '예약마감' | '예약가능'
+  lessonState: string
   category: string
 }
 
