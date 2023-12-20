@@ -19,28 +19,61 @@ class TicketListAPI(APIView):
         
         # access token을 decode 해서 유저 id 추출 => 유저 식별
         access = request.COOKIES.get('access')
-        # access = request.COOKIES['access']
-        payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
-        userNumb = payload.get('user_numb') # 사용자 일련번호
-        userAbcd = payload.get('user_abcd') # 사용자 회원구분(A:회원, B:강사, C:기업)
 
-        # 사용자ID, 권한(회원) chk
-        if UrMaster.objects.filter(user_numb=userNumb).exists():
-            # user_abcd 회원구분(A:회원, B:강사, C:기업)
-            if(userAbcd == "A"):
-                ticketInfo = ticketListDetailView("A", userNumb)
-                return Response(ticketInfo, status=200)
+        try:
 
-            elif(userAbcd == "B"):
-                # 강사 본인이 갖고있는 강사수업 LIST 조회
-                ticketInfo = ticketListDetailView("B", userNumb)
-                return Response(ticketInfo, status=200)
+            payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
+            userNumb = payload.get('user_numb') # 사용자 일련번호
+            userAbcd = payload.get('user_abcd') # 사용자 회원구분(A:회원, B:강사, C:기업)
 
-            elif(userAbcd == "C"):
-                ticketInfo = ticketListDetailView("C", userNumb)
-                return Response(ticketInfo, status=200)
-        else:
-            return Response({'message': '일치하는 ID가 없습니다.'}, status=200)
+            # 사용자ID, 권한(회원) chk
+            if UrMaster.objects.filter(user_numb=userNumb).exists():
+                # user_abcd 회원구분(A:회원, B:강사, C:기업)
+                if(userAbcd == "A"):
+                    ticketInfo = ticketListDetailView("A", userNumb)
+                    return Response(ticketInfo, status=200)
+
+                elif(userAbcd == "B"):
+                    # 강사 본인이 갖고있는 강사수업 LIST 조회
+                    ticketInfo = ticketListDetailView("B", userNumb)
+                    return Response(ticketInfo, status=200)
+
+                elif(userAbcd == "C"):
+                    ticketInfo = ticketListDetailView("C", userNumb)
+                    return Response(ticketInfo, status=200)
+            else:
+                return Response({'message': '일치하는 ID가 없습니다.'}, status=200)
+		# 만약 해당 token의 로그인 시간이 만료되었다면, 아래와 같은 코드를 실행합니다.
+        except jwt.ExpiredSignatureError:
+            return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+            # 만약 해당 token이 올바르게 디코딩되지 않는다면, 아래와 같은 코드를 실행합니다.
+        except jwt.exceptions.DecodeError:
+            return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+
+
+
+        # # access = request.COOKIES['access']
+        # payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
+        # userNumb = payload.get('user_numb') # 사용자 일련번호
+        # userAbcd = payload.get('user_abcd') # 사용자 회원구분(A:회원, B:강사, C:기업)
+
+        # # 사용자ID, 권한(회원) chk
+        # if UrMaster.objects.filter(user_numb=userNumb).exists():
+        #     # user_abcd 회원구분(A:회원, B:강사, C:기업)
+        #     if(userAbcd == "A"):
+        #         ticketInfo = ticketListDetailView("A", userNumb)
+        #         return Response(ticketInfo, status=200)
+
+        #     elif(userAbcd == "B"):
+        #         # 강사 본인이 갖고있는 강사수업 LIST 조회
+        #         ticketInfo = ticketListDetailView("B", userNumb)
+        #         return Response(ticketInfo, status=200)
+
+        #     elif(userAbcd == "C"):
+        #         ticketInfo = ticketListDetailView("C", userNumb)
+        #         return Response(ticketInfo, status=200)
+        # else:
+        #     return Response({'message': '일치하는 ID가 없습니다.'}, status=200)
 
             
 # 티켓생성
