@@ -23,8 +23,8 @@ class ClassManagementAPI(APIView):
     def get(self, request):
         
         # access token을 decode 해서 유저 id 추출 => 유저 식별
-        access = request.COOKIES['access']
-        payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
+        access_token = request.COOKIES['access_token']
+        payload = jwt.decode(access_token, SECRET_KEY, algorithms=['HS256'])
         userNumb = payload.get('user_numb') # 사용자 일련번호
         userAbcd = payload.get('user_abcd') # 사용자 회원구분(A:회원, B:강사, C:기업)
 
@@ -45,8 +45,8 @@ class ClassManagementAPI(APIView):
     def post(self, request):
 
         # access token을 decode 해서 유저 id 추출 => 유저 식별
-        access = request.COOKIES['access']
-        payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
+        access_token = request.COOKIES['access_token']
+        payload = jwt.decode(access_token, SECRET_KEY, algorithms=['HS256'])
         userNumb = payload.get('user_numb') # 사용자 일련번호
         userAbcd = payload.get('user_abcd') # 사용자 회원구분(A:회원, B:강사, C:기업)
 
@@ -76,8 +76,8 @@ class ClassManagementAPI(APIView):
     def put(self, request):
 
         # access token을 decode 해서 유저 id 추출 => 유저 식별
-        access = request.COOKIES['access']
-        payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
+        access_token = request.COOKIES['access_token']
+        payload = jwt.decode(access_token, SECRET_KEY, algorithms=['HS256'])
         userNumb = payload.get('user_numb') # 사용자 일련번호
         userAbcd = payload.get('user_abcd') # 사용자 회원구분(A:회원, B:강사, C:기업)
 
@@ -117,8 +117,8 @@ class ClassManagementAPI(APIView):
     def delete(self, request):
 
         # access token을 decode 해서 유저 id 추출 => 유저 식별
-        access = request.COOKIES['access']
-        payload = jwt.decode(access, SECRET_KEY, algorithms=['HS256'])
+        access_token = request.COOKIES['access_token']
+        payload = jwt.decode(access_token, SECRET_KEY, algorithms=['HS256'])
         userNumb = payload.get('user_numb') # 사용자 일련번호
         userAbcd = payload.get('user_abcd') # 사용자 회원구분(A:회원, B:강사, C:기업)
 
