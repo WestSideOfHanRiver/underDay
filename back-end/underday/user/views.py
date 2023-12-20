@@ -113,7 +113,12 @@ class UserLoginAPI(APIView):
                 token = MyTokenObtainPairSerializer.get_token(userInfo) # refresh 토큰 생성
                 refresh_token = str(token) # refresh 토큰 문자열화
                 access_token = str(token.access_token) # access 토큰 문자열화
-                response = Response({"message": "OK"}, status=200)
+                # response = Response({"message": "OK"}, status=200)
+
+                response = Response({'message': "OK"
+                                    ,'access_token': access_token # access
+                                    ,'refresh_token': refresh_token # refresh
+                                    }, status=200)
 
                 # JWT 토큰 => 쿠키에 저장
                 response.set_cookie("access", access_token, httponly=True)
