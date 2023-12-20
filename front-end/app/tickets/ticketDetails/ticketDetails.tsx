@@ -20,9 +20,7 @@ type Props = {
 export async function getClasses() {
   const url =
     'https://port-0-underday-local-2rrqq2blmlt9v8u.sel5.cloudtype.app/ticket/trMbshipList/'
-  const classes = await fetchData(url, {
-    user_numb: '3',
-  })
+  const classes = await fetchData(url)
 
   return classes
 }

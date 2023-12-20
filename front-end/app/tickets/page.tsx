@@ -11,9 +11,7 @@ import styles from './tickets.module.scss'
 export async function getTickets() {
   const url =
     'https://port-0-underday-local-2rrqq2blmlt9v8u.sel5.cloudtype.app/ticket/ticket_list/'
-  const tickets = await fetchData(url, {
-    user_numb: '1',
-  })
+  const tickets = await fetchData(url)
 
   return tickets
 }
