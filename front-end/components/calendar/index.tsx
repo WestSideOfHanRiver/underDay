@@ -2,7 +2,7 @@
 
 import { MouseEvent, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import moment from 'moment'
+import moment, { Moment } from 'moment'
 import Image from 'next/image'
 
 import styles from './calendar.module.scss'
@@ -10,103 +10,98 @@ import styles from './calendar.module.scss'
 import PreviousIcon from '@svg/previous.svg'
 import NextIcon from '@svg/next.svg'
 
-import { RootState } from '@stores/selectedDate'
+import { SelectedDateState } from '@stores/selectedDate'
 import { setSelectedDate } from './selectedDateSlice'
 
-const DUMMYDATE = ['20230623', '20230626']
-
 export default function Calendar() {
-  const [getMoment, setMoment] = useState(moment())
-  const [getTitle, setTitle] = useState(getMoment.format('YY년 M월'))
-
-  const handleCalendar = (days: number) => {
-    const date = getMoment.clone().add(days, 'month')
-
-    setMoment(date)
-    setTitle(date.format('YY년 M월'))
-  }
-
-  const selectedDate = useSelector(
-    (state: RootState) => state.selectedDate.value,
-  )
+  const [currentMoment, setCurrentMoment] = useState(moment())
+  const [slideAnimation, setSlideAnimation] = useState('')
   const dispatch = useDispatch()
+  const selectedDate = useSelector(
+    (state: SelectedDateState) => state.selectedDate.value,
+  )
+
+  const handleMonthChange = (monthsToAdd: number) => {
+    const newMoment = currentMoment.clone().add(monthsToAdd, 'month')
+    setCurrentMoment(newMoment)
+  }
 
   const handleClickDate = (e: MouseEvent<HTMLLIElement>) => {
-    dispatch(setSelectedDate(e.currentTarget.dataset.date!))
+    const clickedDate = moment(e.currentTarget.dataset.date, 'YYMMDD')
+    const isDifferentMonth = !currentMoment.isSame(clickedDate, 'month')
+
+    if (isDifferentMonth) {
+      setCurrentMoment(clickedDate)
+    }
+
+    dispatch(setSelectedDate(clickedDate.format('YYMMDD')))
   }
 
-  const calendarArr = () => {
-    const today = getMoment
-    const firstWeek = today.clone().startOf('month').week()
+  const handleResetCurrentMoment = () => {
+    const current = moment()
+
+    setCurrentMoment(current)
+    dispatch(setSelectedDate(current.format('YYMMDD')))
+  }
+
+  const generateCalendar = (moment: Moment) => {
+    const firstWeek = moment.clone().startOf('month').week()
     const lastWeek =
-      today.clone().endOf('month').week() === 1
+      moment.clone().endOf('month').week() === 1
         ? 53
-        : today.clone().endOf('month').week()
+        : moment.clone().endOf('month').week()
 
-    let result: any[] = []
-    let week = firstWeek
-
-    for (week; week <= lastWeek; week++) {
-      result = result.concat(
-        <ul key={week} className={styles.days}>
-          {Array(7)
-            .fill(0)
-            .map((_, index) => {
-              let days = today
-                .clone()
-                .startOf('year')
-                .week(week)
-                .startOf('week')
-                .add(index, 'day')
-
-              let styleClass = null
-
-              if (moment().isSame(days, 'day')) {
-                styleClass = 'today'
-              } else if (!today.isSame(days, 'month')) {
-                styleClass = 'before'
-              }
-
-              return (
-                <li
-                  key={index}
-                  className={`${
-                    styleClass != null ? `${styles[styleClass]}` : ''
-                  } ${
-                    days.format('YYMMDD') === selectedDate
-                      ? styles.selectedDate
-                      : ''
-                  }`}
-                  data-day={`${days.day()}`}
-                  data-date={`${days.format('YYMMDD')}`}
-                  onClick={handleClickDate}
-                >
-                  {days.format('D')}
-                  {DUMMYDATE.map((date, index) => {
-                    if (date === days.format('YYYYMMDD')) {
-                      return <small key={index} className={styles.dot}></small>
-                    }
-                  })}
-                </li>
-              )
-            })}
+    let calendar = []
+    for (let week = firstWeek; week <= lastWeek; week++) {
+      calendar.push(
+        <ul key={week} className={`${styles.days} ${slideAnimation}`}>
+          {Array.from({ length: 7 }).map((_, index) =>
+            renderDayCell(week, index),
+          )}
         </ul>,
       )
     }
-    return result
+
+    return calendar
   }
 
-  const Dates = calendarArr()
+  const renderDayCell = (week: number, index: number) => {
+    const day = currentMoment
+      .clone()
+      .startOf('year')
+      .week(week)
+      .startOf('week')
+      .add(index, 'day')
+    const isToday = moment().isSame(day, 'day')
+    const isDifferentMonth = !currentMoment.isSame(day, 'month')
+    const isSelectedDate = day.format('YYMMDD') === selectedDate
+
+    return (
+      <li
+        key={index}
+        className={`${isToday ? styles.today : ''} ${
+          isDifferentMonth ? styles.before : ''
+        } ${isSelectedDate ? styles.selectedDate : ''}`}
+        data-day={day.day()}
+        data-date={day.format('YYMMDD')}
+        onClick={handleClickDate}
+      >
+        {day.format('D')}
+      </li>
+    )
+  }
 
   return (
     <div className={styles.content}>
       <div className={styles.topTit}>
-        <button type="button" onClick={() => handleCalendar(-1)}>
-          <Image src={PreviousIcon} alt="previous month button" />
+        <button type="button" onClick={() => handleMonthChange(-1)}>
+          <Image src={PreviousIcon} alt="previous month" />
         </button>
-        <h2>{getTitle}</h2>
-        <button type="button" onClick={() => handleCalendar(1)}>
-          <Image src={NextIcon} alt="next month button" />
+        <h2 onClick={handleResetCurrentMoment}>
+          {currentMoment.format('YY년 M월')}
+        </h2>
+        <button type="button" onClick={() => handleMonthChange(1)}>
+          <Image src={NextIcon} alt="next month" />
         </button>
       </div>
       <ul className={styles.dayTit}>
@@ -114,7 +109,7 @@ export default function Calendar() {
           <li key={day}>{day}</li>
         ))}
       </ul>
-      {Dates}
+      {generateCalendar(currentMoment)}
     </div>
   )
 }
