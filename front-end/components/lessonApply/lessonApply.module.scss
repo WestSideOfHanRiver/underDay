@@ -1,0 +1,49 @@
+.background {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  opacity: 0.2;
+  background-color: #000000;
+}
+
+.applyModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  font-weight: 600;
+
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+.content {
+  padding: 20px 24px;
+}
+
+.actions {
+  display: flex;
+
+  button {
+    cursor: pointer;
+    flex-grow: 1;
+    padding: 12px 0;
+    font-size: 14px;
+  }
+}
+
+.applyButton {
+  color: #ffffff;
+  background-color: #ff612f;
+  border-radius: 0 0 0 8px;
+}
+
+.closeButton {
+  color: #0f2552;
+  background-color: #dddddd;
+  border-radius: 0 0 8px 0;
+}
