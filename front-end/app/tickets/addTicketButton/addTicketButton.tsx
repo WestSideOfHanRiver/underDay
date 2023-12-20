@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 
-import Modal from '@components/modal/modal'
 import TicketDetails from '../ticketDetails/ticketDetails'
+
+import styles from '../tickets.module.scss'
 
 export default function AddTicketButton() {
   const [toggleDetail, setToggleDetail] = useState(false)
@@ -14,12 +15,15 @@ export default function AddTicketButton() {
 
   return (
     <>
-      <button type="button" onClick={handleClickAdd}>회원권 생성하기</button>
-      {toggleDetail && (
-        <Modal>
-          <TicketDetails setToggleDetail={setToggleDetail} />
-        </Modal>
-      )}
+      <button
+        className={styles.ticketsBtn}
+        type="button"
+        onClick={handleClickAdd}
+      >
+        생성
+      </button>
+
+      {toggleDetail && <TicketDetails setToggleDetail={setToggleDetail} />}
     </>
   )
 }

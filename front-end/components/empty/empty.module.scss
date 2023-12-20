@@ -1,0 +1,24 @@
+.emptyPage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: calc(100vh - 64px);
+
+  img {
+    width: 72px;
+    height: auto;
+  }
+
+  p {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 20px 0 5px;
+  }
+
+  span {
+    font-size: 12px;
+    text-align: center;
+    line-height: 1.5;
+  }
+}
