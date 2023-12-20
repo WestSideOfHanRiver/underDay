@@ -1,7 +1,6 @@
 .formWrap {
   margin-top: 90px;
-  padding: 0 20px;
-  
+
   h2 {
     font-size: 20px;
     font-weight: 500;
@@ -16,44 +15,48 @@
       position: relative;
       margin-bottom: 25px;
     }
-  }
 
-  button {
-    padding: 10px 0;
-    border: none;
-    outline: none;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    z-index: 999;
-    height: 64px;
-    width: 100%;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 22px;
-    color: #fff;
-    border: 1px solid red;
-    background: #ff612f;
+    > button {
+      padding: 10px 0;
+      border: none;
+      outline: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      z-index: 999;
+      height: 64px;
+      width: 100%;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 22px;
+      color: #fff;
+      border: 1px solid red;
+      background: #ff612f;
+    }
   }
 
   .inputWrap {
     input {
       padding-left: 0px;
-  
+
       border: none;
       border-bottom: 1px solid #ddd;
       background: transparent;
       outline: none;
       width: 100%;
       height: 40px;
-  
-      font-size: inherit;
-  
+
+      font-size: 16px;
+
+      &::placeholder {
+        font-size: inherit;
+      }
+
       &:focus,
       &.active {
         border-bottom: 1px solid #ff612f;
         caret-color: #ff612f;
-  
+
         ~ label {
           top: -8px;
           font-size: 12px;
@@ -62,26 +65,94 @@
         }
       }
     }
-  
+
     label {
       position: absolute;
       z-index: -1;
       top: 50%;
       left: 0px;
-  
+
       font-size: inherit;
       font-weight: 500;
       color: #bbb;
-  
+
       transition: 0.3s;
       cursor: text;
       transform: translateY(-50%);
-  
+
       &.active {
         top: -8px;
         font-size: 12px;
         font-weight: 300;
         color: #ff612f;
+      }
+    }
+  }
+
+  .inputExcep {
+    display: flex;
+    gap: 5px;
+    margin: 10px 0 20px;
+
+    small {
+      font-size: 12px;
+      font-weight: 500;
+      color: #505050;
+      display: flex;
+      align-items: center;
+
+      &:after {
+        content: '';
+        width: 1px;
+        height: 12px;
+        background-color: #505050;
+        margin-left: 5px;
+      }
+
+      &:last-child {
+        &:after {
+          display: none;
+        }
+      }
+
+      &.active {
+        color: #ff612f;
+      }
+    }
+  }
+
+  .comWrap {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .btnWrap {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    align-items: end;
+    gap: 15px;
+
+    button {
+      border-radius: 4px;
+      box-shadow: 0 2px 4px 0 rgba(204, 204, 204, 0.2);
+      background-color: #ddd;
+      color: #333;
+      font-weight: 700;
+      outline: none;
+      border: none;
+      cursor: pointer;
+      display: block;
+      margin: 97px auto 0;
+      width: 100%;
+      font-size: 14px;
+      height: 100%;
+      height: 42px;
+      margin: 0;
+
+      &.active {
+        background-color: #d62c2c;
+        color: #fff;
       }
     }
   }
@@ -100,13 +171,13 @@
       border-right: 0;
       margin-bottom: 0;
       cursor: pointer;
-    
+
       &:first-of-type {
         border-top-left-radius: 4px;
         border-bottom-left-radius: 4px;
         border-left: 1px solid #e3e3e3;
       }
-  
+
       &:last-of-type {
         border-top-right-radius: 4px;
         border-bottom-right-radius: 4px;
@@ -118,14 +189,10 @@
       display: none;
 
       &:checked + label {
-        border: solid 1px #ff612f;;
-        background-color: #ff612f;;
+        border: solid 1px #ff612f;
+        background-color: #ff612f;
         color: #fff;
       }
     }
   }
 }
-
-
-
-
