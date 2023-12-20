@@ -34,12 +34,13 @@ export default function Navigation() {
                 className={`${styles.link} ${isActive ? styles.active : ''}`}
                 href={path}
               >
-                {!isActive && (
-                  <Image className={styles.icon} src={icon} alt={label} />
-                )}
-                {isActive && (
-                  <Image className={styles.icon} src={activeIcon} alt={label} />
-                )}
+                <Image
+                  className={styles.icon}
+                  src={isActive ? activeIcon : icon}
+                  alt={label}
+                  width={24}
+                  height={24}
+                />
                 {label}
               </Link>
             </li>
@@ -67,6 +68,12 @@ const NAV_LIST = [
   {
     label: '수강권',
     path: '/tickets',
+    icon: ticketIcon,
+    activeIcon: ticketActiveIcon,
+  },
+  {
+    label: '회원관리',
+    path: '/membership',
     icon: ticketIcon,
     activeIcon: ticketActiveIcon,
   },
