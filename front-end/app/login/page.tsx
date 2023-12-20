@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
 import Social from '@components/social'
@@ -25,18 +25,19 @@ export default function Login() {
       return
     }
 
-    console.log({
-      user_numb: username,
-      password1: password,
-    })
-
     axios
-      .post('http://127.0.0.1:8000/signup', {
-        username: username,
-        password: password,
-      })
+      .post(
+        // 'http://127.0.0.1:8000/signup'
+        'https://port-0-underday-2rrqq2blmyv6o6x.sel5.cloudtype.app/user/login/',
+        {
+          user_idxx: username,
+          password: password,
+        },
+      )
       .then((res) => {
-        console.log(res)
+        if (res.data.message == 'SUCCESS') {
+          console.log('로그인 성공!!!')
+        }
       })
   }
 
